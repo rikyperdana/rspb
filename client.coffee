@@ -12,19 +12,17 @@ if Meteor.isClient
 		newPasien: -> Session.get 'newPasien'
 		pasienData: -> Session.get 'pasienData'
 		moduleList: -> Session.get('pasienData')[currentRoute()]
-		moduleColumns: ->
+		moduleTable: ->
 			columns = []
 			for key, val of Session.get('pasienData')[currentRoute()][1]
 				columns.push key
-			columns
-		moduleRows: ->
 			rows = []
 			for i in Session.get('pasienData')[currentRoute()]
 				list = []
 				for key, val of i
 					list.push val
 				rows.push list
-			rows
+			columns: columns, rows: rows
 
 	Template.modul.events
 		'click #newPasien': -> Session.set 'newPasien', not Session.get 'newPasien'

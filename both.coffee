@@ -37,6 +37,7 @@ schema.regis =
 	'regis.ibu': type: String
 	'regis.pasangan': type: String
 	'regis.petugas': type: String
+	'regis.date': type: Date
 
 schema.jalan =
 	no_mr: type: Number
@@ -44,11 +45,13 @@ schema.jalan =
 	'jalan.$': type: Object
 	'jalan.$.cara_bayar': type: Number
 	'jalan.$.status_bayar': type: Number
-	'jalan.$.petugas': type: String
 	'jalan.$.tindakan': type: Array
 	'jalan.$.tindakan.$': type: Object
 	'jalan.$.tindakan.$.jenis': type: Number
 	'jalan.$.tindakan.$.biaya': type: Number
+	'jalan.$.id': type: Number
+	'jalan.$.petugas': type: String
+	'jalan.$.date': type: Date
 
 @coll = new Meteor.Collection 'coll'
 coll.allow

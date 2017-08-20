@@ -31,8 +31,6 @@ template(name='modul'): .container
 			each datas
 				tr#row
 					td= no_mr
-
-
 	with pasienData
 		h5 Tambah {{route}}
 		+quickForm(
@@ -49,10 +47,10 @@ template(name='modul'): .container
 		table
 			thead
 				tr
-					each val in moduleColumns
+					each val in moduleTable.columns
 						th= val
 			tbody
-				each val in moduleRows
+				each val in moduleTable.rows
 					tr
 						each item in val
 							td= item
