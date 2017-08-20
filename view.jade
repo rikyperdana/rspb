@@ -1,0 +1,58 @@
+template(name='layout')
+	+menu
+	+yield
+
+template(name='menu')
+	.navbar-fixed: nav: .nav-wrapper
+		ul.left
+			li: a Home
+		a.brand-logo.center RSPB
+		ul.right
+			li: a Login
+
+template(name='home'): .container
+	h4 Beranda
+
+template(name='modul'): .container
+	.right.btn#newPasien + Pasien
+	if newPasien
+		+quickForm(
+			collection= coll
+			schema= schema
+			type = 'insert'
+			id = 'insertModul'
+		)
+	h5 Daftar Pasien
+	table
+		thead
+			tr
+				th No MR
+		tbody
+			each datas
+				tr#row
+					td= no_mr
+
+
+	with pasienData
+		h5 Tambah {{route}}
+		+quickForm(
+			collection= coll
+			schema= schema
+			type = 'update-pushArray'
+			id = 'update'
+			doc= pasienData
+			scope= route
+		)
+		.right.orange.btn#close Tutup
+		.row
+		h5 Daftar {{route}}
+		table
+			thead
+				tr
+					each val in moduleColumns
+						th= val
+			tbody
+				each val in moduleRows
+					tr
+						each item in val
+							td= item
