@@ -53,6 +53,7 @@ coll.allow
 
 makeRoute = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
+		name: modul
 		action: -> this.render 'modul'
 		waitOn: ->
 			no_mr = this.params.no_mr

@@ -15,6 +15,14 @@ template(name='home'): .container
 
 template(name='modul'): .container
 	h5 Tabel Pasien
+	.right.btn#addPasien + Pasien
+	if addPasien
+		+quickForm(
+			collection= coll
+			schema= schema
+			type = 'insert'
+			id = 'insertPasien'
+		)
 	unless pasienData
 		table
 			thead
