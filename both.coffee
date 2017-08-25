@@ -6,14 +6,6 @@ Router.configure
 Router.route '/',
 	action: -> this.render 'home'
 
-Router.route '/regis',
-	action: -> this.render 'modul'
-	waitOn: -> Meteor.subscribe 'coll'
-
-Router.route '/jalan',
-	action: -> this.render 'modul'
-	waitOn: -> Meteor.subscribe 'coll'
-
 @schema = {}
 
 schema.regis =
@@ -58,3 +50,15 @@ coll.allow
 	insert: -> true
 	update: -> true
 	remove: -> true
+
+makeRoute = (modul) ->
+	Router.route '/'+modul+'/:no_mr?',
+		action: -> this.render 'modul'
+		waitOn: ->
+			no_mr = this.params.no_mr
+			if no_mr
+				Meteor.subscribe 'coll', no_mr, modul
+			else
+				Meteor.subscribe 'coll'
+
+makeRoute key for key, val of schema
