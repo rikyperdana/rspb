@@ -28,3 +28,5 @@ aldeed:autoform@=5.8.1
 gildaspk:autoform-materialize
 stevezhu:lodash
 session
+nilsdannemann:pdfmake
+momentjs:moment

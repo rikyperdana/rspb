@@ -3,7 +3,7 @@ template(name='layout')
 	+yield
 
 template(name='menu')
-	.navbar-fixed: nav: .nav-wrapper
+	.navbar-fixed: nav.teal: .nav-wrapper
 		ul.left
 			li: a Home
 		a.brand-logo.center RSPB
@@ -12,6 +12,9 @@ template(name='menu')
 
 template(name='home'): .container
 	h4 Beranda
+
+template(name='loading'): .container
+	.progress.center: .indeterminate
 
 template(name='modul'): .container
 	h5 Tabel Pasien
@@ -37,6 +40,7 @@ template(name='modul'): .container
 						td= no_mr
 						td= regis.nama_lengkap
 	with pasienData
+		.left.purple.btn#card Cetak
 		table
 			tr
 				th No MR
@@ -44,6 +48,13 @@ template(name='modul'): .container
 			tr
 				th Nama Lengkap
 				td= regis.nama_lengkap
+			tr
+				th Tanggal Lahir
+				td= hari(regis.tgl_lahir)
+			tr
+				th Tempat Lahir
+				td= regis.tmpt_lahir
+		.right.orange.btn#close Tutup
 		if jalan
 			table
 				thead

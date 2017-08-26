@@ -15,23 +15,30 @@ if Meteor.isClient
 		pasienData: -> coll.findOne no_mr: parseInt Router.current().params.no_mr
 		addPasien: -> Session.get 'addPasien'
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
+		hari: (date) ->
+			moment(date).format('D MM YYYY')
 
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
+		'click #close': -> Router.go currentRoute()
+		'click #card': ->
+			pdf = pdfMake.createPdf
+				content: [
+					'Nama: ' + coll.findOne().regis.nama_lengkap
+					'No. MR: ' + coll.findOne().no_mr
+				]
+				pageSize: 'B8'
+				pageMargins: [110, 50, 0, 0]
+				pageOrientation: 'landscape'
+			pdf.open()
 
 	AutoForm.addHooks null,
 		after:
 			insert: (err, res) ->
 				if res then console.log res
 			'update-pushArray': (err, res) -> if res
-				###
-				console.log [
-					currentRoute()
-					this.currentDoc.no_mr
-					this.insertDoc
-				]
-				###
+				# console.log currentRoute(), this.currentDoc.no_mr, this.insertDoc
 				doc = this.insertDoc
 				if currentRoute() is 'jalan'
 					selector = coll.findOne()._id

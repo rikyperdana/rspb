@@ -2,6 +2,7 @@ _ = lodash
 
 Router.configure
 	layoutTemplate: 'layout'
+	loadingTemplate: 'loading'
 
 Router.route '/',
 	action: -> this.render 'home'
@@ -44,6 +45,20 @@ schema.jalan =
 	'jalan.$.id': type: Number
 	'jalan.$.petugas': type: String
 	'jalan.$.date': type: Date
+
+schema.bayar =
+	no_mr: type: Number
+	bayar: type: Array
+	'bayar.$': type: Object
+	'bayar.$.cara_bayar': type: Number
+	'bayar.$.status_bayar': type: Number
+	'bayar.$.tindakan': type: Array
+	'bayar.$.tindakan.$': type: Object
+	'bayar.$.tindakan.$.jenis': type: Number
+	'bayar.$.tindakan.$.biaya': type: Number
+	'bayar.$.id': type: Number
+	'bayar.$.petugas': type: String
+	'bayar.$.date': type: Date
 
 @coll = new Meteor.Collection 'coll'
 coll.allow
