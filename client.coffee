@@ -24,9 +24,22 @@ if Meteor.isClient
 		after:
 			insert: (err, res) ->
 				if res then console.log res
-			'update-pushArray': (err, res) ->
-				if res then console.log [
+			'update-pushArray': (err, res) -> if res
+				###
+				console.log [
 					currentRoute()
 					this.currentDoc.no_mr
 					this.insertDoc
 				]
+				###
+				doc = this.insertDoc
+				if currentRoute() is 'jalan'
+					selector = coll.findOne()._id
+					data = $push: bayar:
+						cara_bayar: doc.cara_bayar
+						status_bayar: doc.status_bayar
+						tindakan: doc.tindakan
+						id: doc.id
+						petugas: doc.petugas
+						data: doc.date
+					coll.update selector, data
