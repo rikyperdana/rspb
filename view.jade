@@ -54,6 +54,9 @@ template(name='modul'): .container
 			tr
 				th Tempat Lahir
 				td= regis.tmpt_lahir
+			tr
+				th Umur
+				td= umur(regis.tgl_lahir)
 		.right.orange.btn#close Tutup
 		if jalan
 			table

@@ -15,8 +15,8 @@ if Meteor.isClient
 		pasienData: -> coll.findOne no_mr: parseInt Router.current().params.no_mr
 		addPasien: -> Session.get 'addPasien'
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
-		hari: (date) ->
-			moment(date).format('D MM YYYY')
+		hari: (date) -> moment(date).format('D MMM YYYY')
+		umur: (date) -> moment().diff(date, 'years') + ' tahun'
 
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
