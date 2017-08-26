@@ -17,9 +17,12 @@ if Meteor.isClient
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 
 	AutoForm.addHooks null,
-		after: 'update-pushArray': (err, res) ->
-			if res then console.log [
-				currentRoute()
-				this.currentDoc.no_mr
-				this.insertDoc
-			]
+		after:
+			insert: (err, res) ->
+				if res then console.log res
+			'update-pushArray': (err, res) ->
+				if res then console.log [
+					currentRoute()
+					this.currentDoc.no_mr
+					this.insertDoc
+				]
