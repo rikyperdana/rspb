@@ -15,7 +15,7 @@ template(name='home'): .container
 
 template(name='modul'): .container
 	h5 Tabel Pasien
-	.right.btn#addPasien + Pasien
+	.right.btn#addPasien.hide Tambah
 	if addPasien
 		+quickForm(
 			collection= coll

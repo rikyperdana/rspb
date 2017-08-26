@@ -3,6 +3,10 @@ if Meteor.isClient
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
 
+	Template.modul.onRendered ->
+		if currentRoute() is 'regis' or Router.current().params.no_mr
+			$('#addPasien').removeClass 'hide'
+
 	Template.modul.helpers
 		coll: -> coll
 		schema: -> new SimpleSchema schema[currentRoute()]
