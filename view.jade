@@ -20,8 +20,10 @@ template(name='modul'): .container
 		+quickForm(
 			collection= coll
 			schema= schema
-			type = 'insert'
+			type= formType
 			id = 'insertPasien'
+			scope= route
+			doc= pasienData
 		)
 	unless pasienData
 		table
