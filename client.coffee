@@ -15,3 +15,11 @@ if Meteor.isClient
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
+
+	AutoForm.addHooks null,
+		after: 'update-pushArray': (err, res) ->
+			if res then console.log [
+				currentRoute()
+				this.currentDoc.no_mr
+				this.insertDoc
+			]
