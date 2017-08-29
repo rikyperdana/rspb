@@ -17,6 +17,9 @@ if Meteor.isClient
 		hari: (date) -> moment(date).format('D MMM YYYY')
 		umur: (date) -> moment().diff(date, 'years') + ' tahun'
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
+		look: (option, value) ->
+			find = _.find selects[option], (i) -> i.value is value
+			find.label
 
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'

@@ -23,7 +23,7 @@ template(name='loading'): .container
 	.progress.center: .indeterminate
 
 template(name='modul'): .container
-	h5 Tabel Pasien
+	h5 Daftar Nama Pasien
 	if showButton
 		.right.btn#addPasien Tambah
 	if addPasien
@@ -41,11 +41,17 @@ template(name='modul'): .container
 				tr
 					th No MR
 					th Nama
+					th Alamat
+					th Jenis Kelamin
+					th Tgl Lahir
 			tbody
 				each pasiens
 					tr#row
 						td= no_mr
 						td= regis.nama_lengkap
+						td= regis.alamat
+						td {{look 'kelamin' regis.kelamin}}
+						td= hari(regis.tgl_lahir)
 	with pasienData
 		.left.purple.btn#card Cetak
 		table
