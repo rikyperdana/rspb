@@ -24,8 +24,12 @@ template(name='loading'): .container
 
 template(name='modul'): .container
 	h5 Daftar Nama Pasien
-	if showButton
-		.right.btn#addPasien Tambah
+	.row
+		.col.m6
+			.input-field: input#search(placeholder='Cari data')
+		.col.m6
+			if showButton
+				.right.btn#addPasien Tambah
 	if addPasien
 		+quickForm(
 			collection= coll

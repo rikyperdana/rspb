@@ -2,6 +2,7 @@ if Meteor.isClient
 
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
+	search = -> Session.get 'search'
 
 	Template.menu.helpers
 		menus: -> modules
@@ -25,6 +26,7 @@ if Meteor.isClient
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': -> Router.go currentRoute()
+		'keyup #search': (event) -> Session.set 'search', event.target.value
 		'click #card': ->
 			pdf = pdfMake.createPdf
 				content: [
