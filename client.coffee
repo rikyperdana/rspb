@@ -3,9 +3,8 @@ if Meteor.isClient
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
 
-	Template.modul.onRendered ->
-		if currentRoute() is 'regis' or Router.current().params.no_mr
-			$('#addPasien').removeClass 'hide'
+	Template.menu.helpers
+		menus: -> modules
 
 	Template.modul.helpers
 		coll: -> coll
@@ -17,6 +16,7 @@ if Meteor.isClient
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
 		hari: (date) -> moment(date).format('D MMM YYYY')
 		umur: (date) -> moment().diff(date, 'years') + ' tahun'
+		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
 
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'

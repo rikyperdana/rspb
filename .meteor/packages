@@ -22,7 +22,6 @@ mquandalle:jade
 iron:router
 stylus
 fourseven:scss
-materialize:materialize@=0.99.0
 aldeed:collection2
 aldeed:autoform@=5.8.1
 gildaspk:autoform-materialize
@@ -30,3 +29,5 @@ stevezhu:lodash
 session
 nilsdannemann:pdfmake
 momentjs:moment
+planettraining:material-design-icons-font
+materialize:materialize@=0.97.6

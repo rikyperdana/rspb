@@ -9,6 +9,12 @@ template(name='menu')
 		a.brand-logo.center RSPB
 		ul.right
 			li: a Login
+	ul.fixed.side-nav.z-depth-2
+		li.grey.lighten-2: a.center: b Menu Admin
+		each menus
+			li: a.waves-effect.waves-teal(href='/{{name}}')
+				span: b= full
+				i.material-icons.right#sideIcon(class='{{color}}-text')= icon
 
 template(name='home'): .container
 	h4 Beranda
@@ -18,7 +24,8 @@ template(name='loading'): .container
 
 template(name='modul'): .container
 	h5 Tabel Pasien
-	.right.btn#addPasien.hide Tambah
+	if showButton
+		.right.btn#addPasien Tambah
 	if addPasien
 		+quickForm(
 			collection= coll
