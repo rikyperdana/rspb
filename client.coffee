@@ -2,6 +2,7 @@ if Meteor.isClient
 
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
+	currentMR = -> parseInt Router.current().params.no_mr
 	search = -> Session.get 'search'
 
 	Template.menu.helpers
@@ -11,8 +12,7 @@ if Meteor.isClient
 		coll: -> coll
 		schema: -> new SimpleSchema schema[currentRoute()]
 		route: -> currentRoute()
-		pasiens: -> coll.find().fetch()
-		pasienData: -> coll.findOne no_mr: parseInt Router.current().params.no_mr
+		pasienData: -> coll.findOne no_mr: currentMR()
 		addPasien: -> Session.get 'addPasien'
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
 		hari: (date) -> moment(date).format('D MMM YYYY')
@@ -21,6 +21,25 @@ if Meteor.isClient
 		look: (option, value) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find.label
+		pasiens: ->
+			# coll.find().fetch()
+			selector = {}
+			options = {}
+			options.fields = no_mr: 1, regis: 1
+			if currentMR()
+				selector.no_mr = currentMR()
+				options.fields[currentRoute()] = 1
+			else if search()
+				selector.nama_lengkap =
+					$regex: '.*'+search()+'.*'
+					$options: '-i'
+			###
+			else
+				options = limit: 5
+			###
+			sub = Meteor.subscribe 'coll', selector, options
+			if sub.ready()
+				coll.find().fetch()
 
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'

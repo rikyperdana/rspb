@@ -70,11 +70,18 @@ makeRoute = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
 		name: modul
 		action: -> this.render 'modul'
+		###
 		waitOn: ->
-			no_mr = this.params.no_mr
+			selector = {}
+			options = {}
+			options.fields = no_mr: 1, regis: 1
+			no_mr = parseInt this.params.no_mr
 			if no_mr
-				Meteor.subscribe 'coll', no_mr, modul
+				selector.no_mr = no_mr
+				options.fields[modul] = 1
 			else
-				Meteor.subscribe 'coll'
+				options = limit: 5
+			Meteor.subscribe 'coll', selector, options
+		###
 
 makeRoute key for key, val of schema
