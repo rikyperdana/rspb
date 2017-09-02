@@ -43,7 +43,9 @@ if Meteor.isClient
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': -> Router.go currentRoute()
-		'keyup #search': (event) -> Session.set 'search', event.target.value
+		'keypress #search': (event) ->
+			if event.key is 'Enter'
+				Session.set 'search', event.target.value
 		'click #card': ->
 			pdf = pdfMake.createPdf
 				content: [
@@ -62,7 +64,7 @@ if Meteor.isClient
 				step: (result) ->
 					data = result.data[0]
 					selector =
-						no_mr: data.no_mr
+						no_mr: parseInt data.no_mr
 					modifier =
 						regis:
 							nama_lengkap: data.nama_lengkap
