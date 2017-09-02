@@ -29,7 +29,9 @@ if Meteor.isClient
 				sub = Meteor.subscribe 'coll', selector, options
 				if sub.ready() then coll.findOne()
 			else if search()
-				selector = 'regis.nama_lengkap': $options: '-i', $regex: '.*'+search()+'.*'
+				byName = 'regis.nama_lengkap': $options: '-i', $regex: '.*'+search()+'.*'
+				byNoMR = no_mr: parseInt search()
+				selector = $or: [byName, byNoMR]
 				options = fields: no_mr: 1, regis: 1
 				sub = Meteor.subscribe 'coll', selector, options
 				if sub.ready() then coll.find().fetch()
