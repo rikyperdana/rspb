@@ -23,7 +23,7 @@ if Meteor.isClient
 			find.label
 		pasiens: ->
 			if currentMR()
-				selector = no_mr: currentMR().toString()
+				selector = no_mr: currentMR()
 				options = fields: no_mr: 1, regis: 1
 				options[currentMR()] = 1
 				sub = Meteor.subscribe 'coll', selector, options
@@ -44,7 +44,9 @@ if Meteor.isClient
 	Template.modul.events
 		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
-		'click #close': -> Router.go currentRoute()
+		'click #close': ->
+			Session.set 'addPasien', false
+			Router.go currentRoute()
 		'keypress #search': (event) ->
 			if event.key is 'Enter'
 				Session.set 'search', event.target.value

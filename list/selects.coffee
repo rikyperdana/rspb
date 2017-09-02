@@ -102,7 +102,7 @@
 		label: 'Duda'
 		value: 4
 	]
-	tujuan_berobat: [
+	klinik: [
 		label: 'Penyakit Dalam'
 		value: 1
 	,
