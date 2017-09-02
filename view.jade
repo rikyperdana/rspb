@@ -39,7 +39,7 @@ template(name='modul'): .container
 			scope= route
 			doc= pasienData
 		)
-	unless pasienData
+	unless currentMR
 		table
 			thead
 				tr
@@ -56,33 +56,43 @@ template(name='modul'): .container
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin}}
 						td= hari(regis.tgl_lahir)
-	with pasienData
-		.left.purple.btn#card Cetak
-		table
-			tr
-				th No MR
-				td= no_mr
-			tr
-				th Nama Lengkap
-				td= regis.nama_lengkap
-			tr
-				th Tanggal Lahir
-				td= hari(regis.tgl_lahir)
-			tr
-				th Tempat Lahir
-				td= regis.tmpt_lahir
-			tr
-				th Umur
-				td= umur(regis.tgl_lahir)
-		.right.orange.btn#close Tutup
-		if jalan
+		+import
+	if currentMR
+		with pasiens
+			.left.purple.btn#card Cetak
 			table
-				thead
-					tr
-						th Cara Bayar
-						th Status Bayar
-				tbody
-					each jalan
+				tr
+					th No MR
+					td= no_mr
+				tr
+					th Nama Lengkap
+					td= regis.nama_lengkap
+				tr
+					th Tanggal Lahir
+					td= hari(regis.tgl_lahir)
+				tr
+					th Tempat Lahir
+					td= regis.tmpt_lahir
+				tr
+					th Umur
+					td= umur(regis.tgl_lahir)
+			.right.orange.btn#close Tutup
+			if jalan
+				table
+					thead
 						tr
-							td= cara_bayar
-							td= status_bayar
+							th Cara Bayar
+							th Status Bayar
+					tbody
+						each jalan
+							tr
+								td= cara_bayar
+								td= status_bayar
+
+template(name='import')
+	.file-field.input-field
+		.btn.left
+			span Impor Data
+			input(type='file' name='upload')
+		.file-path-wrapper
+			input.file-path.wrapper(type='text')
