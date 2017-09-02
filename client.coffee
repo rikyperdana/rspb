@@ -28,6 +28,11 @@ if Meteor.isClient
 				options[currentMR()] = 1
 				sub = Meteor.subscribe 'coll', selector, options
 				if sub.ready() then coll.findOne()
+			else if search()
+				selector = 'regis.nama_lengkap': $options: '-i', $regex: '.*'+search()+'.*'
+				options = fields: no_mr: 1, regis: 1
+				sub = Meteor.subscribe 'coll', selector, options
+				if sub.ready() then coll.find().fetch()
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1
