@@ -37,6 +37,7 @@ schema.jalan =
 	no_mr: type: Number
 	jalan: type: Array
 	'jalan.$': type: Object
+	'jalan.$.idbayar': type: Number
 	'jalan.$.tanggal': type: Date
 	'jalan.$.klinik': type: Number
 	'jalan.$.diagnosa': type: String

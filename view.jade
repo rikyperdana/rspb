@@ -69,19 +69,28 @@ template(name='modul'): .container
 						th Dokter
 						th Tindakan
 						th Total Biaya
+						th Cara Bayar
 						th Status Bayar
+						th Aksi
 				tbody
 					each pasien in pasiens
 						each item in pasien.jalan
-							tr
-								td= pasien.no_mr
-								td= pasien.regis.nama_lengkap
-								td= hari(item.tanggal)
-								td= item.klinik
-								td= item.dokter
-								td= item.tindakan
-								td= item.total.semua
-								td= item.status_bayar
+							unless item.status_bayar
+								tr
+									td= pasien.no_mr
+									td= pasien.regis.nama_lengkap
+									td= hari(item.tanggal)
+									td= item.klinik
+									td= item.dokter
+									td= item.tindakan
+									td= item.total.semua
+									td= item.cara_bayar
+									td= item.status_bayar
+									td
+										a#bayar(
+											pasien= pasien.no_mr
+											idbayar= item.idbayar
+										) Bayar
 	if currentMR
 		with pasiens
 			.left.purple.btn#card Cetak

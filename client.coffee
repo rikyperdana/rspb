@@ -62,7 +62,10 @@ if Meteor.isClient
 				pageMargins: [110, 50, 0, 0]
 				pageOrientation: 'landscape'
 			pdf.open()
-		'dblclick #coba': -> console.log this
+		'dblclick #bayar': (event) ->
+			no_mr = event.target.attributes.pasien.nodeValue
+			idbayar = event.target.attributes.idbayar.nodeValue
+			console.log no_mr, idbayar
 
 	Template.import.events
 		'change :file': (event, template) ->
