@@ -73,7 +73,7 @@
 		label: 'O'
 		value: 4
 	]
-	jenis_pembayaran: [
+	cara_bayar: [
 		label: 'Umum'
 		value: 1
 	,
@@ -89,7 +89,7 @@
 		label: 'Lapas/Dinsos'
 		value: 5
 	]
-	status: [
+	nikah: [
 		label: 'Nikah'
 		value: 1
 	,

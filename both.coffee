@@ -13,15 +13,15 @@ schema.regis =
 	no_mr: type: Number
 	regis: type: Object
 	'regis.nama_lengkap': type: String
-	'regis.cara_bayar': type: Number
 	'regis.tgl_lahir': type: Date
 	'regis.tmpt_lahir': type: String
-	'regis.kelamin': type: Number
-	'regis.agama': type: Number
-	'regis.nikah': type: Number
-	'regis.edukasi': type: Number
-	'regis.darah': type: Number
-	'regis.kerja': type: Number
+	'regis.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
+	'regis.kelamin': type: Number, autoform: options: selects.kelamin, type: 'select-radio-inline'
+	'regis.agama': type: Number, autoform: options: selects.agama, type: 'select-radio-inline'
+	'regis.nikah': type: Number, autoform: options: selects.nikah, type: 'select-radio-inline'
+	'regis.pendidikan': type: Number, autoform: options: selects.pendidikan, type: 'select-radio-inline'
+	'regis.darah': type: Number, autoform: options: selects.darah, type: 'select-radio-inline'
+	'regis.pekerjaan': type: Number, autoform: options: selects.pekerjaan, type: 'select-radio-inline'
 	'regis.alamat': type: String
 	'regis.kelurahan': type: String
 	'regis.kecamatan': type: String
@@ -37,14 +37,17 @@ schema.jalan =
 	no_mr: type: Number
 	jalan: type: Array
 	'jalan.$': type: Object
-	'jalan.$.idbayar': type: Number
+	'jalan.$.idbayar':
+		type: Number
+		autoform: type: 'hidden'
+		autoValue: -> Math.random().toString(36).slice(2)
 	'jalan.$.tanggal': type: Date
-	'jalan.$.klinik': type: Number
+	'jalan.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
+	'jalan.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'jalan.$.diagnosa': type: String
 	'jalan.$.tindakan': type: Number
 	'jalan.$.dokter': type: Number
-	'jalan.$.cara_bayar': type: Number
-	'jalan.$.status_bayar': type: Number
+	'jalan.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.labor': type: Array
 	'jalan.$.labor.$': type: Object
@@ -78,10 +81,10 @@ schema.jalan =
 	'jalan.$.obat.$.subtotal': type: Number
 
 	'jalan.$.total': type: Object
-	'jalan.$.total.labor': type: Number
-	'jalan.$.total.radio': type: Number
-	'jalan.$.total.obat': type: Number
-	'jalan.$.total.semua': type: Number
+	'jalan.$.total.labor': type: Number, autoform: disabled: true
+	'jalan.$.total.radio': type: Number, autoform: disabled: true
+	'jalan.$.total.obat': type: Number, autoform: disabled: true
+	'jalan.$.total.semua': type: Number, autoform: disabled: true
 
 @coll = new Meteor.Collection 'coll'
 coll.allow

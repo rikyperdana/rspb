@@ -44,7 +44,10 @@ if Meteor.isClient
 				if sub.ready() then coll.find().fetch()
 
 	Template.modul.events
-		'click #addPasien': -> Session.set 'addPasien', not Session.get 'addPasien'
+		'click #addPasien': ->
+			Session.set 'addPasien', not Session.get 'addPasien'
+			unexpand = -> $('.autoform-remove-item').trigger 'click'
+			setTimeout unexpand, 1000
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
 			Session.set 'addPasien', false
