@@ -43,6 +43,7 @@ schema.jalan =
 	'jalan.$.tindakan': type: Number
 	'jalan.$.dokter': type: Number
 	'jalan.$.cara_bayar': type: Number
+	'jalan.$.status_bayar': type: Number
 
 	'jalan.$.labor': type: Array
 	'jalan.$.labor.$': type: Object
@@ -75,19 +76,11 @@ schema.jalan =
 	'jalan.$.obat.$.harga': type: Number
 	'jalan.$.obat.$.subtotal': type: Number
 
-schema.bayar =
-	no_mr: type: Number
-	bayar: type: Array
-	'bayar.$': type: Object
-	'bayar.$.cara_bayar': type: Number
-	'bayar.$.status_bayar': type: Number
-	'bayar.$.tindakan': type: Array
-	'bayar.$.tindakan.$': type: Object
-	'bayar.$.tindakan.$.jenis': type: Number
-	'bayar.$.tindakan.$.biaya': type: Number
-	'bayar.$.id': type: Number
-	'bayar.$.petugas': type: String
-	'bayar.$.date': type: Date
+	'jalan.$.total': type: Object
+	'jalan.$.total.labor': type: Number
+	'jalan.$.total.radio': type: Number
+	'jalan.$.total.obat': type: Number
+	'jalan.$.total.semua': type: Number
 
 @coll = new Meteor.Collection 'coll'
 coll.allow
@@ -99,18 +92,8 @@ makeRoute = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
 		name: modul
 		action: -> this.render 'modul'
-		###
-		waitOn: ->
-			selector = {}
-			options = {}
-			options.fields = no_mr: 1, regis: 1
-			no_mr = parseInt this.params.no_mr
-			if no_mr
-				selector.no_mr = no_mr
-				options.fields[modul] = 1
-			else
-				options = limit: 5
-			Meteor.subscribe 'coll', selector, options
-		###
 
 makeRoute key for key, val of schema
+
+Router.route '/bayar',
+	action: -> this.render 'modul'

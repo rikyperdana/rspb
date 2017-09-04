@@ -37,7 +37,7 @@ template(name='modul'): .container
 			type= formType
 			id = 'formPasien'
 			scope= route
-			doc= pasienData
+			doc= pasiens
 		)
 	unless currentMR
 		table
@@ -57,6 +57,31 @@ template(name='modul'): .container
 						td {{look 'kelamin' regis.kelamin}}
 						td= hari(regis.tgl_lahir)
 		+import
+		if routeIs 'bayar'
+			h5 Daftar Bayar
+			table.bordered
+				thead
+					tr
+						th No MR
+						th Nama
+						th Tanggal
+						th Klinik
+						th Dokter
+						th Tindakan
+						th Total Biaya
+						th Status Bayar
+				tbody
+					each pasien in pasiens
+						each item in pasien.jalan
+							tr
+								td= pasien.no_mr
+								td= pasien.regis.nama_lengkap
+								td= hari(item.tanggal)
+								td= item.klinik
+								td= item.dokter
+								td= item.tindakan
+								td= item.total.semua
+								td= item.status_bayar
 	if currentMR
 		with pasiens
 			.left.purple.btn#card Cetak
@@ -81,11 +106,21 @@ template(name='modul'): .container
 				table
 					thead
 						tr
+							th Tanggal
+							th Klinik
+							th Diagnosa
+							th Tindakan
+							th Dokter
 							th Cara Bayar
 							th Status Bayar
 					tbody
 						each jalan
 							tr
+								td= hari(tanggal)
+								td= klinik
+								td= diagnosa
+								td= tindakan
+								td= dokter
 								td= cara_bayar
 								td= status_bayar
 
