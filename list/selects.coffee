@@ -153,3 +153,22 @@
 		value: 4
 	,
 	]
+	orders: [
+		grup: 'hematologi'
+		jenis: [
+			name: 'hemoglobin'
+			value: 1
+		,
+			name: 'leukosit'
+			value: 2
+		]
+	,
+		grup: 'urinalisa'
+		jenis: [
+			name: 'warna'
+			value: 3
+		,
+			name: 'berat'
+			value: 4
+		]
+	]

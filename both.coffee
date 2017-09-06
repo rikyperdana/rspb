@@ -51,12 +51,11 @@ schema.jalan =
 
 	'jalan.$.labor': type: Array
 	'jalan.$.labor.$': type: Object
-	'jalan.$.labor.$.tanggal': type: Date
 	'jalan.$.labor.$.order': type: Number
 	'jalan.$.labor.$.jenis': type: Number
-	'jalan.$.labor.$.nilai': type: Number
+	'jalan.$.labor.$.normal': type: Number
 	'jalan.$.labor.$.satuan': type: Number
-	'jalan.$.labor.$.hasil': type: String
+	'jalan.$.labor.$.hasil': type: Number, decimal: true
 	'jalan.$.labor.$.harga': type: Number
 
 	'jalan.$.radio': type: Array
