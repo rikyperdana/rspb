@@ -51,8 +51,8 @@ schema.jalan =
 
 	'jalan.$.labor': type: Array
 	'jalan.$.labor.$': type: Object
-	'jalan.$.labor.$.order': type: Number
-	'jalan.$.labor.$.jenis': type: Number
+	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders
+	'jalan.$.labor.$.jenis': type: Number, autoform: options: -> selects.orders
 	'jalan.$.labor.$.normal': type: Number
 	'jalan.$.labor.$.satuan': type: Number
 	'jalan.$.labor.$.hasil': type: Number, decimal: true

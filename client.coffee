@@ -91,3 +91,6 @@ if Meteor.isClient
 				if res then console.log res
 			'update-pushArray': (err, res) -> if res
 				console.log currentRoute(), this.currentDoc.no_mr, this.insertDoc
+		formToDoc: (doc) ->
+			console.log doc
+			$('input[name="diagnosa"]').val 'cinta'

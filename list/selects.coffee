@@ -154,21 +154,23 @@
 	,
 	]
 	orders: [
-		grup: 'hematologi'
+		label: 'Hematologi'
+		value: 1
 		jenis: [
-			name: 'hemoglobin'
-			value: 1
+			name: 'Hemoglobin'
+			value: 11
 		,
-			name: 'leukosit'
-			value: 2
+			name: 'Leukosit'
+			value: 12
 		]
 	,
-		grup: 'urinalisa'
+		label: 'Urinalisa'
+		value: 2
 		jenis: [
-			name: 'warna'
-			value: 3
+			name: 'Warna'
+			value: 21
 		,
-			name: 'berat'
-			value: 4
+			name: 'Berat'
+			value: 22
 		]
 	]
