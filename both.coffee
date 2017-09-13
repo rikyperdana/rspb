@@ -37,10 +37,6 @@ schema.jalan =
 	no_mr: type: Number
 	jalan: type: Array
 	'jalan.$': type: Object
-	'jalan.$.idbayar':
-		type: Number
-		autoform: type: 'hidden'
-		autoValue: -> Math.random().toString(36).slice(2)
 	'jalan.$.tanggal': type: Date
 	'jalan.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'jalan.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
@@ -49,26 +45,23 @@ schema.jalan =
 	'jalan.$.dokter': type: Number
 	'jalan.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
 
-	'jalan.$.labor': type: Array
+	'jalan.$.labor': type: Array, optional: true
 	'jalan.$.labor.$': type: Object
-	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders
-	'jalan.$.labor.$.jenis': type: Number, autoform: options: -> selects.orders
+	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders, type: 'universe-select'
 	'jalan.$.labor.$.normal': type: Number
 	'jalan.$.labor.$.satuan': type: Number
 	'jalan.$.labor.$.hasil': type: Number, decimal: true
 	'jalan.$.labor.$.harga': type: Number
 
-	'jalan.$.radio': type: Array
+	'jalan.$.radio': type: Array, optional: true
 	'jalan.$.radio.$': type: Object
-	'jalan.$.radio.$.tanggal': type: Date
 	'jalan.$.radio.$.order': type: Number
 	'jalan.$.radio.$.jenis': type: Number
 	'jalan.$.radio.$.hasil': type: String
 	'jalan.$.radio.$.harga': type: Number
 
-	'jalan.$.obat': type: Array
+	'jalan.$.obat': type: Array, optional: true
 	'jalan.$.obat.$': type: Object
-	'jalan.$.obat.$.tanggal': type: Date
 	'jalan.$.obat.$.nama': type: Number
 	'jalan.$.obat.$.satuan': type: Number
 	'jalan.$.obat.$.aturan': type: Object
@@ -79,11 +72,11 @@ schema.jalan =
 	'jalan.$.obat.$.harga': type: Number
 	'jalan.$.obat.$.subtotal': type: Number
 
-	'jalan.$.total': type: Object
-	'jalan.$.total.labor': type: Number, autoform: disabled: true
-	'jalan.$.total.radio': type: Number, autoform: disabled: true
-	'jalan.$.total.obat': type: Number, autoform: disabled: true
-	'jalan.$.total.semua': type: Number, autoform: disabled: true
+	'jalan.$.total': type: Object, optional: true, autoform: type: 'hidden'
+	'jalan.$.total.labor': type: Number
+	'jalan.$.total.radio': type: Number
+	'jalan.$.total.obat': type: Number
+	'jalan.$.total.semua': type: Number
 
 @coll = new Meteor.Collection 'coll'
 coll.allow

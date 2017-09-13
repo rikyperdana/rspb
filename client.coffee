@@ -85,12 +85,7 @@ if Meteor.isClient
 							alamat: data.alamat
 					Meteor.call 'import', selector, modifier
 
-	AutoForm.addHooks null,
+	AutoForm.addHooks 'formPasien',
 		after:
-			insert: (err, res) ->
-				if res then console.log res
-			'update-pushArray': (err, res) -> if res
-				console.log currentRoute(), this.currentDoc.no_mr, this.insertDoc
-		formToDoc: (doc) ->
-			console.log doc
-			$('input[name="diagnosa"]').val 'cinta'
+			insert: (err, res) -> console.log 'data masuk'
+			'update-pushArray': (err, res) -> console.log 'selip masuk'

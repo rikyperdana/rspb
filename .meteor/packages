@@ -32,3 +32,5 @@ momentjs:moment
 planettraining:material-design-icons-font
 materialize:materialize@=0.97.6
 harrison:papa-parse
+matdutour:popup-confirm
+vazco:universe-autoform-select
