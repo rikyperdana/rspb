@@ -22,8 +22,6 @@ mquandalle:jade
 iron:router
 stylus
 fourseven:scss
-aldeed:collection2
-aldeed:autoform@=5.8.1
 gildaspk:autoform-materialize
 stevezhu:lodash
 session
@@ -34,3 +32,5 @@ materialize:materialize@=0.97.6
 harrison:papa-parse
 matdutour:popup-confirm
 vazco:universe-autoform-select
+aldeed:collection2-core
+aldeed:autoform

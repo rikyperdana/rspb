@@ -86,6 +86,10 @@ if Meteor.isClient
 					Meteor.call 'import', selector, modifier
 
 	AutoForm.addHooks 'formPasien',
-		after:
-			insert: (err, res) -> console.log 'data masuk'
-			'update-pushArray': (err, res) -> console.log 'selip masuk'
+		before:
+			'update-pushArray': (doc) ->
+				ask = confirm 'Tambah data'
+				if ask is true
+					this.result doc
+				else
+					this.result false
