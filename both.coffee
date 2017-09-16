@@ -37,6 +37,7 @@ schema.jalan =
 	no_mr: type: Number
 	jalan: type: Array
 	'jalan.$': type: Object
+	'jalan.$.idbayar': type: String, autoform: type: 'hidden'
 	'jalan.$.tanggal': type: Date
 	'jalan.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'jalan.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'

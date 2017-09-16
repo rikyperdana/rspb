@@ -132,6 +132,10 @@ template(name='modul'): .container
 								td= dokter
 								td= cara_bayar
 								td= status_bayar
+	if confirm
+		.modal#confirm
+			.modal-content
+				p konfirmasi dulu
 
 template(name='import')
 	.file-field.input-field

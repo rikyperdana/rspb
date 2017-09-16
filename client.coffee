@@ -19,6 +19,7 @@ if Meteor.isClient
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
 		currentMR: -> currentMR()
 		routeIs: (name) -> currentRoute() is name
+		confirm: -> Session.get 'confirm'
 		look: (option, value) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find.label
@@ -85,11 +86,18 @@ if Meteor.isClient
 							alamat: data.alamat
 					Meteor.call 'import', selector, modifier
 
+	modForm = (doc) ->
+		doc.idbayar = Math.random().toString(36).slice(2)
+		doc
+
 	AutoForm.addHooks 'formPasien',
 		before:
 			'update-pushArray': (doc) ->
 				ask = confirm 'Tambah data'
 				if ask is true
-					this.result doc
+					this.result modForm doc
 				else
 					this.result false
+		formToDoc: (doc) ->
+			Session.set 'formDoc', modForm doc
+			doc
