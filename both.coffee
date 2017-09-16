@@ -74,10 +74,10 @@ schema.jalan =
 	'jalan.$.obat.$.subtotal': type: Number
 
 	'jalan.$.total': type: Object, optional: true, autoform: type: 'hidden'
-	'jalan.$.total.labor': type: Number
-	'jalan.$.total.radio': type: Number
-	'jalan.$.total.obat': type: Number
-	'jalan.$.total.semua': type: Number
+	'jalan.$.total.labor': type: Number, optional: true
+	'jalan.$.total.radio': type: Number, optional: true
+	'jalan.$.total.obat': type: Number, optional: true
+	'jalan.$.total.semua': type: Number, optional: true
 
 @coll = new Meteor.Collection 'coll'
 coll.allow

@@ -92,9 +92,14 @@ if Meteor.isClient
 	modForm = (doc) ->
 		if currentRoute() is 'jalan'
 			doc.idbayar = Math.random().toString(36).slice(2)
+			totalLabor = 0
 			if doc.labor
 				for labor in doc.labor
 					labor.harga = 32500
+					totalLabor += labor.harga
+			doc.total =
+				labor: totalLabor
+				semua: totalLabor
 		doc
 
 	AutoForm.addHooks 'formPasien',
