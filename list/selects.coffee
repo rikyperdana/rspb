@@ -154,23 +154,23 @@
 	,
 	]
 	orders: [
-		label: 'Hematologi'
+		label: 'Hemoglobin'
 		value: 1
-		jenis: [
-			name: 'Hemoglobin'
-			value: 11
-		,
-			name: 'Leukosit'
-			value: 12
-		]
+		grup: 'Hematologi'
+		harga: 25000
 	,
-		label: 'Urinalisa'
+		label: 'Leukosit'
 		value: 2
-		jenis: [
-			name: 'Warna'
-			value: 21
-		,
-			name: 'Berat'
-			value: 22
-		]
+		grup: 'Hematologi'
+		harga: 30000
+	,
+		label: 'Warna'
+		value: 3
+		grup: 'Urinalisa'
+		harga: 15000
+	,
+		label: 'Berat'
+		value: 4
+		grup: 'Urinalisa'
+		harga: 18000
 	]

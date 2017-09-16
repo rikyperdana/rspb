@@ -47,6 +47,7 @@ if Meteor.isClient
 	Template.modul.events
 		'click #addPasien': ->
 			Session.set 'addPasien', not Session.get 'addPasien'
+			if Session.get('formDoc') then Session.set 'formDoc', null
 			unexpand = -> $('.autoform-remove-item').trigger 'click'
 			setTimeout unexpand, 1000
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
@@ -89,7 +90,11 @@ if Meteor.isClient
 					Meteor.call 'import', selector, modifier
 
 	modForm = (doc) ->
-		doc.idbayar = Math.random().toString(36).slice(2)
+		if currentRoute() is 'jalan'
+			doc.idbayar = Math.random().toString(36).slice(2)
+			if doc.labor
+				for labor in doc.labor
+					labor.harga = 32500
 		doc
 
 	AutoForm.addHooks 'formPasien',

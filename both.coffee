@@ -49,10 +49,10 @@ schema.jalan =
 	'jalan.$.labor': type: Array, optional: true
 	'jalan.$.labor.$': type: Object
 	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders, type: 'universe-select'
-	'jalan.$.labor.$.normal': type: Number
-	'jalan.$.labor.$.satuan': type: Number
-	'jalan.$.labor.$.hasil': type: Number, decimal: true
-	'jalan.$.labor.$.harga': type: Number
+	'jalan.$.labor.$.normal': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.labor.$.satuan': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.labor.$.hasil': type: Number, decimal: true, optional: true, autoform: type: 'hidden'
+	'jalan.$.labor.$.harga': type: Number, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.radio': type: Array, optional: true
 	'jalan.$.radio.$': type: Object
