@@ -30,6 +30,9 @@ template(name='modul'): .container
 		.col.m6
 			if showButton
 				.right.btn#addPasien Tambah
+			if formDoc
+				a.btn.modal-trigger(href='#preview') Preview
+
 	if addPasien
 		+quickForm(
 			collection= coll
@@ -132,10 +135,12 @@ template(name='modul'): .container
 								td= dokter
 								td= cara_bayar
 								td= status_bayar
-	if confirm
-		.modal#confirm
+
+	with formDoc
+		.modal#preview
 			.modal-content
-				p konfirmasi dulu
+				p= idbayar
+				p= tanggal
 
 template(name='import')
 	.file-field.input-field

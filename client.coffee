@@ -19,7 +19,7 @@ if Meteor.isClient
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
 		currentMR: -> currentMR()
 		routeIs: (name) -> currentRoute() is name
-		confirm: -> Session.get 'confirm'
+		formDoc: -> Session.get 'formDoc'
 		look: (option, value) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find.label
@@ -70,6 +70,8 @@ if Meteor.isClient
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
 			console.log no_mr, idbayar
+		'click .modal-trigger': ->
+			$('#preview').modal 'open'
 
 	Template.import.events
 		'change :file': (event, template) ->
