@@ -70,7 +70,11 @@ if Meteor.isClient
 		'dblclick #bayar': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
-			console.log no_mr, idbayar
+			dialog =
+				title: 'Konfirmasi Pembayaran'
+				message: 'Apakah yakin tagihan ini sudah dibayar?'
+			new Confirmation dialog, (ok) ->
+				if ok then Meteor.call 'bayar', 'jalan', no_mr, idbayar
 		'click .modal-trigger': ->
 			$('#preview').modal 'open'
 
@@ -94,9 +98,9 @@ if Meteor.isClient
 			doc.idbayar = Math.random().toString(36).slice(2)
 			totalLabor = 0
 			if doc.labor
-				for labor in doc.labor
-					labor.harga = 32500
-					totalLabor += labor.harga
+				for i in doc.labor
+					i.harga = (_.find selects.orders, (j) -> j.value is i.order).harga
+					totalLabor += i.harga
 			doc.total =
 				labor: totalLabor
 				semua: totalLabor

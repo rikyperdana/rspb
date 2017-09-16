@@ -57,9 +57,8 @@ schema.jalan =
 	'jalan.$.radio': type: Array, optional: true
 	'jalan.$.radio.$': type: Object
 	'jalan.$.radio.$.order': type: Number
-	'jalan.$.radio.$.jenis': type: Number
-	'jalan.$.radio.$.hasil': type: String
-	'jalan.$.radio.$.harga': type: Number
+	'jalan.$.radio.$.hasil': type: String, optional: true, autoform: type: 'hidden'
+	'jalan.$.radio.$.harga': type: Number, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.obat': type: Array, optional: true
 	'jalan.$.obat.$': type: Object
@@ -70,8 +69,8 @@ schema.jalan =
 	'jalan.$.obat.$.aturan.dosis': type: Number
 	'jalan.$.obat.$.aturan.bentuk': type: Number
 	'jalan.$.obat.$.jumlah': type: Number
-	'jalan.$.obat.$.harga': type: Number
-	'jalan.$.obat.$.subtotal': type: Number
+	'jalan.$.obat.$.harga': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.obat.$.subtotal': type: Number, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.total': type: Object, optional: true, autoform: type: 'hidden'
 	'jalan.$.total.labor': type: Number, optional: true

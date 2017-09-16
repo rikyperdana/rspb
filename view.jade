@@ -135,12 +135,13 @@ template(name='modul'): .container
 								td= dokter
 								td= cara_bayar
 								td= status_bayar
-
 	with formDoc
 		.modal#preview
 			.modal-content
-				p= idbayar
-				p= tanggal
+				h5 Tanggal
+				span= tanggal
+				h5 Total Biaya
+				span= total.semua
 
 template(name='import')
 	.file-field.input-field
