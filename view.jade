@@ -94,6 +94,32 @@ template(name='modul'): .container
 											pasien= pasien.no_mr
 											idbayar= item.idbayar
 										) Bayar
+		if routeIs 'labor'
+			h5 Daftar Request Labor
+			table.bordered
+				thead
+					tr
+						th No. MR
+						th Pasien
+						th Order
+						th Satuan
+						th Hasil
+						th Aksi
+				tbody
+					each pasien in pasiens
+						each item in pasien.jalan
+							if item.labor
+								each labor in item.labor
+									tr
+										td= pasien.no_mr
+										td= pasien.regis.nama_lengkap
+										td {{look 'orders' labor.order}}
+										td= labor.satuan
+										td= labor.hasil
+										td: a#labor(
+												pasien= pasien.no_mr
+												idbayar= item.idbayar
+											) Isi
 	if currentMR
 		with pasiens
 			.left.purple.btn#card Cetak

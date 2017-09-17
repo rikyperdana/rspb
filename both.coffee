@@ -90,6 +90,9 @@ makeRoute = (modul) ->
 		action: -> this.render 'modul'
 
 makeRoute key for key, val of schema
+makeRoute i for i in ['bayar', 'labor']
 
+###
 Router.route '/bayar',
 	action: -> this.render 'modul'
+###

@@ -27,7 +27,8 @@ if Meteor.isClient
 			if currentMR()
 				selector = no_mr: currentMR()
 				options = fields: no_mr: 1, regis: 1
-				options.fields[currentRoute()] = 1
+				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
+					options.fields.jalan = 1
 				sub = Meteor.subscribe 'coll', selector, options
 				if sub.ready() then coll.findOne()
 			else if search()
@@ -40,7 +41,8 @@ if Meteor.isClient
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1
-				if currentRoute() is 'bayar' then options.fields.jalan = 1
+				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
+					options.fields.jalan = 1
 				sub = Meteor.subscribe 'coll', selector, options
 				if sub.ready() then coll.find().fetch()
 
@@ -75,6 +77,11 @@ if Meteor.isClient
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, (ok) ->
 				if ok then Meteor.call 'bayar', 'jalan', no_mr, idbayar
+		'dblclick #labor': (event) ->
+			no_mr = event.target.attributes.pasien.nodeValue
+			idbayar = event.target.attributes.idbayar.nodeValue
+			ask = prompt 'Berapa nilai nya?'
+			if ask then console.log ask
 		'click .modal-trigger': ->
 			$('#preview').modal 'open'
 
