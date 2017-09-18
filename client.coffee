@@ -80,8 +80,9 @@ if Meteor.isClient
 		'dblclick #labor': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
-			ask = prompt 'Berapa nilai nya?'
-			if ask then console.log ask
+			idlabor = event.target.attributes.idlabor.nodeValue
+			hasil = prompt 'Berapa nilai nya?'
+			if hasil then console.log no_mr, idbayar, idlabor, hasil
 		'click .modal-trigger': ->
 			$('#preview').modal 'open'
 
@@ -106,6 +107,7 @@ if Meteor.isClient
 			totalLabor = 0
 			if doc.labor
 				for i in doc.labor
+					i.idlabor = Math.random().toString(36).slice(2)
 					i.harga = (_.find selects.orders, (j) -> j.value is i.order).harga
 					totalLabor += i.harga
 			doc.total =

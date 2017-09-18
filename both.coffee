@@ -48,6 +48,7 @@ schema.jalan =
 
 	'jalan.$.labor': type: Array, optional: true
 	'jalan.$.labor.$': type: Object
+	'jalan.$.labor.$.idlabor': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders, type: 'universe-select'
 	'jalan.$.labor.$.normal': type: Number, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.satuan': type: Number, optional: true, autoform: type: 'hidden'
@@ -56,12 +57,14 @@ schema.jalan =
 
 	'jalan.$.radio': type: Array, optional: true
 	'jalan.$.radio.$': type: Object
+	'jalan.$.radio.$.idradio': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.radio.$.order': type: Number
 	'jalan.$.radio.$.hasil': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.radio.$.harga': type: Number, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.obat': type: Array, optional: true
 	'jalan.$.obat.$': type: Object
+	'jalan.$.obat.$.idobat': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.obat.$.nama': type: Number
 	'jalan.$.obat.$.satuan': type: Number
 	'jalan.$.obat.$.aturan': type: Object
@@ -91,8 +94,3 @@ makeRoute = (modul) ->
 
 makeRoute key for key, val of schema
 makeRoute i for i in ['bayar', 'labor']
-
-###
-Router.route '/bayar',
-	action: -> this.render 'modul'
-###
