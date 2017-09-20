@@ -174,10 +174,54 @@ template(name='modul'): .container
 	with formDoc
 		.modal#preview
 			.modal-content
-				h5 Tanggal
-				span= tanggal
-				h5 Total Biaya
-				span= total.semua
+				table
+					tr
+						th Tanggal
+						td= hari(tanggal)
+						th Cara Bayar
+						td {{look 'cara_bayar' cara_bayar 'label'}}
+						th Klinik
+						td {{look 'klinik' klinik 'label'}}
+					tr
+						th Diagnosa
+						td= diagnosa
+					tr
+						th Tindakan
+						td= tindakan
+					tr
+						th Dokter
+						td= dokter
+				if labor
+					table
+						thead
+							tr
+								th Grup
+								th Order
+								th Normal
+								th Satuan
+								th Hasil
+						tbody
+							each labor
+								td {{look 'orders' order 'grup'}}
+								td {{look 'orders' order 'label'}}
+								td {{look 'orders' order 'normal'}}
+								td {{look 'orders' order 'satuan'}}
+								td= hasil
+				with total
+					table
+						tr
+							if labor
+								th Total Labor
+								td= rupiah(labor)
+							if radio
+								th Total Radio
+								td= rupiah(radio)
+							if obat
+								th Total Obat
+								td= rupiah(obat)
+							if semua
+								th Total Semua
+								td= rupiah(semua)
 
 template(name='import')
 	.file-field.input-field

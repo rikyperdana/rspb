@@ -20,6 +20,7 @@ if Meteor.isClient
 		currentMR: -> currentMR()
 		routeIs: (name) -> currentRoute() is name
 		formDoc: -> Session.get 'formDoc'
+		rupiah: (val) -> 'Rp ' + val
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
