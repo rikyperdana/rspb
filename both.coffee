@@ -50,8 +50,6 @@ schema.jalan =
 	'jalan.$.labor.$': type: Object
 	'jalan.$.labor.$.idlabor': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders, type: 'universe-select'
-	'jalan.$.labor.$.normal': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.labor.$.satuan': type: Number, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.hasil': type: Number, decimal: true, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.harga': type: Number, optional: true, autoform: type: 'hidden'
 

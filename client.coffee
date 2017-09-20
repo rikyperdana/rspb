@@ -82,7 +82,7 @@ if Meteor.isClient
 			idbayar = event.target.attributes.idbayar.nodeValue
 			idlabor = event.target.attributes.idlabor.nodeValue
 			hasil = prompt 'Berapa nilai nya?'
-			if hasil then console.log no_mr, idbayar, idlabor, hasil
+			if hasil then Meteor.call 'labor', no_mr, idbayar, idlabor, hasil
 		'click .modal-trigger': ->
 			$('#preview').modal 'open'
 
