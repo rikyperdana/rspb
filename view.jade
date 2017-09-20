@@ -202,11 +202,12 @@ template(name='modul'): .container
 								th Hasil
 						tbody
 							each labor
-								td {{look 'orders' order 'grup'}}
-								td {{look 'orders' order 'label'}}
-								td {{look 'orders' order 'normal'}}
-								td {{look 'orders' order 'satuan'}}
-								td= hasil
+								tr
+									td {{look 'orders' order 'grup'}}
+									td {{look 'orders' order 'label'}}
+									td {{look 'orders' order 'normal'}}
+									td {{look 'orders' order 'satuan'}}
+									td= hasil
 				with total
 					table
 						tr
@@ -230,3 +231,4 @@ template(name='import')
 			input(type='file' name='upload')
 		.file-path-wrapper
 			input.file-path.wrapper(type='text')
+
