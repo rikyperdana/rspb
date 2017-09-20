@@ -83,7 +83,8 @@ if Meteor.isClient
 			idlabor = event.target.attributes.idlabor.nodeValue
 			hasil = prompt 'Berapa nilai nya?'
 			if hasil then Meteor.call 'labor', no_mr, idbayar, idlabor, hasil
-		'click .modal-trigger': ->
+		'click .modal-trigger': (event) ->
+			if this.idbayar then Session.set 'formDoc', this
 			$('#preview').modal 'open'
 
 	Template.import.events

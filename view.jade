@@ -152,6 +152,7 @@ template(name='modul'): .container
 							th Dokter
 							th Cara Bayar
 							th Status Bayar
+							th Edit
 					tbody
 						each jalan
 							tr
@@ -162,6 +163,7 @@ template(name='modul'): .container
 								td= dokter
 								td= cara_bayar
 								td= status_bayar
+								td: a.modal-trigger(href='#preview') Edit
 	with formDoc
 		.modal#preview
 			.modal-content
