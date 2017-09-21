@@ -20,7 +20,7 @@ if Meteor.isServer
 				if i.labor
 					for j in i.labor
 						if j.idlabor is idlabor
-							j.hasil = parseInt hasil
+							j.hasil = hasil
 			selector = no_mr: parseInt no_mr
 			modifier = jalan: findPasien.jalan
 			coll.update selector, $set: modifier

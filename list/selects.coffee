@@ -158,19 +158,25 @@
 		label: 'Hemoglobin'
 		grup: 'Hematologi'
 		harga: 25000
+		normal: 'Pr 12 - 14'
+		satuan: 'g/dl'
 	,
 		value: 2
 		label: 'Leukosit'
 		grup: 'Hematologi'
 		harga: 30000
+		normal: '4000 - 10000'
+		satuan: '/mm'
 	,
 		value: 3
 		label: 'Warna'
 		grup: 'Urinalisa'
 		harga: 15000
+		normal: 'Kuning Jernih'
 	,
 		value: 4
 		label: 'Berat'
 		grup: 'Urinalisa'
 		harga: 18000
+		normal: '1.003 - 1.030'
 	]

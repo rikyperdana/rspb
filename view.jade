@@ -83,11 +83,11 @@ template(name='modul'): .container
 									td= pasien.no_mr
 									td= pasien.regis.nama_lengkap
 									td= hari(item.tanggal)
-									td= item.klinik
+									td {{look 'klinik' item.klinik 'label'}}
 									td= item.dokter
 									td= item.tindakan
 									td= item.total.semua
-									td= item.cara_bayar
+									td {{look 'cara_bayar' item.cara_bayar 'label'}}
 									td= item.status_bayar
 									td
 										a#bayar(
@@ -101,26 +101,33 @@ template(name='modul'): .container
 					tr
 						th No. MR
 						th Pasien
+						th Grup
 						th Order
+						th Normal
 						th Satuan
 						th Hasil
 						th Aksi
 				tbody
 					each pasien in pasiens
 						each item in pasien.jalan
-							if item.labor
-								each labor in item.labor
-									tr
-										td= pasien.no_mr
-										td= pasien.regis.nama_lengkap
-										td {{look 'orders' labor.order}}
-										td= labor.satuan
-										td= labor.hasil
-										td: a#labor(
-												pasien= pasien.no_mr
-												idbayar= item.idbayar
-												idlabor= labor.idlabor
-											) Isi
+							if item.status_bayar
+								if item.labor
+									each labor in item.labor
+										unless labor.hasil
+											tr
+												td= pasien.no_mr
+												td= pasien.regis.nama_lengkap
+												td {{look 'orders' labor.order 'grup'}}
+												td {{look 'orders' labor.order 'label'}}
+												td {{look 'orders' labor.order 'normal'}}
+												td {{look 'orders' labor.order 'satuan'}}
+												td= labor.hasil
+												td
+													a#labor(
+														pasien= pasien.no_mr
+														idbayar= item.idbayar
+														idlabor= labor.idlabor
+													) Isi
 	if currentMR
 		with pasiens
 			.left.purple.btn#card Cetak
@@ -152,18 +159,18 @@ template(name='modul'): .container
 							th Dokter
 							th Cara Bayar
 							th Status Bayar
-							th Edit
+							th Lihat
 					tbody
 						each jalan
 							tr
 								td= hari(tanggal)
-								td= klinik
+								td {{look 'klinik' klinik 'label'}}
 								td= diagnosa
 								td= tindakan
 								td= dokter
-								td= cara_bayar
+								td {{look 'cara_bayar' cara_bayar 'label'}}
 								td= status_bayar
-								td: a.modal-trigger(href='#preview') Edit
+								td: a.modal-trigger(href='#preview') Lihat
 	with formDoc
 		.modal#preview
 			.modal-content
