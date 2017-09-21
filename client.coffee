@@ -84,6 +84,12 @@ if Meteor.isClient
 			idlabor = event.target.attributes.idlabor.nodeValue
 			hasil = prompt 'Berapa nilai nya?'
 			if hasil then Meteor.call 'labor', no_mr, idbayar, idlabor, hasil
+		'dblclick #obat': (event) ->
+			no_mr = event.target.attributes.pasien.nodeValue
+			idbayar = event.target.attributes.idbayar.nodeValue
+			idobat = event.target.attributes.idobat.nodeValue
+			serah = confirm 'Serahkan obat?'
+			if serah then Meteor.call 'obat', no_mr, idbayar, idobat, true
 		'click .modal-trigger': (event) ->
 			if this.idbayar then Session.set 'formDoc', this
 			$('#preview').modal 'open'
@@ -103,18 +109,25 @@ if Meteor.isClient
 							alamat: data.alamat
 					Meteor.call 'import', selector, modifier
 
-	modForm = (doc) ->
-		if currentRoute() is 'jalan'
-			doc.idbayar = Math.random().toString(36).slice(2)
-			totalLabor = 0
-			if doc.labor
-				for i in doc.labor
-					i.idlabor = Math.random().toString(36).slice(2)
-					i.harga = (_.find selects.orders, (j) -> j.value is i.order).harga
-					totalLabor += i.harga
-			doc.total =
-				labor: totalLabor
-				semua: totalLabor
+	modForm = (doc) -> if currentRoute() is 'jalan'
+		randomId = -> Math.random().toString(36).slice(2)
+		doc.idbayar = randomId()
+		totalLabor = 0; totalObat = 0; totalRadio = 0;
+		if doc.labor
+			for i in doc.labor
+				i.idlabor = randomId()
+				i.harga = (_.find selects.orders, (j) -> j.value is i.order).harga
+				totalLabor += i.harga
+		if doc.obat
+			for i in doc.obat
+				i.idobat = randomId()
+				i.harga = (_.find selects.obats, (j) -> j.value is i.nama).harga
+				i.subtotal = i.harga * i.jumlah
+				totalObat += i.subtotal
+		doc.total =
+			labor: totalLabor
+			obat: totalObat
+			semua: totalLabor + totalObat
 		doc
 
 	AutoForm.addHooks 'formPasien',

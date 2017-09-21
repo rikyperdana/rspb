@@ -180,3 +180,28 @@
 		harga: 18000
 		normal: '1.003 - 1.030'
 	]
+	bentuk: [
+		value: 1
+		label: 'butir'
+	,
+		value: 2
+		label: 'kapsul'
+	,
+		value: 3
+		label: 'tablet'
+	,
+		value: 4
+		label: 'sendok makan'
+	,
+		value: 5
+		label: 'sendok teh'
+	]
+	obats: [
+		value: 1
+		label: 'Paracetamol'
+		harga: 3000
+	,
+		value: 2
+		label: 'Amoxilin'
+		harga: 2500
+	]

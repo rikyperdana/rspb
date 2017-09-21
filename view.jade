@@ -94,6 +94,41 @@ template(name='modul'): .container
 											pasien= pasien.no_mr
 											idbayar= item.idbayar
 										) Bayar
+		if routeIs 'apotek'
+			h5 Daftar Request Obat
+			table.bordered
+				thead
+					tr
+						th No. MR
+						th Pasien
+						th Nama Obat
+						th Kali
+						th Dosis
+						th Bentuk
+						th Jumlah
+						th Serah
+				tbody
+					each pasien in pasiens
+						each item in pasien.jalan
+							if item.status_bayar
+								if item.obat
+									each obat in item.obat
+										unless obat.serah
+											tr
+												td= pasien.no_mr
+												td= pasien.regis.nama_lengkap
+												td= obat.nama
+												td= obat.aturan.kali
+												td= obat.aturan.dosis
+												td= obat.aturan.bentuk
+												td= obat.jumlah
+												td
+													a#obat(
+														pasien= pasien.no_mr
+														idbayar= item.idbayar
+														idobat= obat.idobat
+													) Serah
+
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -208,6 +243,23 @@ template(name='modul'): .container
 									td {{look 'orders' order 'normal'}}
 									td {{look 'orders' order 'satuan'}}
 									td= hasil
+				if obat
+					table
+						thead
+							tr
+								th Nama
+								th Dosis
+								th Bentuk
+								th Kali
+								th Jumlah
+						tbody
+							each obat
+								tr
+									td {{look 'obats' nama 'label'}}
+									td= aturan.dosis
+									td {{look 'bentuk' aturan.bentuk 'label'}}
+									td= aturan.kali
+									td= jumlah
 				with total
 					table
 						tr

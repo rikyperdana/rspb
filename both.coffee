@@ -63,15 +63,15 @@ schema.jalan =
 	'jalan.$.obat': type: Array, optional: true
 	'jalan.$.obat.$': type: Object
 	'jalan.$.obat.$.idobat': type: String, optional: true, autoform: type: 'hidden'
-	'jalan.$.obat.$.nama': type: Number
-	'jalan.$.obat.$.satuan': type: Number
+	'jalan.$.obat.$.nama': type: Number, autoform: options: selects.obats, type: 'universe-select'
 	'jalan.$.obat.$.aturan': type: Object
 	'jalan.$.obat.$.aturan.kali': type: Number
 	'jalan.$.obat.$.aturan.dosis': type: Number
-	'jalan.$.obat.$.aturan.bentuk': type: Number
+	'jalan.$.obat.$.aturan.bentuk': type: Number, autoform: options: selects.bentuk
 	'jalan.$.obat.$.jumlah': type: Number
 	'jalan.$.obat.$.harga': type: Number, optional: true, autoform: type: 'hidden'
 	'jalan.$.obat.$.subtotal': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.obat.$.serah': type: Number, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.total': type: Object, optional: true, autoform: type: 'hidden'
 	'jalan.$.total.labor': type: Number, optional: true
@@ -91,4 +91,4 @@ makeRoute = (modul) ->
 		action: -> this.render 'modul'
 
 makeRoute key for key, val of schema
-makeRoute i for i in ['bayar', 'labor']
+makeRoute i for i in ['bayar', 'labor', 'apotek']
