@@ -36,3 +36,15 @@ if Meteor.isServer
 			selector = no_mr: parseInt no_mr
 			modifier = jalan: findPasien.jalan
 			coll.update selector, $set: modifier
+		radio: (no_mr, idbayar, idradio, arsip) ->
+			select = no_mr: parseInt no_mr
+			option = fields: no_mr: 1, jalan: 1
+			findPasien = coll.findOne select, option
+			for i in findPasien.jalan
+				if i.radio
+					for j in i.radio
+						if j.idradio is idradio
+							j.arsip = arsip
+			selector = no_mr: parseInt no_mr
+			modifier = jalan: findPasien.jalan
+			coll.update selector, $set: modifier

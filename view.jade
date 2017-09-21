@@ -128,6 +128,34 @@ template(name='modul'): .container
 														idbayar= item.idbayar
 														idobat= obat.idobat
 													) Serah
+		if routeIs 'radio'
+			h5 Daftar Request Radiologi
+			table.bordered
+				thead
+					tr
+						th No. MR
+						th Pasien
+						th Order
+						th Arsip
+						th Aksi
+				tbody
+					each pasien in pasiens
+						each item in pasien.jalan
+							if item.status_bayar
+								if item.radio
+									each radio in item.radio
+										unless radio.arsip
+											tr
+												td= pasien.no_mr
+												td= pasien.regis.nama_lengkap
+												td= radio.order
+												td= radio.arsip
+												td
+													a#radio(
+														pasien= pasien.no_mr
+														idbayar= item.idbayar
+														idradio= radio.idradio
+													) Aksi
 
 		if routeIs 'labor'
 			h5 Daftar Request Labor
@@ -260,6 +288,17 @@ template(name='modul'): .container
 									td {{look 'bentuk' aturan.bentuk 'label'}}
 									td= aturan.kali
 									td= jumlah
+				if radio
+					table
+						thead
+							tr
+								th Order
+								th Arsip
+						tbody
+							each radio
+								tr
+									td {{look 'orders_rad' order 'label'}}
+									td= arsip
 				with total
 					table
 						tr

@@ -56,9 +56,9 @@ schema.jalan =
 	'jalan.$.radio': type: Array, optional: true
 	'jalan.$.radio.$': type: Object
 	'jalan.$.radio.$.idradio': type: String, optional: true, autoform: type: 'hidden'
-	'jalan.$.radio.$.order': type: Number
-	'jalan.$.radio.$.hasil': type: String, optional: true, autoform: type: 'hidden'
+	'jalan.$.radio.$.order': type: Number, autoform: options: selects.orders_rad
 	'jalan.$.radio.$.harga': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.radio.$.arsip': type: String, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.obat': type: Array, optional: true
 	'jalan.$.obat.$': type: Object
@@ -91,4 +91,4 @@ makeRoute = (modul) ->
 		action: -> this.render 'modul'
 
 makeRoute key for key, val of schema
-makeRoute i for i in ['bayar', 'labor', 'apotek']
+makeRoute i for i in ['bayar', 'labor', 'apotek', 'radio']

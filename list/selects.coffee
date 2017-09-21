@@ -180,6 +180,15 @@
 		harga: 18000
 		normal: '1.003 - 1.030'
 	]
+	orders_rad: [
+		value: 1
+		label: 'Rontgen'
+		harga: 150000
+	,
+		value: 2
+		label: 'MRI'
+		harga: 2500000
+	]
 	bentuk: [
 		value: 1
 		label: 'butir'

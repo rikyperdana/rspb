@@ -90,6 +90,12 @@ if Meteor.isClient
 			idobat = event.target.attributes.idobat.nodeValue
 			serah = confirm 'Serahkan obat?'
 			if serah then Meteor.call 'obat', no_mr, idbayar, idobat, true
+		'dblclick #radio': (event) ->
+			no_mr = event.target.attributes.pasien.nodeValue
+			idbayar = event.target.attributes.idbayar.nodeValue
+			idradio = event.target.attributes.idradio.nodeValue
+			arsip = prompt 'Kode arsip radiologi?'
+			if arsip then Meteor.call 'radio', no_mr, idbayar, idradio, arsip
 		'click .modal-trigger': (event) ->
 			if this.idbayar then Session.set 'formDoc', this
 			$('#preview').modal 'open'
@@ -124,10 +130,16 @@ if Meteor.isClient
 				i.harga = (_.find selects.obats, (j) -> j.value is i.nama).harga
 				i.subtotal = i.harga * i.jumlah
 				totalObat += i.subtotal
+		if doc.radio
+			for i in doc.radio
+				i.idradio = randomId()
+				i.harga = (_.find selects.orders_rad, (j) -> j.value is i.order).harga
+				totalRadio += i.harga
 		doc.total =
 			labor: totalLabor
 			obat: totalObat
-			semua: totalLabor + totalObat
+			radio: totalRadio
+			semua: totalLabor + totalObat + totalRadio
 		doc
 
 	AutoForm.addHooks 'formPasien',
