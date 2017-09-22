@@ -83,8 +83,10 @@ if Meteor.isClient
 			idbayar = event.target.attributes.idbayar.nodeValue
 			jenis = event.target.attributes.jenis.nodeValue
 			idjenis = event.target.attributes.idjenis.nodeValue
-			hasil = prompt 'Sebutkan hasilnya'
-			if hasil then Meteor.call 'request', no_mr, idbayar, jenis, idjenis, hasil
+			MaterializeModal.prompt
+				message: 'Isikan data requestnya'
+				callback: (err, res) -> if res.submit
+					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value
 		'click .modal-trigger': (event) ->
 			if this.idbayar then Session.set 'formDoc', this
 			$('#preview').modal 'open'
