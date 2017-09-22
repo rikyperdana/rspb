@@ -12,39 +12,13 @@ if Meteor.isServer
 			modifier = {}
 			modifier[modul + '.$.status_bayar'] = 1
 			coll.update selector, $set: modifier
-		labor: (no_mr, idbayar, idlabor, hasil) ->
-			select = no_mr: parseInt no_mr
-			option = fields: no_mr: 1, jalan: 1
-			findPasien = coll.findOne select, option
+		request: (no_mr, idbayar, jenis, idjenis, hasil) ->
+			selector = no_mr: parseInt no_mr
+			findPasien = coll.findOne selector
 			for i in findPasien.jalan
-				if i.labor
-					for j in i.labor
-						if j.idlabor is idlabor
+				if i[jenis]
+					for j in i[jenis]
+						if j['id'+jenis] is idjenis
 							j.hasil = hasil
-			selector = no_mr: parseInt no_mr
-			modifier = jalan: findPasien.jalan
-			coll.update selector, $set: modifier
-		obat: (no_mr, idbayar, idobat, serah) ->
-			select = no_mr: parseInt no_mr
-			option = fields: no_mr: 1, jalan: 1
-			findPasien = coll.findOne select, option
-			for i in findPasien.jalan
-				if i.obat
-					for j in i.obat
-						if j.idobat is idobat
-							j.serah = true
-			selector = no_mr: parseInt no_mr
-			modifier = jalan: findPasien.jalan
-			coll.update selector, $set: modifier
-		radio: (no_mr, idbayar, idradio, arsip) ->
-			select = no_mr: parseInt no_mr
-			option = fields: no_mr: 1, jalan: 1
-			findPasien = coll.findOne select, option
-			for i in findPasien.jalan
-				if i.radio
-					for j in i.radio
-						if j.idradio is idradio
-							j.arsip = arsip
-			selector = no_mr: parseInt no_mr
 			modifier = jalan: findPasien.jalan
 			coll.update selector, $set: modifier

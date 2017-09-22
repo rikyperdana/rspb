@@ -50,15 +50,15 @@ schema.jalan =
 	'jalan.$.labor.$': type: Object
 	'jalan.$.labor.$.idlabor': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders, type: 'universe-select'
-	'jalan.$.labor.$.hasil': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.labor.$.harga': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.labor.$.hasil': type: String, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.radio': type: Array, optional: true
 	'jalan.$.radio.$': type: Object
 	'jalan.$.radio.$.idradio': type: String, optional: true, autoform: type: 'hidden'
 	'jalan.$.radio.$.order': type: Number, autoform: options: selects.orders_rad
 	'jalan.$.radio.$.harga': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.radio.$.arsip': type: String, optional: true, autoform: type: 'hidden'
+	'jalan.$.radio.$.hasil': type: String, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.obat': type: Array, optional: true
 	'jalan.$.obat.$': type: Object
@@ -71,7 +71,7 @@ schema.jalan =
 	'jalan.$.obat.$.jumlah': type: Number
 	'jalan.$.obat.$.harga': type: Number, optional: true, autoform: type: 'hidden'
 	'jalan.$.obat.$.subtotal': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.obat.$.serah': type: Number, optional: true, autoform: type: 'hidden'
+	'jalan.$.obat.$.hasil': type: String, optional: true, autoform: type: 'hidden'
 
 	'jalan.$.total': type: Object, optional: true, autoform: type: 'hidden'
 	'jalan.$.total.labor': type: Number, optional: true

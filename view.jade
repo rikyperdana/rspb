@@ -113,7 +113,7 @@ template(name='modul'): .container
 							if item.status_bayar
 								if item.obat
 									each obat in item.obat
-										unless obat.serah
+										unless obat.hasil
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
@@ -123,10 +123,11 @@ template(name='modul'): .container
 												td= obat.aturan.bentuk
 												td= obat.jumlah
 												td
-													a#obat(
+													a#request(
 														pasien= pasien.no_mr
 														idbayar= item.idbayar
-														idobat= obat.idobat
+														jenis = 'obat'
+														idjenis= obat.idobat
 													) Serah
 		if routeIs 'radio'
 			h5 Daftar Request Radiologi
@@ -144,17 +145,18 @@ template(name='modul'): .container
 							if item.status_bayar
 								if item.radio
 									each radio in item.radio
-										unless radio.arsip
+										unless radio.hasil
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
 												td= radio.order
-												td= radio.arsip
+												td= radio.hasil
 												td
-													a#radio(
+													a#request(
 														pasien= pasien.no_mr
 														idbayar= item.idbayar
-														idradio= radio.idradio
+														jenis = 'radio'
+														idjenis= radio.idradio
 													) Aksi
 
 		if routeIs 'labor'
@@ -186,10 +188,11 @@ template(name='modul'): .container
 												td {{look 'orders' labor.order 'satuan'}}
 												td= labor.hasil
 												td
-													a#labor(
+													a#request(
 														pasien= pasien.no_mr
 														idbayar= item.idbayar
-														idlabor= labor.idlabor
+														jenis= 'labor'
+														idjenis= labor.idlabor
 													) Isi
 	if currentMR
 		with pasiens

@@ -78,24 +78,13 @@ if Meteor.isClient
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, (ok) ->
 				if ok then Meteor.call 'bayar', 'jalan', no_mr, idbayar
-		'dblclick #labor': (event) ->
+		'dblclick #request': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
-			idlabor = event.target.attributes.idlabor.nodeValue
-			hasil = prompt 'Berapa nilai nya?'
-			if hasil then Meteor.call 'labor', no_mr, idbayar, idlabor, hasil
-		'dblclick #obat': (event) ->
-			no_mr = event.target.attributes.pasien.nodeValue
-			idbayar = event.target.attributes.idbayar.nodeValue
-			idobat = event.target.attributes.idobat.nodeValue
-			serah = confirm 'Serahkan obat?'
-			if serah then Meteor.call 'obat', no_mr, idbayar, idobat, true
-		'dblclick #radio': (event) ->
-			no_mr = event.target.attributes.pasien.nodeValue
-			idbayar = event.target.attributes.idbayar.nodeValue
-			idradio = event.target.attributes.idradio.nodeValue
-			arsip = prompt 'Kode arsip radiologi?'
-			if arsip then Meteor.call 'radio', no_mr, idbayar, idradio, arsip
+			jenis = event.target.attributes.jenis.nodeValue
+			idjenis = event.target.attributes.idjenis.nodeValue
+			hasil = prompt 'Sebutkan hasilnya'
+			if hasil then Meteor.call 'request', no_mr, idbayar, jenis, idjenis, hasil
 		'click .modal-trigger': (event) ->
 			if this.idbayar then Session.set 'formDoc', this
 			$('#preview').modal 'open'
