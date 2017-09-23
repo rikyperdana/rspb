@@ -1,24 +1,22 @@
 if Meteor.isServer
 
-	Meteor.publish 'coll', (selector, options) ->
-		coll.find selector, options
+	Meteor.publish 'pasien', (selector, options) ->
+		coll.pasien.find selector, options
 
 	Meteor.methods
 		import: (selector, modifier) ->
-			coll.upsert selector, $set: modifier
-		bayar: (modul, no_mr, idbayar) ->
-			selector = no_mr: parseInt no_mr
-			selector[modul + '.idbayar'] = idbayar
-			modifier = {}
-			modifier[modul + '.$.status_bayar'] = 1
-			coll.update selector, $set: modifier
+			coll.pasien.upsert selector, $set: modifier
+		bayar: (no_mr, idbayar) ->
+			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
+			modifier = 'rawat.$.status_bayar': 1
+			coll.pasien.update selector, $set: modifier
 		request: (no_mr, idbayar, jenis, idjenis, hasil) ->
 			selector = no_mr: parseInt no_mr
-			findPasien = coll.findOne selector
-			for i in findPasien.jalan
+			findPasien = coll.pasien.findOne selector
+			for i in findPasien.rawat
 				if i[jenis]
 					for j in i[jenis]
 						if j['id'+jenis] is idjenis
 							j.hasil = hasil
-			modifier = jalan: findPasien.jalan
-			coll.update selector, $set: modifier
+			modifier = rawat: findPasien.rawat
+			coll.pasien.update selector, $set: modifier

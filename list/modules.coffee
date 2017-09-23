@@ -19,7 +19,7 @@
 	icon: 'airport_shuttle'
 	color: 'red'
 ,
-	name: 'idmisi'
+	name: 'admisi'
 	full: 'Admisi'
 	icon: 'assignment'
 	color: 'purple'
@@ -39,7 +39,7 @@
 	icon: 'airline_seat_flat'
 	color: 'indigo'
 ,
-	name: 'apotek'
+	name: 'obat'
 	full: 'Apotek'
 	icon: 'enhanced_encryption'
 	color: 'light-green'

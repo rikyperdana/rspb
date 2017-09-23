@@ -1,4 +1,14 @@
 @selects =
+	rawats: [
+		label: 'Rawat Jalan'
+		value: 1
+	,
+		label: 'Rawat Inap'
+		value: 2
+	,
+		label: 'IGD'
+		value: 3
+	]
 	pekerjaan: [
 		label: 'Pegawai Negeri'
 		value: 1
@@ -153,7 +163,7 @@
 		value: 4
 	,
 	]
-	orders: [
+	labors: [
 		value: 1
 		label: 'Hemoglobin'
 		grup: 'Hematologi'
@@ -180,7 +190,7 @@
 		harga: 18000
 		normal: '1.003 - 1.030'
 	]
-	orders_rad: [
+	radios: [
 		value: 1
 		label: 'Rontgen'
 		harga: 150000

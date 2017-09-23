@@ -29,23 +29,23 @@ if Meteor.isClient
 				selector = no_mr: currentMR()
 				options = fields: no_mr: 1, regis: 1
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
-					options.fields.jalan = 1
-				sub = Meteor.subscribe 'coll', selector, options
-				if sub.ready() then coll.findOne()
+					options.fields.rawat = 1
+				sub = Meteor.subscribe 'pasien', selector, options
+				if sub.ready() then coll.pasien.findOne()
 			else if search()
 				byName = 'regis.nama_lengkap': $options: '-i', $regex: '.*'+search()+'.*'
 				byNoMR = no_mr: parseInt search()
 				selector = $or: [byName, byNoMR]
 				options = fields: no_mr: 1, regis: 1
-				sub = Meteor.subscribe 'coll', selector, options
-				if sub.ready() then coll.find().fetch()
+				sub = Meteor.subscribe 'pasien', selector, options
+				if sub.ready() then coll.pasien.find().fetch()
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
-					options.fields.jalan = 1
-				sub = Meteor.subscribe 'coll', selector, options
-				if sub.ready() then coll.find().fetch()
+					options.fields.rawat = 1
+				sub = Meteor.subscribe 'pasien', selector, options
+				if sub.ready() then coll.pasien.find().fetch()
 
 	Template.modul.events
 		'click #addPasien': ->
@@ -63,8 +63,8 @@ if Meteor.isClient
 		'click #card': ->
 			pdf = pdfMake.createPdf
 				content: [
-					'Nama: ' + coll.findOne().regis.nama_lengkap
-					'No. MR: ' + coll.findOne().no_mr
+					'Nama: ' + coll.pasien.findOne().regis.nama_lengkap
+					'No. MR: ' + coll.pasien.findOne().no_mr
 				]
 				pageSize: 'B8'
 				pageMargins: [110, 50, 0, 0]
@@ -77,7 +77,7 @@ if Meteor.isClient
 				title: 'Konfirmasi Pembayaran'
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, (ok) ->
-				if ok then Meteor.call 'bayar', 'jalan', no_mr, idbayar
+				if ok then Meteor.call 'bayar', no_mr, idbayar
 		'dblclick #request': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue

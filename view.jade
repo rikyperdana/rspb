@@ -35,11 +35,11 @@ template(name='modul'): .container
 
 	if addPasien
 		+quickForm(
-			collection= coll
+			collection= coll.pasien
 			schema= schema
 			type= formType
 			id = 'formPasien'
-			scope= route
+			scope= 'rawat'
 			doc= pasiens
 		)
 	unless currentMR
@@ -77,7 +77,7 @@ template(name='modul'): .container
 						th Aksi
 				tbody
 					each pasien in pasiens
-						each item in pasien.jalan
+						each item in pasien.rawat
 							unless item.status_bayar
 								tr
 									td= pasien.no_mr
@@ -94,7 +94,67 @@ template(name='modul'): .container
 											pasien= pasien.no_mr
 											idbayar= item.idbayar
 										) Bayar
-		if routeIs 'apotek'
+		if routeIs 'labor'
+			h5 Daftar Request Labor
+			table.bordered
+				thead
+					tr
+						th No. MR
+						th Pasien
+						th Grup
+						th Order
+						th Normal
+						th Satuan
+						th Aksi
+				tbody
+					each pasien in pasiens
+						each item in pasien.rawat
+							if item.status_bayar
+								if item.labor
+									each labor in item.labor
+										unless labor.hasil
+											tr
+												td= pasien.no_mr
+												td= pasien.regis.nama_lengkap
+												td {{look 'orders' labor.order 'grup'}}
+												td {{look 'orders' labor.order 'label'}}
+												td {{look 'orders' labor.order 'normal'}}
+												td {{look 'orders' labor.order 'satuan'}}
+												td
+													a#request(
+														pasien= pasien.no_mr
+														idbayar= item.idbayar
+														jenis= 'labor'
+														idjenis= labor.idlabor
+													) Isi
+		if routeIs 'radio'
+			h5 Daftar Request Radiologi
+			table.bordered
+				thead
+					tr
+						th No. MR
+						th Pasien
+						th Order
+						th Aksi
+				tbody
+					each pasien in pasiens
+						each item in pasien.rawat
+							if item.status_bayar
+								if item.radio
+									each radio in item.radio
+										unless radio.hasil
+											tr
+												td= pasien.no_mr
+												td= pasien.regis.nama_lengkap
+												td= radio.order
+												td
+													a#request(
+														pasien= pasien.no_mr
+														idbayar= item.idbayar
+														jenis = 'radio'
+														idjenis= radio.idradio
+													) Aksi
+		if routeIs 'obat'
 			h5 Daftar Request Obat
 			table.bordered
 				thead
@@ -109,7 +169,7 @@ template(name='modul'): .container
 						th Serah
 				tbody
 					each pasien in pasiens
-						each item in pasien.jalan
+						each item in pasien.rawat
 							if item.status_bayar
 								if item.obat
 									each obat in item.obat
@@ -129,71 +189,6 @@ template(name='modul'): .container
 														jenis = 'obat'
 														idjenis= obat.idobat
 													) Serah
-		if routeIs 'radio'
-			h5 Daftar Request Radiologi
-			table.bordered
-				thead
-					tr
-						th No. MR
-						th Pasien
-						th Order
-						th Arsip
-						th Aksi
-				tbody
-					each pasien in pasiens
-						each item in pasien.jalan
-							if item.status_bayar
-								if item.radio
-									each radio in item.radio
-										unless radio.hasil
-											tr
-												td= pasien.no_mr
-												td= pasien.regis.nama_lengkap
-												td= radio.order
-												td= radio.hasil
-												td
-													a#request(
-														pasien= pasien.no_mr
-														idbayar= item.idbayar
-														jenis = 'radio'
-														idjenis= radio.idradio
-													) Aksi
-
-		if routeIs 'labor'
-			h5 Daftar Request Labor
-			table.bordered
-				thead
-					tr
-						th No. MR
-						th Pasien
-						th Grup
-						th Order
-						th Normal
-						th Satuan
-						th Hasil
-						th Aksi
-				tbody
-					each pasien in pasiens
-						each item in pasien.jalan
-							if item.status_bayar
-								if item.labor
-									each labor in item.labor
-										unless labor.hasil
-											tr
-												td= pasien.no_mr
-												td= pasien.regis.nama_lengkap
-												td {{look 'orders' labor.order 'grup'}}
-												td {{look 'orders' labor.order 'label'}}
-												td {{look 'orders' labor.order 'normal'}}
-												td {{look 'orders' labor.order 'satuan'}}
-												td= labor.hasil
-												td
-													a#request(
-														pasien= pasien.no_mr
-														idbayar= item.idbayar
-														jenis= 'labor'
-														idjenis= labor.idlabor
-													) Isi
 	if currentMR
 		with pasiens
 			.left.purple.btn#card Cetak
@@ -214,7 +209,7 @@ template(name='modul'): .container
 					th Umur
 					td= umur(regis.tgl_lahir)
 			.right.orange.btn#close Tutup
-			if jalan
+			if rawat
 				table
 					thead
 						tr
@@ -227,7 +222,7 @@ template(name='modul'): .container
 							th Status Bayar
 							th Lihat
 					tbody
-						each jalan
+						each rawat
 							tr
 								td= hari(tanggal)
 								td {{look 'klinik' klinik 'label'}}

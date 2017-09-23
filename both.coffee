@@ -7,6 +7,7 @@ Router.configure
 Router.route '/',
 	action: -> this.render 'home'
 
+@coll = {}
 @schema = {}
 
 schema.regis =
@@ -33,54 +34,56 @@ schema.regis =
 	'regis.petugas': type: String
 	'regis.date': type: Date
 
-schema.jalan =
+schema.labor =
+	idlabor: type: String, optional: true, autoform: type: 'hidden'
+	labors: type: Number, autoform: options: selects.labors
+	harga: type: Number, optional: true, autoform: type: 'hidden'
+	hasil: type: String, optional: true, autoform: type: 'hidden'
+
+schema.radio =
+	idradio: type: String, optional: true, autoform: type: 'hidden'
+	radios: type: Number, autoform: options: selects.radios
+	harga: type: Number, optional: true, autoform: type: 'hidden'
+	hasil: type: String, optional: true, autoform: type: 'hidden'
+
+schema.obat =
+	idobat: type: String, optional: true, autoform: type: 'hidden'
+	obats: type: Number, autoform: options: selects.obats
+	aturan: type: Object
+	'aturan.kali': type: Number
+	'aturan.dosis': type: Number
+	'aturan.bentuk': type: Number, autoform: options: selects.bentuk
+	jumlah: type: Number
+	harga: type: Number, optional: true, autoform: type: 'hidden'
+	subtotal: type: Number, optional: true, autoform: type: 'hidden'
+	hasil: type: String, optional: true, autoform: type: 'hidden'
+
+schema.rawat =
 	no_mr: type: Number
-	jalan: type: Array
-	'jalan.$': type: Object
-	'jalan.$.idbayar': type: String, autoform: type: 'hidden'
-	'jalan.$.tanggal': type: Date
-	'jalan.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
-	'jalan.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
-	'jalan.$.diagnosa': type: String
-	'jalan.$.tindakan': type: Number
-	'jalan.$.dokter': type: Number
-	'jalan.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
+	rawat: type: Array
+	'rawat.$': type: Object
+	'rawat.$.idbayar': type: String, autoform: type: 'hidden'
+	'rawat.$.jenis': type: Number, autoform: options: selects.rawats
+	'rawat.$.tanggal': type: Date
+	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
+	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
+	'rawat.$.diagnosa': type: String
+	'rawat.$.tindakan': type: Number
+	'rawat.$.dokter': type: Number
+	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
+	'rawat.$.labor': type: [new SimpleSchema schema.labor]
+	'rawat.$.radio': type: [new SimpleSchema schema.radio]
+	'rawat.$.obat': type: [new SimpleSchema schema.obat]
+	'rawat.$.total': type: Object, optional: true, autoform: type: 'hidden'
+	'rawat.$.total.labor': type: Number, optional: true
+	'rawat.$.total.radio': type: Number, optional: true
+	'rawat.$.total.obat': type: Number, optional: true
+	'rawat.$.total.semua': type: Number, optional: true
 
-	'jalan.$.labor': type: Array, optional: true
-	'jalan.$.labor.$': type: Object
-	'jalan.$.labor.$.idlabor': type: String, optional: true, autoform: type: 'hidden'
-	'jalan.$.labor.$.order': type: Number, autoform: options: selects.orders, type: 'universe-select'
-	'jalan.$.labor.$.harga': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.labor.$.hasil': type: String, optional: true, autoform: type: 'hidden'
+schema.jalan = Object.assign {}, schema.rawat
 
-	'jalan.$.radio': type: Array, optional: true
-	'jalan.$.radio.$': type: Object
-	'jalan.$.radio.$.idradio': type: String, optional: true, autoform: type: 'hidden'
-	'jalan.$.radio.$.order': type: Number, autoform: options: selects.orders_rad
-	'jalan.$.radio.$.harga': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.radio.$.hasil': type: String, optional: true, autoform: type: 'hidden'
-
-	'jalan.$.obat': type: Array, optional: true
-	'jalan.$.obat.$': type: Object
-	'jalan.$.obat.$.idobat': type: String, optional: true, autoform: type: 'hidden'
-	'jalan.$.obat.$.nama': type: Number, autoform: options: selects.obats, type: 'universe-select'
-	'jalan.$.obat.$.aturan': type: Object
-	'jalan.$.obat.$.aturan.kali': type: Number
-	'jalan.$.obat.$.aturan.dosis': type: Number
-	'jalan.$.obat.$.aturan.bentuk': type: Number, autoform: options: selects.bentuk
-	'jalan.$.obat.$.jumlah': type: Number
-	'jalan.$.obat.$.harga': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.obat.$.subtotal': type: Number, optional: true, autoform: type: 'hidden'
-	'jalan.$.obat.$.hasil': type: String, optional: true, autoform: type: 'hidden'
-
-	'jalan.$.total': type: Object, optional: true, autoform: type: 'hidden'
-	'jalan.$.total.labor': type: Number, optional: true
-	'jalan.$.total.radio': type: Number, optional: true
-	'jalan.$.total.obat': type: Number, optional: true
-	'jalan.$.total.semua': type: Number, optional: true
-
-@coll = new Meteor.Collection 'coll'
-coll.allow
+coll.pasien = new Meteor.Collection 'pasien'
+coll.pasien.allow
 	insert: -> true
 	update: -> true
 	remove: -> true
@@ -90,5 +93,4 @@ makeRoute = (modul) ->
 		name: modul
 		action: -> this.render 'modul'
 
-makeRoute key for key, val of schema
-makeRoute i for i in ['bayar', 'labor', 'apotek', 'radio']
+makeRoute i.name for i in modules[0..9]
