@@ -8,7 +8,7 @@ if Meteor.isServer
 			coll.pasien.upsert selector, $set: modifier
 		bayar: (no_mr, idbayar) ->
 			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
-			modifier = 'rawat.$.status_bayar': 1
+			modifier = 'rawat.$.status_bayar': true
 			coll.pasien.update selector, $set: modifier
 		request: (no_mr, idbayar, jenis, idjenis, hasil) ->
 			selector = no_mr: parseInt no_mr

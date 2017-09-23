@@ -34,21 +34,28 @@ schema.regis =
 	'regis.petugas': type: String
 	'regis.date': type: Date
 
+schema.tindakan =
+	idtindakan: type: String, optional: true, autoform: type: 'hidden'
+	diagnosa: type: String
+	nama: type: Number, autoform: options: selects.tindakan
+	dokter: type: Number, autoform: options: selects.dokter
+	harga: type: Number, optional: true, autoform: type: 'hidden'
+
 schema.labor =
 	idlabor: type: String, optional: true, autoform: type: 'hidden'
-	labors: type: Number, autoform: options: selects.labors
+	nama: type: Number, autoform: options: selects.labor
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 	hasil: type: String, optional: true, autoform: type: 'hidden'
 
 schema.radio =
 	idradio: type: String, optional: true, autoform: type: 'hidden'
-	radios: type: Number, autoform: options: selects.radios
+	nama: type: Number, autoform: options: selects.radio
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 	hasil: type: String, optional: true, autoform: type: 'hidden'
 
 schema.obat =
 	idobat: type: String, optional: true, autoform: type: 'hidden'
-	obats: type: Number, autoform: options: selects.obats
+	nama: type: Number, autoform: options: selects.obat
 	aturan: type: Object
 	'aturan.kali': type: Number
 	'aturan.dosis': type: Number
@@ -63,18 +70,17 @@ schema.rawat =
 	rawat: type: Array
 	'rawat.$': type: Object
 	'rawat.$.idbayar': type: String, autoform: type: 'hidden'
-	'rawat.$.jenis': type: Number, autoform: options: selects.rawats
+	'rawat.$.jenis': type: Number, autoform: options: selects.rawat
 	'rawat.$.tanggal': type: Date
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
-	'rawat.$.diagnosa': type: String
-	'rawat.$.tindakan': type: Number
-	'rawat.$.dokter': type: Number
 	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
+	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan]
 	'rawat.$.labor': type: [new SimpleSchema schema.labor]
 	'rawat.$.radio': type: [new SimpleSchema schema.radio]
 	'rawat.$.obat': type: [new SimpleSchema schema.obat]
 	'rawat.$.total': type: Object, optional: true, autoform: type: 'hidden'
+	'rawat.$.total.tindakan': type: Number, optional: true
 	'rawat.$.total.labor': type: Number, optional: true
 	'rawat.$.total.radio': type: Number, optional: true
 	'rawat.$.total.obat': type: Number, optional: true

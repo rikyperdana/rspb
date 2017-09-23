@@ -1,5 +1,5 @@
 @selects =
-	rawats: [
+	rawat: [
 		label: 'Rawat Jalan'
 		value: 1
 	,
@@ -163,7 +163,7 @@
 		value: 4
 	,
 	]
-	labors: [
+	labor: [
 		value: 1
 		label: 'Hemoglobin'
 		grup: 'Hematologi'
@@ -190,7 +190,7 @@
 		harga: 18000
 		normal: '1.003 - 1.030'
 	]
-	radios: [
+	radio: [
 		value: 1
 		label: 'Rontgen'
 		harga: 150000
@@ -215,7 +215,7 @@
 		value: 5
 		label: 'sendok teh'
 	]
-	obats: [
+	obat: [
 		value: 1
 		label: 'Paracetamol'
 		harga: 3000
@@ -223,4 +223,20 @@
 		value: 2
 		label: 'Amoxilin'
 		harga: 2500
+	]
+	tindakan: [
+		label: 'Operasi Besar'
+		value: 1
+		harga: 5000000
+	,
+		label: 'Operasi Kecil'
+		value: 2
+		harga: 1500000
+	]
+	dokter: [
+		label: 'Muhammad Rafi'
+		value: 1
+	,
+		label: 'Sabrina Maharani'
+		value: 2
 	]

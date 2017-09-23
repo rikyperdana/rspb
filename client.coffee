@@ -109,28 +109,34 @@ if Meteor.isClient
 	modForm = (doc) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
 		doc.idbayar = randomId()
-		totalLabor = 0; totalObat = 0; totalRadio = 0;
+		totalTindakan = 0; totalLabor = 0; totalObat = 0; totalRadio = 0;
+		if doc.tindakan
+			for i in doc.tindakan
+				i.idtindakan = randomId()
+				i.harga = (_.find selects.tindakan, (j) -> j.value is i.nama).harga
+				totalTindakan += i.harga
 		if doc.labor
 			for i in doc.labor
 				i.idlabor = randomId()
-				i.harga = (_.find selects.orders, (j) -> j.value is i.order).harga
+				i.harga = (_.find selects.labor, (j) -> j.value is i.nama).harga
 				totalLabor += i.harga
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
-				i.harga = (_.find selects.obats, (j) -> j.value is i.nama).harga
+				i.harga = (_.find selects.obat, (j) -> j.value is i.nama).harga
 				i.subtotal = i.harga * i.jumlah
 				totalObat += i.subtotal
 		if doc.radio
 			for i in doc.radio
 				i.idradio = randomId()
-				i.harga = (_.find selects.orders_rad, (j) -> j.value is i.order).harga
+				i.harga = (_.find selects.radio, (j) -> j.value is i.nama).harga
 				totalRadio += i.harga
 		doc.total =
+			tindakan: totalTindakan
 			labor: totalLabor
 			obat: totalObat
 			radio: totalRadio
-			semua: totalLabor + totalObat + totalRadio
+			semua: totalTindakan + totalLabor + totalObat + totalRadio
 		doc
 
 	AutoForm.addHooks 'formPasien',

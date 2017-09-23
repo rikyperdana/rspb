@@ -68,9 +68,6 @@ template(name='modul'): .container
 						th No MR
 						th Nama
 						th Tanggal
-						th Klinik
-						th Dokter
-						th Tindakan
 						th Total Biaya
 						th Cara Bayar
 						th Status Bayar
@@ -83,12 +80,12 @@ template(name='modul'): .container
 									td= pasien.no_mr
 									td= pasien.regis.nama_lengkap
 									td= hari(item.tanggal)
-									td {{look 'klinik' item.klinik 'label'}}
-									td= item.dokter
-									td= item.tindakan
 									td= item.total.semua
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
-									td= item.status_bayar
+									if item.status_bayar
+										td Sudah
+									else
+										td Belum
 									td
 										a#bayar(
 											pasien= pasien.no_mr
@@ -116,10 +113,10 @@ template(name='modul'): .container
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
-												td {{look 'orders' labor.order 'grup'}}
-												td {{look 'orders' labor.order 'label'}}
-												td {{look 'orders' labor.order 'normal'}}
-												td {{look 'orders' labor.order 'satuan'}}
+												td {{look 'labor' labor.nama 'grup'}}
+												td {{look 'labor' labor.nama 'label'}}
+												td {{look 'labor' labor.nama 'normal'}}
+												td {{look 'labor' labor.nama 'satuan'}}
 												td
 													a#request(
 														pasien= pasien.no_mr
@@ -146,7 +143,7 @@ template(name='modul'): .container
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
-												td= radio.order
+												td= radio.nama
 												td
 													a#request(
 														pasien= pasien.no_mr
@@ -180,7 +177,7 @@ template(name='modul'): .container
 												td= obat.nama
 												td= obat.aturan.kali
 												td= obat.aturan.dosis
-												td= obat.aturan.bentuk
+												td {{look 'bentuk' obat.aturan.bentuk 'label'}}
 												td= obat.jumlah
 												td
 													a#request(
@@ -215,9 +212,6 @@ template(name='modul'): .container
 						tr
 							th Tanggal
 							th Klinik
-							th Diagnosa
-							th Tindakan
-							th Dokter
 							th Cara Bayar
 							th Status Bayar
 							th Lihat
@@ -226,11 +220,11 @@ template(name='modul'): .container
 							tr
 								td= hari(tanggal)
 								td {{look 'klinik' klinik 'label'}}
-								td= diagnosa
-								td= tindakan
-								td= dokter
 								td {{look 'cara_bayar' cara_bayar 'label'}}
-								td= status_bayar
+								if status_bayar
+									td Sudah
+								else
+									td Belum
 								td: a.modal-trigger(href='#preview') Lihat
 	with formDoc
 		.modal#preview
@@ -243,15 +237,21 @@ template(name='modul'): .container
 						td {{look 'cara_bayar' cara_bayar 'label'}}
 						th Klinik
 						td {{look 'klinik' klinik 'label'}}
-					tr
-						th Diagnosa
-						td= diagnosa
-					tr
-						th Tindakan
-						td= tindakan
-					tr
-						th Dokter
-						td= dokter
+				if tindakan
+					table
+						thead
+							tr
+								th Diagnosa
+								th Tindakan
+								th Dokter
+								th Harga
+						tbody
+							each tindakan
+								tr
+									td= diagnosa
+									td {{look 'tindakan' nama 'label'}}
+									td {{look 'dokter' dokter 'label'}}
+									td= rupiah(harga)
 				if labor
 					table
 						thead
@@ -264,10 +264,10 @@ template(name='modul'): .container
 						tbody
 							each labor
 								tr
-									td {{look 'orders' order 'grup'}}
-									td {{look 'orders' order 'label'}}
-									td {{look 'orders' order 'normal'}}
-									td {{look 'orders' order 'satuan'}}
+									td {{look 'labor' nama 'grup'}}
+									td {{look 'labor' nama 'label'}}
+									td {{look 'labor' nama 'normal'}}
+									td {{look 'labor' nama 'satuan'}}
 									td= hasil
 				if obat
 					table
@@ -281,7 +281,7 @@ template(name='modul'): .container
 						tbody
 							each obat
 								tr
-									td {{look 'obats' nama 'label'}}
+									td {{look 'obat' nama 'label'}}
 									td= aturan.dosis
 									td {{look 'bentuk' aturan.bentuk 'label'}}
 									td= aturan.kali
@@ -295,11 +295,14 @@ template(name='modul'): .container
 						tbody
 							each radio
 								tr
-									td {{look 'orders_rad' order 'label'}}
-									td= arsip
+									td {{look 'radio' nama 'label'}}
+									td= hasil
 				with total
 					table
 						tr
+							if tindakan
+								th Total Tindakan
+								td= rupiah(tindakan)
 							if labor
 								th Total Labor
 								td= rupiah(labor)
