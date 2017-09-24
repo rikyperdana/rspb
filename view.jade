@@ -22,25 +22,26 @@ template(name='home'): .container
 template(name='loading'): .container
 	.progress.center: .indeterminate
 
-template(name='modul'): .container
+template(name='pasien'): .container
 	h5 Daftar Nama Pasien
 	.row
 		.col.m6
 			.input-field: input#search(value= search)
 		.col.m6
 			if showButton
-				.right.btn#addPasien Tambah
+				.right.btn#showForm Tambah
 			if formDoc
 				a.btn.modal-trigger(href='#preview') Preview
 
-	if addPasien
+	if showForm
 		+quickForm(
 			collection= coll.pasien
 			schema= schema
 			type= formType
 			id = 'formPasien'
-			scope= 'rawat'
+			scope = 'rawat'
 			doc= pasiens
+			buttonContent = 'simpan'
 		)
 	unless currentMR
 		table
@@ -324,3 +325,45 @@ template(name='import')
 		.file-path-wrapper
 			input.file-path.wrapper(type='text')
 
+template(name='gudang'): .container
+	h5 Daftar Barang Gudang
+	.row
+		.col.m8
+			.input-field: input#search(value= search)
+		.col.m4
+			.right.btn#showForm Tambah
+	if showForm
+		+quickForm(
+			collection= coll.gudang
+			schema= schema
+			id = 'formGudang'
+			type = 'insert'
+		)
+	table
+		thead
+			tr
+				th ID Batch
+				th Masuk
+				th Kadaluarsa
+				th ID Obat
+				th Nama
+				th Jenis
+				th Qty
+				th Satuan
+				th Beli
+				th Jual
+				th Suplier
+		tbody
+			each gudangs
+				tr
+					td= idbatch
+					td= hari(masuk)
+					td= hari(kadaluarsa)
+					td= idobat
+					td= nama
+					td= jenis
+					td= kuantitas
+					td= satuan
+					td= rupiah(beli)
+					td= rupiah(jual)
+					td= suplier

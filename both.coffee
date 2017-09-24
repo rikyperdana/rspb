@@ -87,6 +87,23 @@ schema.rawat =
 	'rawat.$.total.semua': type: Number, optional: true
 
 schema.jalan = Object.assign {}, schema.rawat
+schema.inap = Object.assign {}, schema.rawat
+schema.igd = Object.assign {}, schema.rawat
+
+schema.gudang =
+	idbatch: type: String
+	masuk: type: Date
+	kadaluarsa: type: Date
+	idobat: type: String
+	nama: type: String
+	jenis: type: Number
+	kuantitas: type: Number
+	satuan: type: Number
+	beli: type: Number
+	jual: type: Number
+	suplier: type: Number
+
+schema.farmasi = Object.assign {}, schema.gudang
 
 coll.pasien = new Meteor.Collection 'pasien'
 coll.pasien.allow
@@ -94,9 +111,19 @@ coll.pasien.allow
 	update: -> true
 	remove: -> true
 
-makeRoute = (modul) ->
-	Router.route '/'+modul+'/:no_mr?',
-		name: modul
-		action: -> this.render 'modul'
+coll.gudang = new Meteor.Collection 'gudang'
+coll.gudang.allow
+	insert: -> true
+	update: -> true
+	remove: -> true
+
+makeRoute = (pasien) ->
+	Router.route '/'+pasien+'/:no_mr?',
+		name: pasien
+		action: -> this.render 'pasien'
 
 makeRoute i.name for i in modules[0..9]
+
+Router.route '/farmasi',
+	name: 'farmasi'
+	action: -> this.render 'gudang'

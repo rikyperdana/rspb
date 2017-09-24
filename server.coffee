@@ -1,7 +1,7 @@
 if Meteor.isServer
 
-	Meteor.publish 'pasien', (selector, options) ->
-		coll.pasien.find selector, options
+	Meteor.publish 'coll', (name, selector, options) ->
+		coll[name].find selector, options
 
 	Meteor.methods
 		import: (selector, modifier) ->
