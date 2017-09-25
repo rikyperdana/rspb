@@ -14,6 +14,11 @@ if Meteor.isClient
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
 	Template.registerHelper 'rupiah', (val) -> 'Rp ' + val
 
+	Template.body.events
+		'keypress #search': (event) ->
+			if event.key is 'Enter'
+				Session.set 'search', event.target.value
+
 	Template.pasien.helpers
 		route: -> currentRoute()
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
@@ -22,7 +27,6 @@ if Meteor.isClient
 		currentMR: -> currentMR()
 		routeIs: (name) -> currentRoute() is name
 		formDoc: -> Session.get 'formDoc'
-		# rupiah: (val) -> 'Rp ' + val
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
@@ -55,6 +59,7 @@ if Meteor.isClient
 			if Session.get('formDoc') then Session.set 'formDoc', null
 			unexpand = -> $('.autoform-remove-item').trigger 'click'
 			setTimeout unexpand, 1000
+			Meteor.subscribe 'coll', 'gudang', {}, {}
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
 			Session.set 'showForm', false
@@ -110,10 +115,20 @@ if Meteor.isClient
 
 	Template.gudang.helpers
 		gudangs: ->
-			selector = {}
-			options = {}
-			sub = Meteor.subscribe 'coll', 'gudang', selector, options
-			if sub.ready then coll.gudang.find().fetch()
+			if search()
+				byName = nama: $options: '-i', $regex: '.*'+search()+'.*'
+				byBatch = idbatch: search()
+				selector = $or: [byName, byBatch]
+				sub = Meteor.subscribe 'coll', 'gudang', selector, {}
+				if sub.ready() then coll.gudang.find().fetch()
+			else
+				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
+				if sub.ready() then coll.gudang.find().fetch()
+		sumBarang: ->
+			sum = 0
+			for i in coll.gudang.find().fetch()
+				sum += i.kuantitas
+			sum + ' unit'
 
 	Template.gudang.events
 		'click #showForm': ->
@@ -136,7 +151,7 @@ if Meteor.isClient
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
-				i.harga = (_.find selects.obat, (j) -> j.value is i.nama).harga
+				i.harga = (_.find coll.gudang.find().fetch(), (j) -> j.nama is i.nama).jual
 				i.subtotal = i.harga * i.jumlah
 				totalObat += i.subtotal
 		if doc.radio

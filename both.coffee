@@ -55,7 +55,7 @@ schema.radio =
 
 schema.obat =
 	idobat: type: String, optional: true, autoform: type: 'hidden'
-	nama: type: Number, autoform: options: selects.obat
+	nama: type: String, autoform: options: selects.obat
 	aturan: type: Object
 	'aturan.kali': type: Number
 	'aturan.dosis': type: Number
@@ -76,9 +76,9 @@ schema.rawat =
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan]
-	'rawat.$.labor': type: [new SimpleSchema schema.labor]
-	'rawat.$.radio': type: [new SimpleSchema schema.radio]
-	'rawat.$.obat': type: [new SimpleSchema schema.obat]
+	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
+	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true
+	'rawat.$.obat': type: [new SimpleSchema schema.obat], optional: true
 	'rawat.$.total': type: Object, optional: true, autoform: type: 'hidden'
 	'rawat.$.total.tindakan': type: Number, optional: true
 	'rawat.$.total.labor': type: Number, optional: true

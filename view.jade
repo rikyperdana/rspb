@@ -58,7 +58,7 @@ template(name='pasien'): .container
 						td= no_mr
 						td= regis.nama_lengkap
 						td= regis.alamat
-						td {{look 'kelamin' regis.kelamin}}
+						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
 		+import
 		if routeIs 'bayar'
@@ -282,7 +282,7 @@ template(name='pasien'): .container
 						tbody
 							each obat
 								tr
-									td {{look 'obat' nama 'label'}}
+									td= nama
 									td= aturan.dosis
 									td {{look 'bentuk' aturan.bentuk 'label'}}
 									td= aturan.kali
@@ -339,7 +339,7 @@ template(name='gudang'): .container
 			id = 'formGudang'
 			type = 'insert'
 		)
-	table
+	table.bordered
 		thead
 			tr
 				th ID Batch
@@ -367,3 +367,7 @@ template(name='gudang'): .container
 					td= rupiah(beli)
 					td= rupiah(jual)
 					td= suplier
+	table
+		tr
+			th Jumlah Barang
+			td= sumBarang

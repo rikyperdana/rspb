@@ -215,15 +215,6 @@
 		value: 5
 		label: 'sendok teh'
 	]
-	obat: [
-		value: 1
-		label: 'Paracetamol'
-		harga: 3000
-	,
-		value: 2
-		label: 'Amoxilin'
-		harga: 2500
-	]
 	tindakan: [
 		label: 'Operasi Besar'
 		value: 1
@@ -240,3 +231,9 @@
 		label: 'Sabrina Maharani'
 		value: 2
 	]
+	obat: -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', 'gudang', {}, {}
+		if sub.ready() then _.map coll.gudang.find().fetch(), (i) ->
+			i.label = i.nama
+			i.value = i.nama
+			i
