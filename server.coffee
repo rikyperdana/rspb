@@ -1,5 +1,8 @@
 if Meteor.isServer
 
+	Meteor.startup ->
+		coll.pasien._ensureIndex 'regis.nama_lengkap': 1
+
 	Meteor.publish 'coll', (name, selector, options) ->
 		coll[name].find selector, options
 

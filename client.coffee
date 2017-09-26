@@ -76,7 +76,7 @@ if Meteor.isClient
 				pageSize: 'B8'
 				pageMargins: [110, 50, 0, 0]
 				pageOrientation: 'landscape'
-			pdf.open()
+			pdf.download coll.pasien.findOne().regis.nama_lengkap + '.pdf'
 		'dblclick #bayar': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
@@ -109,8 +109,14 @@ if Meteor.isClient
 					modifier =
 						regis:
 							nama_lengkap: data.nama_lengkap
-							tmpt_kelahiran: data.tmpt_kelahiran
 							alamat: data.alamat
+							agama: parseInt data.agama
+							ayah: data.ayah
+							nikah: parseInt data.nikah
+							pekerjaan: parseInt data.pekerjaan
+							pendidikan: parseInt data.pendidikan
+							tgl_lahir: new Date data.tgl_lahir
+							tmpt_kelahiran: data.tmpt_kelahiran
 					Meteor.call 'import', selector, modifier
 
 	Template.gudang.helpers
@@ -171,7 +177,7 @@ if Meteor.isClient
 		Session.set 'showForm', null
 		Session.set 'formDoc', null
 
-	AutoForm.addHooks 'formPasien',
+	AutoForm.addHooks null,
 		before:
 			'update-pushArray': (doc) ->
 				ask = confirm 'Tambah data'
