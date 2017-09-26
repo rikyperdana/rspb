@@ -20,3 +20,16 @@ if Meteor.isServer
 							j.hasil = hasil
 			modifier = rawat: findPasien.rawat
 			coll.pasien.update selector, $set: modifier
+			
+			if jenis is 'obat'
+				for i in findPasien.rawat
+					if i.obat
+						for j in i.obat
+							if j.idobat is idjenis
+								for k in [1..j.jumlah]
+									select = nama: j.nama, kuantitas: $gt: 0
+									options = sort: masuk: -1
+									findStock = coll.gudang.findOne select, options
+									selector = idbatch: findStock.idbatch
+									modifier = $inc: kuantitas: -1
+									coll.gudang.update selector, modifier

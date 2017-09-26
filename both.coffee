@@ -14,7 +14,7 @@ schema.regis =
 	no_mr: type: Number
 	regis: type: Object
 	'regis.nama_lengkap': type: String
-	'regis.tgl_lahir': type: Date
+	'regis.tgl_lahir': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	'regis.tmpt_lahir': type: String
 	'regis.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'regis.kelamin': type: Number, autoform: options: selects.kelamin, type: 'select-radio-inline'
@@ -32,7 +32,7 @@ schema.regis =
 	'regis.ibu': type: String
 	'regis.pasangan': type: String
 	'regis.petugas': type: String
-	'regis.date': type: Date
+	'regis.date': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'
@@ -71,7 +71,7 @@ schema.rawat =
 	'rawat.$': type: Object
 	'rawat.$.idbayar': type: String, autoform: type: 'hidden'
 	'rawat.$.jenis': type: Number, autoform: options: selects.rawat
-	'rawat.$.tanggal': type: Date
+	'rawat.$.tanggal': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
@@ -92,8 +92,8 @@ schema.igd = Object.assign {}, schema.rawat
 
 schema.gudang =
 	idbatch: type: String
-	masuk: type: Date
-	kadaluarsa: type: Date
+	masuk: type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
+	kadaluarsa: type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	idobat: type: String
 	nama: type: String
 	jenis: type: Number
