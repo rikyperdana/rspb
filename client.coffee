@@ -104,19 +104,17 @@ if Meteor.isClient
 				header: true
 				step: (result) ->
 					data = result.data[0]
-					selector =
-						no_mr: parseInt data.no_mr
-					modifier =
-						regis:
-							nama_lengkap: data.nama_lengkap
-							alamat: data.alamat
-							agama: parseInt data.agama
-							ayah: data.ayah
-							nikah: parseInt data.nikah
-							pekerjaan: parseInt data.pekerjaan
-							pendidikan: parseInt data.pendidikan
-							tgl_lahir: new Date data.tgl_lahir
-							tmpt_kelahiran: data.tmpt_kelahiran
+					selector = no_mr: parseInt data.no_mr
+					modifier = regis:
+						nama_lengkap: _.startCase data.nama_lengkap
+						alamat: _.startCase data.alamat
+						agama: parseInt data.agama
+						ayah: _.startCase data.ayah
+						nikah: parseInt data.nikah
+						pekerjaan: parseInt data.pekerjaan
+						pendidikan: parseInt data.pendidikan
+						tgl_lahir: new Date data.tgl_lahir
+						tmpt_kelahiran: _.startCase data.tmpt_kelahiran
 					Meteor.call 'import', selector, modifier
 
 	Template.gudang.helpers
