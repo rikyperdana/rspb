@@ -1,4 +1,4 @@
-_ = lodash
+@_ = lodash
 
 Router.configure
 	layoutTemplate: 'layout'

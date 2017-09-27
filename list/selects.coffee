@@ -233,7 +233,8 @@
 	]
 	obat: -> if Meteor.isClient
 		sub = Meteor.subscribe 'coll', 'gudang', {}, {}
-		if sub.ready() then _.map coll.gudang.find().fetch(), (i) ->
+		uniqs = _.uniqBy coll.gudang.find().fetch(), 'nama'
+		if sub.ready() then _.map uniqs, (i) ->
 			i.label = i.nama
 			i.value = i.nama
 			i

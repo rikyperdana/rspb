@@ -31,7 +31,7 @@ if Meteor.isServer
 							if j.idobat is idjenis
 								for k in [1..j.jumlah]
 									select = nama: j.nama, kuantitas: $gt: 0
-									options = sort: masuk: -1
+									options = sort: masuk: 1
 									findStock = coll.gudang.findOne select, options
 									selector = idbatch: findStock.idbatch
 									modifier = $inc: kuantitas: -1
