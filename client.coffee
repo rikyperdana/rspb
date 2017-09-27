@@ -123,7 +123,7 @@ if Meteor.isClient
 				selector = idbarang: currentPar 'idbarang'
 				sub = Meteor.subscribe 'coll', 'gudang', selector, {}
 				if sub.ready() then coll.gudang.findOne()
-			if search()
+			else if search()
 				byName = nama: $options: '-i', $regex: '.*'+search()+'.*'
 				byBatch = idbatch: search()
 				selector = $or: [byName, byBatch]
@@ -132,15 +132,6 @@ if Meteor.isClient
 			else
 				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
 				if sub.ready() then coll.gudang.find().fetch()
-		sumBarang: ->
-			digudang = 0; diapotek = 0;
-			for i in coll.gudang.find().fetch()
-				for j in i.batch
-					digudang += j.digudang
-					diapotek += j.diapotek
-			data =
-				digudang: digudang
-				diapotek: diapotek
 
 	Template.gudang.events
 		'click #showForm': ->

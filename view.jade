@@ -354,13 +354,39 @@ template(name='gudang'): .container
 						td= jenis
 						td= nama
 						td= harga
-		table
-			tr
-				th Jumlah Barang
-				td= sumBarang.digudang
-				td= sumBarang.diapotek
 
 	if currentPar 'idbarang'
 		h5 Rincian Barang
 		with gudangs
-			p love you
+			table
+				tr
+					th ID Barang
+					td= idbarang
+				tr
+					th Nama
+					td= nama
+				tr
+					th Harga
+					td= harga
+			table
+				thead
+					tr
+						th ID Batch
+						th Masuk
+						th Kadaluarsa
+						th Beli
+						th Jual
+						th Di Apotik
+						th Di Gudang
+						th Suplier
+				tbody
+					each batch
+						tr
+							td= idbatch
+							td= hari(masuk)
+							td= hari(kadaluarsa)
+							td= beli
+							td= jual
+							td= diapotik
+							td= digudang
+							td= suplier
