@@ -26,7 +26,7 @@ template(name='pasien'): .container
 	h5 Daftar Nama Pasien
 	.row
 		.col.m6
-			.input-field: input#search(value= search)
+			.input-field: input#search(value= search placeholder= 'Nama Pasien / No.MR')
 		.col.m6
 			if showButton
 				.right.btn#showForm Tambah
@@ -43,7 +43,7 @@ template(name='pasien'): .container
 			doc= pasiens
 			buttonContent = 'simpan'
 		)
-	unless currentMR
+	unless currentPar 'no_mr'
 		table
 			thead
 				tr
@@ -187,7 +187,7 @@ template(name='pasien'): .container
 														jenis = 'obat'
 														idjenis= obat.idobat
 													) Serah
-	if currentMR
+	if currentPar 'no_mr'
 		with pasiens
 			.left.purple.btn#card Cetak
 			table
@@ -329,7 +329,7 @@ template(name='gudang'): .container
 	h5 Daftar Barang Gudang
 	.row
 		.col.m8
-			.input-field: input#search(value= search)
+			.input-field: input#search(value= search placeholder='Nama Obat / Batch')
 		.col.m4
 			.right.btn#showForm Tambah
 	if showForm
@@ -339,35 +339,28 @@ template(name='gudang'): .container
 			id = 'formGudang'
 			type = 'insert'
 		)
-	table.bordered
-		thead
-			tr
-				th ID Batch
-				th Masuk
-				th Kadaluarsa
-				th ID Obat
-				th Nama
-				th Jenis
-				th Qty
-				th Satuan
-				th Beli
-				th Jual
-				th Suplier
-		tbody
-			each gudangs
+	unless currentPar 'idbarang'
+		table.bordered
+			thead
 				tr
-					td= idbatch
-					td= hari(masuk)
-					td= hari(kadaluarsa)
-					td= idobat
-					td= nama
-					td= jenis
-					td= kuantitas
-					td= satuan
-					td= rupiah(beli)
-					td= rupiah(jual)
-					td= suplier
-	table
-		tr
-			th Jumlah Barang
-			td= sumBarang
+					th ID Barang
+					th Jenis Barang
+					th Nama Barang
+					th Harga Barang
+			tbody
+				each gudangs
+					tr#row
+						td= idbarang
+						td= jenis
+						td= nama
+						td= harga
+		table
+			tr
+				th Jumlah Barang
+				td= sumBarang.digudang
+				td= sumBarang.diapotek
+
+	if currentPar 'idbarang'
+		h5 Rincian Barang
+		with gudangs
+			p love you

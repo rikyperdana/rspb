@@ -91,17 +91,20 @@ schema.inap = Object.assign {}, schema.rawat
 schema.igd = Object.assign {}, schema.rawat
 
 schema.gudang =
-	idbatch: type: String
-	masuk: type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
-	kadaluarsa: type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
-	idobat: type: String
-	nama: type: String
+	idbarang: type: String
 	jenis: type: Number
-	kuantitas: type: Number
-	satuan: type: Number
-	beli: type: Number
-	jual: type: Number
-	suplier: type: Number
+	nama: type: String
+	harga: type: Number
+	batch: type: Array
+	'batch.$': type: Object
+	'batch.$.idbatch': type: String
+	'batch.$.masuk': type: Date
+	'batch.$.kadaluarsa': type: Date
+	'batch.$.digudang': type: Number
+	'batch.$.diapotik': type: Number
+	'batch.$.beli': type: Number
+	'batch.$.jual': type: Number
+	'batch.$.suplier': type: Number
 
 schema.farmasi = Object.assign {}, schema.gudang
 
@@ -117,13 +120,16 @@ coll.gudang.allow
 	update: -> true
 	remove: -> true
 
-makeRoute = (pasien) ->
-	Router.route '/'+pasien+'/:no_mr?',
-		name: pasien
+makePasien = (modul) ->
+	Router.route '/'+modul+'/:no_mr?',
+		name: modul
 		action: -> this.render 'pasien'
 
-makeRoute i.name for i in modules[0..9]
+makePasien i.name for i in modules[0..9]
 
-Router.route '/farmasi',
-	name: 'farmasi'
-	action: -> this.render 'gudang'
+makeGudang = (modul) ->
+	Router.route '/'+modul+'/:idbarang?',
+		name: modul
+		action: -> this.render 'gudang'
+
+makeGudang i.name for i in modules[10..11]

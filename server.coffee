@@ -24,6 +24,7 @@ if Meteor.isServer
 			modifier = rawat: findPasien.rawat
 			coll.pasien.update selector, $set: modifier
 			
+			###			
 			if jenis is 'obat'
 				for i in findPasien.rawat
 					if i.obat
@@ -36,3 +37,4 @@ if Meteor.isServer
 									selector = idbatch: findStock.idbatch
 									modifier = $inc: kuantitas: -1
 									coll.gudang.update selector, modifier
+			###

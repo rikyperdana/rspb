@@ -2,7 +2,7 @@ if Meteor.isClient
 
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
-	currentMR = -> parseInt Router.current().params.no_mr
+	currentPar = (param) -> Router.current().params[param]
 	search = -> Session.get 'search'
 
 	Template.menu.helpers
@@ -13,6 +13,7 @@ if Meteor.isClient
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
 	Template.registerHelper 'rupiah', (val) -> 'Rp ' + val
+	Template.registerHelper 'currentPar', (param) -> currentPar param
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -24,15 +25,14 @@ if Meteor.isClient
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
 		umur: (date) -> moment().diff(date, 'years') + ' tahun'
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
-		currentMR: -> currentMR()
 		routeIs: (name) -> currentRoute() is name
 		formDoc: -> Session.get 'formDoc'
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
 		pasiens: ->
-			if currentMR()
-				selector = no_mr: currentMR()
+			if currentPar 'no_mr'
+				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
@@ -119,6 +119,10 @@ if Meteor.isClient
 
 	Template.gudang.helpers
 		gudangs: ->
+			if currentPar 'idbarang'
+				selector = idbarang: currentPar 'idbarang'
+				sub = Meteor.subscribe 'coll', 'gudang', selector, {}
+				if sub.ready() then coll.gudang.findOne()
 			if search()
 				byName = nama: $options: '-i', $regex: '.*'+search()+'.*'
 				byBatch = idbatch: search()
@@ -129,14 +133,19 @@ if Meteor.isClient
 				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
 				if sub.ready() then coll.gudang.find().fetch()
 		sumBarang: ->
-			sum = 0
+			digudang = 0; diapotek = 0;
 			for i in coll.gudang.find().fetch()
-				sum += i.kuantitas
-			sum + ' unit'
+				for j in i.batch
+					digudang += j.digudang
+					diapotek += j.diapotek
+			data =
+				digudang: digudang
+				diapotek: diapotek
 
 	Template.gudang.events
 		'click #showForm': ->
 			Session.set 'showForm', not Session.get 'showForm'
+		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.idbarang
 
 	modForm = (doc) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
