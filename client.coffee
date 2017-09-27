@@ -137,6 +137,13 @@ if Meteor.isClient
 		'click #showForm': ->
 			Session.set 'showForm', not Session.get 'showForm'
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.idbarang
+		'dblclick #transfer': ->
+			data = this
+			MaterializeModal.prompt
+				message: 'Transfer Gudang > Apotek'
+				callback: (err, res) -> if res.submit
+					# console.log currentPar('idbarang'), data, res.value
+					Meteor.call 'transfer', currentPar('idbarang'), data.idbatch, parseInt res.value
 
 	modForm = (doc) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)

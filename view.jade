@@ -376,17 +376,17 @@ template(name='gudang'): .container
 						th Kadaluarsa
 						th Beli
 						th Jual
-						th Di Apotik
 						th Di Gudang
+						th Di Apotik
 						th Suplier
 				tbody
 					each batch
-						tr
+						tr#transfer
 							td= idbatch
 							td= hari(masuk)
 							td= hari(kadaluarsa)
 							td= beli
 							td= jual
-							td= diapotik
 							td= digudang
+							td= diapotik
 							td= suplier

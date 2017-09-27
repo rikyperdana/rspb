@@ -38,3 +38,13 @@ if Meteor.isServer
 									modifier = $inc: kuantitas: -1
 									coll.gudang.update selector, modifier
 			###
+
+		transfer: (idbarang, idbatch, amount) ->
+			selector = idbarang: idbarang
+			findBarang = coll.gudang.findOne selector
+			for i in findBarang.batch
+				if i.idbatch is idbatch
+					i.digudang -= amount
+					i.diapotik += amount
+			modifier = batch: findBarang.batch
+			coll.gudang.update selector, $set: modifier
