@@ -162,7 +162,7 @@ if Meteor.isClient
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
-				i.harga = (_.find coll.gudang.find().fetch(), (j) -> j.nama is i.nama).jual
+				i.harga = (_.find coll.gudang.find().fetch(), (j) -> j.nama is i.nama).harga
 				i.subtotal = i.harga * i.jumlah
 				totalObat += i.subtotal
 		if doc.radio
