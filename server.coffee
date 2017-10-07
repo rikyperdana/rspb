@@ -9,6 +9,10 @@ if Meteor.isServer
 	Meteor.methods
 		import: (selector, modifier) ->
 			coll.pasien.upsert selector, $set: modifier
+		payRegis: (no_mr) ->
+			selector = no_mr: parseInt no_mr
+			modifier = 'regis.paidRegis': true
+			coll.pasien.update selector, $set: modifier
 		bayar: (no_mr, idbayar) ->
 			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
 			modifier = 'rawat.$.status_bayar': true
@@ -30,9 +34,9 @@ if Meteor.isServer
 							if j.idobat is idjenis
 								findStock = coll.gudang.findOne nama: j.nama
 								for k in [1..j.jumlah]
-									sorted = _.sortBy findStock.batch, (l) -> - new Date(l.masuk).getTime()
-									filtered = _.filter sorted, (l) -> l.diapotik > 0
-									filtered[0].diapotik -= 1
+									filtered = _.filter findStock.batch, (l) -> l.diapotik > 0
+									sorted = _.sortBy filtered, (l) -> - new Date(l.masuk).getTime()
+									sorted[0].diapotik -= 1
 								selector = nama: findStock.nama
 								modifier = $set: batch: findStock.batch
 								coll.gudang.update selector, modifier
@@ -41,3 +45,4 @@ if Meteor.isServer
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
 			modifier = $inc: 'batch.$.diapotik': amount, 'batch.$.digudang': -amount
 			coll.gudang.update selector, modifier
+

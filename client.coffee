@@ -77,6 +77,13 @@ if Meteor.isClient
 				pageMargins: [110, 50, 0, 0]
 				pageOrientation: 'landscape'
 			pdf.download coll.pasien.findOne().regis.nama_lengkap + '.pdf'
+		'dblclick #payRegis': (event) ->
+			no_mr = event.target.attributes.pasien.nodeValue
+			dialog =
+				title: 'Pembayaran Pendaftaran'
+				message: 'Apakah yakin pasien sudah membayar?'
+			new Confirmation dialog, (ok) ->
+				if ok then Meteor.call 'payRegis', no_mr
 		'dblclick #bayar': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
@@ -142,7 +149,6 @@ if Meteor.isClient
 			MaterializeModal.prompt
 				message: 'Transfer Gudang > Apotek'
 				callback: (err, res) -> if res.submit
-					# console.log currentPar('idbarang'), data, res.value
 					Meteor.call 'transfer', currentPar('idbarang'), data.idbatch, parseInt res.value
 
 	modForm = (doc) -> if currentRoute() is 'jalan'

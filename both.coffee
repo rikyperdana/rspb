@@ -33,6 +33,7 @@ schema.regis =
 	'regis.pasangan': type: String
 	'regis.petugas': type: String
 	'regis.date': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
+	'regis.paidRegis': type: Boolean, optional: true, autoform: type: 'hidden'
 
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'

@@ -75,6 +75,18 @@ template(name='pasien'): .container
 						th Aksi
 				tbody
 					each pasien in pasiens
+						unless pasien.regis.paidRegis
+							tr
+								td= pasien.no_mr
+								td= pasien.regis.nama_lengkap
+								td= pasien.regis.date
+								td Rp 10000
+								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
+								td Belum
+								td
+									a#payRegis(
+										pasien= pasien.no_mr
+									) Bayar
 						each item in pasien.rawat
 							unless item.status_bayar
 								tr
