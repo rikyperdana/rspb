@@ -79,7 +79,7 @@ template(name='pasien'): .container
 							tr
 								td= pasien.no_mr
 								td= pasien.regis.nama_lengkap
-								td= pasien.regis.date
+								td= hari(pasien.regis.date)
 								td Rp 10000
 								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
 								td Belum
@@ -93,7 +93,7 @@ template(name='pasien'): .container
 									td= pasien.no_mr
 									td= pasien.regis.nama_lengkap
 									td= hari(item.tanggal)
-									td= item.total.semua
+									td= rupiah(item.total.semua)
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
 									if item.status_bayar
 										td Sudah

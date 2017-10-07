@@ -21,25 +21,21 @@ if Meteor.isServer
 			selector = no_mr: parseInt no_mr
 			findPasien = coll.pasien.findOne selector
 			for i in findPasien.rawat
-				if i[jenis]
-					for j in i[jenis]
-						if j['id'+jenis] is idjenis
-							j.hasil = hasil
+				if i[jenis] then for j in i[jenis]
+					if j['id'+jenis] is idjenis then j.hasil = hasil
 			modifier = rawat: findPasien.rawat
 			coll.pasien.update selector, $set: modifier
-			if jenis is 'obat'
-				for i in findPasien.rawat
-					if i.obat
-						for j in i.obat
-							if j.idobat is idjenis
-								findStock = coll.gudang.findOne nama: j.nama
-								for k in [1..j.jumlah]
-									filtered = _.filter findStock.batch, (l) -> l.diapotik > 0
-									sorted = _.sortBy filtered, (l) -> - new Date(l.masuk).getTime()
-									sorted[0].diapotik -= 1
-								selector = nama: findStock.nama
-								modifier = $set: batch: findStock.batch
-								coll.gudang.update selector, modifier
+			if jenis is 'obat' then for i in findPasien.rawat
+				if i.obat then for j in i.obat
+					if j.idobat is idjenis
+						findStock = coll.gudang.findOne nama: j.nama
+						for k in [1..j.jumlah]
+							filtered = _.filter findStock.batch, (l) -> l.diapotik > 0
+							sorted = _.sortBy filtered, (l) -> - new Date(l.masuk).getTime()
+							sorted[0].diapotik -= 1
+						selector = nama: findStock.nama
+						modifier = $set: batch: findStock.batch
+						coll.gudang.update selector, modifier
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
