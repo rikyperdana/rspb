@@ -19,11 +19,6 @@
 	icon: 'airport_shuttle'
 	color: 'red'
 ,
-	name: 'admisi'
-	full: 'Admisi'
-	icon: 'assignment'
-	color: 'purple'
-,
 	name: 'inap'
 	full: 'Rawat Inap'
 	icon: 'hotel'
@@ -58,4 +53,8 @@
 	full: 'Gudang Logistik'
 	icon: 'rv_hookup'
 	color: 'blue-grey'
+	name: 'admisi'
+	full: 'Admisi'
+	icon: 'assignment'
+	color: 'purple'
 ]

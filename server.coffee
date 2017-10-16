@@ -9,14 +9,17 @@ if Meteor.isServer
 	Meteor.methods
 		import: (selector, modifier) ->
 			coll.pasien.upsert selector, $set: modifier
+
 		payRegis: (no_mr) ->
 			selector = no_mr: parseInt no_mr
 			modifier = 'regis.paidRegis': true
 			coll.pasien.update selector, $set: modifier
+
 		bayar: (no_mr, idbayar) ->
 			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
 			modifier = 'rawat.$.status_bayar': true
 			coll.pasien.update selector, $set: modifier
+
 		request: (no_mr, idbayar, jenis, idjenis, hasil) ->
 			selector = no_mr: parseInt no_mr
 			findPasien = coll.pasien.findOne selector
@@ -41,4 +44,3 @@ if Meteor.isServer
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
 			modifier = $inc: 'batch.$.diapotik': amount, 'batch.$.digudang': -amount
 			coll.gudang.update selector, modifier
-
