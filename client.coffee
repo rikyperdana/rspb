@@ -56,9 +56,12 @@ if Meteor.isClient
 	Template.pasien.events
 		'click #showForm': ->
 			Session.set 'showForm', not Session.get 'showForm'
-			if Session.get('formDoc') then Session.set 'formDoc', null
-			unexpand = -> $('.autoform-remove-item').trigger 'click'
-			setTimeout unexpand, 1000
+			later = ->
+				$('.autoform-remove-item').trigger 'click'
+				formDoc = Session.get 'formDoc'
+				if formDoc then _.map ['jenis', 'cara_bayar', 'klinik'], (i) ->
+					$('input[name="'+i+'"][value="'+formDoc[i]+'"]').prop 'checked', true
+			setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
@@ -191,14 +194,9 @@ if Meteor.isClient
 	AutoForm.addHooks null,
 		before:
 			'update-pushArray': (doc) ->
-				ask = confirm 'Tambah data'
-				if ask is true
-					this.result modForm doc
-				else
-					this.result false
+				formDoc = Session.get 'formDoc'
+				if formDoc then Meteor.call 'rmRawat', currentPar('no_mr'), formDoc.idbayar
+				this.result modForm doc
 		after:
 			insert: -> closeForm()
 			'update-pushArray': -> closeForm()
-		formToDoc: (doc) ->
-			Session.set 'formDoc', modForm doc
-			doc

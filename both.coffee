@@ -70,13 +70,23 @@ schema.rawat =
 	no_mr: type: Number
 	rawat: type: Array
 	'rawat.$': type: Object
-	'rawat.$.idbayar': type: String, autoform: type: 'hidden'
-	'rawat.$.jenis': type: Number, autoform: options: selects.rawat
-	'rawat.$.tanggal': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
+	'rawat.$.idbayar':
+		type: String
+		autoform: type: 'hidden'
+		autoValue: -> Math.random().toString(36).slice(2)
+	'rawat.$.tanggal':
+		type: Date
+		autoform:
+			type: 'pickadate'
+			pickadateOptions:
+				selectYears: 150
+				selectMonths: true
+		autoValue: -> new Date()
+	'rawat.$.jenis': type: Number, autoform: options: selects.rawat, type: 'select-radio-inline'
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
-	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan]
+	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
 	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
 	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true
 	'rawat.$.obat': type: [new SimpleSchema schema.obat], optional: true

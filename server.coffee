@@ -44,3 +44,8 @@ if Meteor.isServer
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
 			modifier = $inc: 'batch.$.diapotik': amount, 'batch.$.digudang': -amount
 			coll.gudang.update selector, modifier
+
+		rmRawat: (no_mr, idbayar) ->
+			selector = no_mr: parseInt no_mr
+			modifier = $pull: rawat: idbayar: idbayar
+			coll.pasien.update selector, modifier
