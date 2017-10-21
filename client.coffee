@@ -27,6 +27,7 @@ if Meteor.isClient
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
 		routeIs: (name) -> currentRoute() is name
 		formDoc: -> Session.get 'formDoc'
+		# omitFields: -> ['tindakan', 'labor', 'radio', 'obat']
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
