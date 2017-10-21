@@ -155,49 +155,27 @@ if Meteor.isClient
 				callback: (err, res) -> if res.submit
 					Meteor.call 'transfer', currentPar('idbarang'), data.idbatch, parseInt res.value
 
-	modForm = (doc) -> if currentRoute() is 'jalan'
-		randomId = -> Math.random().toString(36).slice(2)
-		doc.idbayar = randomId()
-		totalTindakan = 0; totalLabor = 0; totalObat = 0; totalRadio = 0;
-		if doc.tindakan
-			for i in doc.tindakan
-				i.idtindakan = randomId()
-				i.harga = (_.find selects.tindakan, (j) -> j.value is i.nama).harga
-				totalTindakan += i.harga
-		if doc.labor
-			for i in doc.labor
-				i.idlabor = randomId()
-				i.harga = (_.find selects.labor, (j) -> j.value is i.nama).harga
-				totalLabor += i.harga
-		if doc.obat
-			for i in doc.obat
-				i.idobat = randomId()
-				i.harga = (_.find coll.gudang.find().fetch(), (j) -> j.nama is i.nama).harga
-				i.subtotal = i.harga * i.jumlah
-				totalObat += i.subtotal
-		if doc.radio
-			for i in doc.radio
-				i.idradio = randomId()
-				i.harga = (_.find selects.radio, (j) -> j.value is i.nama).harga
-				totalRadio += i.harga
-		doc.total =
-			tindakan: totalTindakan
-			labor: totalLabor
-			obat: totalObat
-			radio: totalRadio
-			semua: totalTindakan + totalLabor + totalObat + totalRadio
-		doc
+	Template.users.onRendered ->
+		Meteor.subscribe 'users'
+	
+	Template.users.helpers
+		users: -> Meteor.users.find().fetch()
+		onUser: -> Session.get 'onUser'
 
-	closeForm = ->
-		Session.set 'showForm', null
-		Session.set 'formDoc', null
-
-	AutoForm.addHooks null,
-		before:
-			'update-pushArray': (doc) ->
-				formDoc = Session.get 'formDoc'
-				if formDoc then Meteor.call 'rmRawat', currentPar('no_mr'), formDoc.idbayar
-				this.result modForm doc
-		after:
-			insert: -> closeForm()
-			'update-pushArray': -> closeForm()
+	Template.users.events
+		'submit form': (event) ->
+			event.preventDefault()
+			onUser = Session.get 'onUser'
+			unless onUser
+				doc =
+					username: event.target.children.username.value
+					password: event.target.children.password.value
+				Accounts.createUser doc
+			else
+				split = _.split event.target.children.roles.value, ','
+				roles = _.map split, (i) -> _.snakeCase i
+				group = event.target.children.group.value
+				Meteor.call 'setRole', Meteor.userId(), roles, group
+			Session.set 'onUser', null
+		'dblclick #row': ->
+			Session.set 'onUser', this

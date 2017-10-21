@@ -144,3 +144,6 @@ makeGudang = (modul) ->
 		action: -> this.render 'gudang'
 
 makeGudang i.name for i in modules[10..11]
+
+Router.route '/users',
+	action: -> this.render 'users'

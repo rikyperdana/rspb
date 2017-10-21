@@ -6,6 +6,9 @@ if Meteor.isServer
 	Meteor.publish 'coll', (name, selector, options) ->
 		coll[name].find selector, options
 
+	Meteor.publish 'users', ->
+		Meteor.users.find({})
+
 	Meteor.methods
 		import: (selector, modifier) ->
 			coll.pasien.upsert selector, $set: modifier
@@ -49,3 +52,6 @@ if Meteor.isServer
 			selector = no_mr: parseInt no_mr
 			modifier = $pull: rawat: idbayar: idbayar
 			coll.pasien.update selector, modifier
+
+		setRole: (id, roles, group) ->
+			Roles.setUserRoles id, roles, group

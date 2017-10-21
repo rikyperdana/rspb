@@ -8,7 +8,9 @@ template(name='menu')
 			li: a Home
 		a.brand-logo.center RSPB
 		ul.right
-			li: a Login
+			li: a(href='/users') Users
+			li: a(href='/sign-in') Login
+			li: a(href='/sign-out') Logout
 	ul.fixed.side-nav.z-depth-2
 		li.grey.lighten-2: a.center: b Menu Admin
 		each menus
@@ -419,3 +421,24 @@ template(name='gudang'): .container
 							td= digudang
 							td= diapotik
 							td= suplier
+
+template(name='users'): .container
+	h5 Daftar Pengguna
+	form
+		input(name='username' placeholder='Username' value= onUser.username)
+		unless onUser
+			input(name='password' placeholder='Password')
+		if onUser
+			input(name='roles' placeholder='Daftar Pernanan')
+			input(name='group' placeholder='Grup')
+		input.btn(type='submit')
+	table
+		thead
+			tr
+				th Username
+				th Peran
+				th Grup
+		tbody
+			each users
+				tr#row
+					td= username
