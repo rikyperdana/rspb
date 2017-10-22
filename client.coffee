@@ -179,7 +179,11 @@ if Meteor.isClient
 				doc =
 					username: event.target.children.username.value
 					password: event.target.children.password.value
-				Accounts.createUser doc
+				repeat = event.target.children.repeat.value
+				if doc.password is repeat
+					Accounts.createUser doc
+				else
+					Materialize.toast 'Password tidak mirip', 3000
 			else
 				split = _.split event.target.children.roles.value, ','
 				roles = _.map split, (i) -> _.snakeCase i

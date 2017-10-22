@@ -435,6 +435,7 @@ template(name='users'): .container
 		input(name='username' placeholder='Username' value= onUser.username)
 		unless onUser
 			input(name='password' placeholder='Password' type='password')
+			input(name='repeat' placeholder='Ulangi Password' type='password')
 		if onUser
 			input(name='roles' placeholder='Daftar Pernanan')
 			input(name='group' placeholder='Grup')
