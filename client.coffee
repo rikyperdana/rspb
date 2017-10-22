@@ -12,7 +12,11 @@ if Meteor.isClient
 	search = -> Session.get 'search'
 
 	Template.menu.helpers
-		menus: -> modules
+		menus: ->
+			if Roles.userIsInRole Meteor.userId(), 'admin', 'pendaftaran'
+				_.map ['regis', 'jalan'], (i) -> _.find modules, (j) -> j.name is i
+			else if Roles.userIsInRole Meteor.userId(), 'admin', 'pembayaran'
+				_.map ['bayar'], (i) -> _.find modules, (j) -> j.name is i
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
 
@@ -182,6 +186,7 @@ if Meteor.isClient
 				repeat = event.target.children.repeat.value
 				if doc.password is repeat
 					Accounts.createUser doc
+					$('input').val ''
 				else
 					Materialize.toast 'Password tidak mirip', 3000
 			else
@@ -189,7 +194,7 @@ if Meteor.isClient
 				roles = _.map split, (i) -> _.snakeCase i
 				group = event.target.children.group.value
 				Meteor.call 'setRole', Meteor.userId(), roles, group
-			Session.set 'onUser', null
+				Session.set 'onUser', null
 		'dblclick #row': ->
 			Session.set 'onUser', this
 
