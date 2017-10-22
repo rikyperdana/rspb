@@ -1,5 +1,11 @@
 if Meteor.isClient
 
+	Router.onBeforeAction ->
+		unless Meteor.userId()
+			this.render 'login'
+		else
+			this.next()
+
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
@@ -7,6 +13,8 @@ if Meteor.isClient
 
 	Template.menu.helpers
 		menus: -> modules
+	Template.menu.events
+		'click #logout': -> Meteor.logout()
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
@@ -14,6 +22,7 @@ if Meteor.isClient
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
 	Template.registerHelper 'rupiah', (val) -> 'Rp ' + val
 	Template.registerHelper 'currentPar', (param) -> currentPar param
+	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -179,3 +188,10 @@ if Meteor.isClient
 			Session.set 'onUser', null
 		'dblclick #row': ->
 			Session.set 'onUser', this
+
+	Template.login.events
+		'submit form': (event) ->
+			event.preventDefault()
+			username = event.target.children.username.value
+			password = event.target.children.password.value
+			Meteor.loginWithPassword username, password

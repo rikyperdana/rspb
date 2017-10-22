@@ -39,6 +39,11 @@
 	icon: 'enhanced_encryption'
 	color: 'light-green'
 ,
+	name: 'admisi'
+	full: 'Admisi'
+	icon: 'assignment'
+	color: 'purple'
+,
 	name: 'rekam'
 	full: 'Rekam Medik'
 	icon: 'content_copy'
@@ -53,8 +58,4 @@
 	full: 'Gudang Logistik'
 	icon: 'rv_hookup'
 	color: 'blue-grey'
-	name: 'admisi'
-	full: 'Admisi'
-	icon: 'assignment'
-	color: 'purple'
 ]
