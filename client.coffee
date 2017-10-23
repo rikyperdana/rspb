@@ -13,10 +13,9 @@ if Meteor.isClient
 
 	Template.menu.helpers
 		menus: ->
-			if Roles.userIsInRole Meteor.userId(), 'admin', 'pendaftaran'
-				_.map ['regis', 'jalan'], (i) -> _.find modules, (j) -> j.name is i
-			else if Roles.userIsInRole Meteor.userId(), 'admin', 'pembayaran'
-				_.map ['bayar'], (i) -> _.find modules, (j) -> j.name is i
+			keys = _.keys Meteor.user().roles
+			find = _.find rights, (i) -> _.find keys, (j) -> j is i.group
+			filter = _.map find.list, (i) -> _.find modules, (j) -> j.name is i
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
 
@@ -27,6 +26,7 @@ if Meteor.isClient
 	Template.registerHelper 'rupiah', (val) -> 'Rp ' + val
 	Template.registerHelper 'currentPar', (param) -> currentPar param
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
+	Template.registerHelper 'startCase', (val) -> _.startCase val
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -193,7 +193,7 @@ if Meteor.isClient
 				split = _.split event.target.children.roles.value, ','
 				roles = _.map split, (i) -> _.snakeCase i
 				group = event.target.children.group.value
-				Meteor.call 'setRole', Meteor.userId(), roles, group
+				Meteor.call 'setRole', onUser._id, roles, group
 				Session.set 'onUser', null
 		'dblclick #row': ->
 			Session.set 'onUser', this

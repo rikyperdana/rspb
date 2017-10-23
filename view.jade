@@ -10,6 +10,7 @@ template(name='menu')
 		ul.right
 			li: a(href='/users') Users
 			if currentUser
+				li: a= startCase(currentUser.username)
 				li: a#logout Logout
 			else			
 				li: a(href='/login') Login
