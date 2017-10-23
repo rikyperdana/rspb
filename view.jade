@@ -6,7 +6,7 @@ template(name='menu')
 	.navbar-fixed: nav.teal: .nav-wrapper
 		ul.left
 			li: a Home
-		a.brand-logo.center RSPB
+		a.brand-logo.center= navTitle
 		ul.right
 			li: a(href='/users') Users
 			if currentUser
@@ -35,7 +35,7 @@ template(name='pasien'): .container
 			.input-field: input#search(value= search placeholder= 'Nama Pasien / No.MR')
 		.col.m6
 			if showButton
-				.right.btn#showForm Tambah
+				.right.btn#showForm= showButtonText
 			if formDoc
 				a.btn.modal-trigger(href='#preview') Preview
 

@@ -16,6 +16,9 @@ if Meteor.isClient
 			keys = _.keys Meteor.user().roles
 			find = _.find rights, (i) -> _.find keys, (j) -> j is i.group
 			filter = _.map find.list, (i) -> _.find modules, (j) -> j.name is i
+		navTitle: ->
+			find = _.find modules, (i) -> i.name is currentRoute()
+			find.full
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
 
@@ -38,9 +41,15 @@ if Meteor.isClient
 		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
 		umur: (date) -> moment().diff(date, 'years') + ' tahun'
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
+		showButtonText: ->
+			switch currentRoute()
+				when 'regis' then '+ Pasien'
+				when 'jalan' then '+ Rawat'
 		routeIs: (name) -> currentRoute() is name
 		formDoc: -> Session.get 'formDoc'
-		# omitFields: -> ['tindakan', 'labor', 'radio', 'obat']
+		omitFields: ->
+			unless Session.get 'formDoc'
+				['tindakan', 'labor', 'radio', 'obat']
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]

@@ -1,5 +1,7 @@
 if Meteor.isClient
 
+	currentRoute = -> Router.current().route.getName()
+	
 	modForm = (doc) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
 		doc.idbayar = randomId()
