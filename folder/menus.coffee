@@ -8,10 +8,10 @@ if Meteor.isClient
 		list: ['bayar']
 	,
 		group: 'rawat_jalan'
-		list: ['rawat', 'apotek']
+		list: ['jalan', 'obat']
 	,
 		group: 'rawat_inap'
-		list: ['rawat', 'apotek']
+		list: ['rawat', 'obat']
 	,
 		group: 'laboratorium'
 		list: ['labor']
@@ -19,8 +19,8 @@ if Meteor.isClient
 		group: 'radiologi'
 		list: ['radio']
 	,
-		group: 'apotek'
-		list: ['apotek', 'farmasi']
+		group: 'obat'
+		list: ['obat', 'farmasi']
 	,
 		group: 'rekam_medik'
 		list: ['rekam', 'pendaftaran']

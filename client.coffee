@@ -13,6 +13,8 @@ if Meteor.isClient
 
 	Template.menu.helpers
 		menus: ->
+			mgt = Roles.userIsInRole Meteor.userId(), 'admin', 'manajemen'
+			console.log mgt
 			keys = _.keys Meteor.user().roles
 			find = _.find rights, (i) -> _.find keys, (j) -> j is i.group
 			filter = _.map find.list, (i) -> _.find modules, (j) -> j.name is i
@@ -102,7 +104,7 @@ if Meteor.isClient
 				pageSize: 'B8'
 				pageMargins: [110, 50, 0, 0]
 				pageOrientation: 'landscape'
-			pdf.download coll.pasien.findOne().regis.nama_lengkap + '.pdf'
+			pdf.download coll.pasien.findOne().no_mr + '.pdf'
 		'dblclick #payRegis': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			dialog =
