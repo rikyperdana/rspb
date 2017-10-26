@@ -16,7 +16,7 @@ template(name='menu')
 				li: a(href='/login') Login
 	ul.fixed.side-nav.z-depth-2
 		if currentUser
-			li.grey.lighten-2: a.center: b Menu Admin
+			li.grey.lighten-2: a.center: b= today
 			each menus
 				li: a.waves-effect.waves-teal(href='/{{name}}')
 					span: b= full
@@ -78,7 +78,6 @@ template(name='pasien'): .container
 						th Tanggal
 						th Total Biaya
 						th Cara Bayar
-						th Status Bayar
 						th Aksi
 				tbody
 					each pasien in pasiens
@@ -89,7 +88,6 @@ template(name='pasien'): .container
 								td= hari(pasien.regis.date)
 								td Rp 10000
 								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
-								td Belum
 								td
 									a#payRegis(
 										pasien= pasien.no_mr
@@ -102,10 +100,6 @@ template(name='pasien'): .container
 									td= hari(item.tanggal)
 									td= rupiah(item.total.semua)
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
-									if item.status_bayar
-										td Sudah
-									else
-										td Belum
 									td
 										a#bayar(
 											pasien= pasien.no_mr
@@ -234,9 +228,9 @@ template(name='pasien'): .container
 							th Klinik
 							th Cara Bayar
 							th Status Bayar
-							th Lihat
+							th Cek
 					tbody
-						each rawat
+						each descended
 							tr
 								td= hari(tanggal)
 								td {{look 'klinik' klinik 'label'}}
@@ -245,7 +239,7 @@ template(name='pasien'): .container
 									td Sudah
 								else
 									td Belum
-								td: a.modal-trigger(href='#preview') Lihat
+								td: a.modal-trigger(href='#preview') cek
 	with formDoc
 		.modal#preview
 			.modal-content

@@ -14,13 +14,13 @@ if Meteor.isClient
 	Template.menu.helpers
 		menus: ->
 			mgt = Roles.userIsInRole Meteor.userId(), 'admin', 'manajemen'
-			console.log mgt
 			keys = _.keys Meteor.user().roles
 			find = _.find rights, (i) -> _.find keys, (j) -> j is i.group
-			filter = _.map find.list, (i) -> _.find modules, (j) -> j.name is i
+			if find then _.map find.list, (i) -> _.find modules, (j) -> j.name is i
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute()
-			find.full
+			if find then find.full else ''
+		today: -> moment(new Date).format('D-MM-YYYY')
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
 
@@ -28,10 +28,11 @@ if Meteor.isClient
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
-	Template.registerHelper 'rupiah', (val) -> 'Rp ' + val
+	Template.registerHelper 'rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')
 	Template.registerHelper 'currentPar', (param) -> currentPar param
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 	Template.registerHelper 'startCase', (val) -> _.startCase val
+	Template.registerHelper 'reverse', (arr) -> _.reverse arr
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -77,6 +78,7 @@ if Meteor.isClient
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.find().fetch()
+		descended: -> _.reverse coll.pasien.findOne().rawat
 
 	Template.pasien.events
 		'click #showForm': ->

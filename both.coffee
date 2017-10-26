@@ -31,8 +31,14 @@ schema.regis =
 	'regis.ayah': type: String
 	'regis.ibu': type: String
 	'regis.pasangan': type: String
-	'regis.petugas': type: String
-	'regis.date': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
+	'regis.petugas':
+		type: String
+		autoform: type: 'hidden'
+		autoValue: -> if Meteor.isClient then Meteor.userId()
+	'regis.date':
+		type: Date
+		autoform: type: 'hidden'
+		autoValue: -> new Date
 	'regis.paidRegis': type: Boolean, optional: true, autoform: type: 'hidden'
 
 schema.tindakan =
@@ -70,19 +76,6 @@ schema.rawat =
 	no_mr: type: Number
 	rawat: type: Array
 	'rawat.$': type: Object
-	'rawat.$.idbayar':
-		type: String
-		autoform: type: 'hidden'
-		autoValue: -> Math.random().toString(36).slice(2)
-	'rawat.$.tanggal':
-		type: Date
-		autoform:
-			type: 'pickadate'
-			pickadateOptions:
-				selectYears: 150
-				selectMonths: true
-		autoValue: -> new Date()
-	'rawat.$.jenis': type: Number, autoform: options: selects.rawat, type: 'select-radio-inline'
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'

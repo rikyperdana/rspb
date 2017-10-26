@@ -11,15 +11,17 @@ rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
 1. jadikan form "berikan peranan" dengan select peran dan grup
-2. field petugas dan tanggal daftar tidak dimunculkan
-3. ganti kata menu admin jadi tanggal hari ini
-4. hilangkan kolom status bayar di pembayaran
-5. hilangkan field pilihan layanan
+oke 2. field petugas dan tanggal daftar tidak dimunculkan
+oke 3. ganti kata menu admin jadi tanggal hari ini
+oke 4. hilangkan kolom status bayar di pembayaran
+oke 5. hilangkan field pilihan layanan
 6. tampilkan request layanan terbaru sesuai poli
-7. hapus kolom "lihat" dan tombol "preview", jadikan row double-click
-8. semua angka duit, dikasi pemisahan ribu
-9. request rawat baru urut descending
-10. daftar riwayat rawat hanya tampilkan yg sudah bayar
+fail 7. hapus kolom "lihat" dan tombol "preview", jadikan row double-click
+	tidak bisa karena tombol lihat digunakan untuk jembatan data antara pendaftaran dan poli
+oke 8. semua angka duit, dikasi pemisahan ribu
+oke 9. request rawat baru urut descending
+fail 10. daftar riwayat rawat hanya tampilkan yg sudah bayar
+	sama dengan fail no 7
 
 Skenario Pasien Baru
 1. Ke pendaftaran, isi form pasien + pilih poli

@@ -82,6 +82,7 @@ mquandalle:jade-compiler@0.4.5
 nilsdannemann:pdfmake@1.0.38
 npm-bcrypt@0.9.3
 npm-mongo@2.2.30
+numeral:numeral@1.5.3_1
 observe-sequence@1.0.16
 ordered-dict@1.0.9
 planettraining:material-design-icons-font@2.2.3

@@ -6,6 +6,7 @@ if Meteor.isClient
 	modForm = (doc) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
 		doc.idbayar = randomId()
+		doc.jenis = currentRoute()
 		totalTindakan = 0; totalLabor = 0; totalObat = 0; totalRadio = 0;
 		if doc.tindakan
 			for i in doc.tindakan
