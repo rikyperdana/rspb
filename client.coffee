@@ -13,10 +13,9 @@ if Meteor.isClient
 
 	Template.menu.helpers
 		menus: ->
-			mgt = Roles.userIsInRole Meteor.userId(), 'admin', 'manajemen'
 			keys = _.keys Meteor.user().roles
-			find = _.find rights, (i) -> _.find keys, (j) -> j is i.group
-			if find then _.map find.list, (i) -> _.find modules, (j) -> j.name is i
+			find = _.find rights, (i) -> i.group is keys[0]
+			if find then  _.map find.list, (i) -> _.find modules, (j) -> j.name is i
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute()
 			if find then find.full else ''
@@ -208,13 +207,6 @@ if Meteor.isClient
 				group = $('input[name="group"]:checked', event.target)[0].id
 				console.log onUser._id, [role], group
 				Meteor.call 'setRole', onUser._id, [role], group
-				###
-				split = _.split event.target.children.roles.value, ','
-				roles = _.map split, (i) -> _.snakeCase i
-				group = event.target.children.group.value
-				Meteor.call 'setRole', onUser._id, roles, group
-				Session.set 'onUser', null
-				###
 		'dblclick #row': ->
 			Session.set 'onUser', this
 

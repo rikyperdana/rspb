@@ -1,29 +1,29 @@
 if Meteor.isClient
 
 	@rights = [
-		group: 'pendaftaran'
+		group: 'regis'
 		list: ['regis', 'jalan']
 	,
-		group: 'pembayaran'
+		group: 'bayar'
 		list: ['bayar']
 	,
-		group: 'rawat_jalan'
+		group: 'jalan'
 		list: ['jalan', 'obat']
 	,
-		group: 'rawat_inap'
-		list: ['rawat', 'obat']
+		group: 'inap'
+		list: ['inap', 'obat']
 	,
-		group: 'laboratorium'
+		group: 'labor'
 		list: ['labor']
 	,
-		group: 'radiologi'
+		group: 'radio'
 		list: ['radio']
 	,
 		group: 'obat'
 		list: ['obat', 'farmasi']
 	,
-		group: 'rekam_medik'
-		list: ['rekam', 'pendaftaran']
+		group: 'rekam'
+		list: ['rekam', 'regis']
 	,
 		group: 'admisi'
 		list: ['admisi']
