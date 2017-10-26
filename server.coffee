@@ -54,4 +54,7 @@ if Meteor.isServer
 			coll.pasien.update selector, modifier
 
 		setRole: (id, roles, group) ->
+			selector = _id: id
+			modifier = $set: roles: {}
+			Meteor.users.update selector, modifier
 			Roles.setUserRoles id, roles, group

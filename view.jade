@@ -432,8 +432,14 @@ template(name='users'): .container
 			input(name='password' placeholder='Password' type='password')
 			input(name='repeat' placeholder='Ulangi Password' type='password')
 		if onUser
-			input(name='roles' placeholder='Daftar Pernanan')
-			input(name='group' placeholder='Grup')
+			.row
+				each val in selRoles
+					input(type='radio' name='role' id=val)
+					label(for=val)= startCase(val)
+			.row
+				each modules
+					input(type='radio' name='group' id=name)
+					label(for=name)= full
 		input.btn(type='submit')
 	h5 Daftar Karyawan
 	table

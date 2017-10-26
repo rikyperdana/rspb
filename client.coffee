@@ -32,7 +32,7 @@ if Meteor.isClient
 	Template.registerHelper 'currentPar', (param) -> currentPar param
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 	Template.registerHelper 'startCase', (val) -> _.startCase val
-	Template.registerHelper 'reverse', (arr) -> _.reverse arr
+	Template.registerHelper 'modules', -> modules
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -187,6 +187,7 @@ if Meteor.isClient
 	Template.users.helpers
 		users: -> Meteor.users.find().fetch()
 		onUser: -> Session.get 'onUser'
+		selRoles: -> ['petugas', 'admin']
 
 	Template.users.events
 		'submit form': (event) ->
@@ -203,11 +204,17 @@ if Meteor.isClient
 				else
 					Materialize.toast 'Password tidak mirip', 3000
 			else
+				role = $('input[name="role"]:checked', event.target)[0].id
+				group = $('input[name="group"]:checked', event.target)[0].id
+				console.log onUser._id, [role], group
+				Meteor.call 'setRole', onUser._id, [role], group
+				###
 				split = _.split event.target.children.roles.value, ','
 				roles = _.map split, (i) -> _.snakeCase i
 				group = event.target.children.group.value
 				Meteor.call 'setRole', onUser._id, roles, group
 				Session.set 'onUser', null
+				###
 		'dblclick #row': ->
 			Session.set 'onUser', this
 

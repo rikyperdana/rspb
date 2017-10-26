@@ -10,7 +10,7 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
-1. jadikan form "berikan peranan" dengan select peran dan grup
+oke 1. jadikan form "berikan peranan" dengan select peran dan grup
 oke 2. field petugas dan tanggal daftar tidak dimunculkan
 oke 3. ganti kata menu admin jadi tanggal hari ini
 oke 4. hilangkan kolom status bayar di pembayaran
