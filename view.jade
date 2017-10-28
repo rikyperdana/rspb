@@ -36,8 +36,8 @@ template(name='pasien'): .container
 		.col.m6
 			if showButton
 				.right.btn#showForm= showButtonText
-			if formDoc
-				a.btn.modal-trigger(href='#preview') Preview
+			if preview
+				a.btn.modal-trigger(href='#preview') View
 
 	if showForm
 		+quickForm(
@@ -94,17 +94,18 @@ template(name='pasien'): .container
 									) Bayar
 						each item in pasien.rawat
 							unless item.status_bayar
-								tr
-									td= pasien.no_mr
-									td= pasien.regis.nama_lengkap
-									td= hari(item.tanggal)
-									td= rupiah(item.total.semua)
-									td {{look 'cara_bayar' item.cara_bayar 'label'}}
-									td
-										a#bayar(
-											pasien= pasien.no_mr
-											idbayar= item.idbayar
-										) Bayar
+								unless isZero item.total.semua
+									tr
+										td= pasien.no_mr
+										td= pasien.regis.nama_lengkap
+										td= hari(item.tanggal)
+										td= rupiah(item.total.semua)
+										td {{look 'cara_bayar' item.cara_bayar 'label'}}
+										td
+											a#bayar(
+												pasien= pasien.no_mr
+												idbayar= item.idbayar
+											) Bayar
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -231,7 +232,7 @@ template(name='pasien'): .container
 							th Status Bayar
 							th Cek
 					tbody
-						each descended
+						each reverse pasiens.rawat
 							tr
 								td= hari(tanggal)
 								td {{look 'klinik' klinik 'label'}}
@@ -241,7 +242,7 @@ template(name='pasien'): .container
 								else
 									td Belum
 								td: a.modal-trigger(href='#preview') cek
-	with formDoc
+	with preview
 		.modal#preview
 			.modal-content
 				table
@@ -434,10 +435,12 @@ template(name='users'): .container
 			input(name='repeat' placeholder='Ulangi Password' type='password')
 		if onUser
 			.row
+				p Peranan
 				each val in selRoles
 					input(type='radio' name='role' id=val)
 					label(for=val)= startCase(val)
 			.row
+				p Grup
 				each modules
 					input(type='radio' name='group' id=name)
 					label(for=name)= full

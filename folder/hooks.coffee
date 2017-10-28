@@ -3,7 +3,7 @@ if Meteor.isClient
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
-	modForm = (doc) -> if currentRoute() is 'jalan'
+	@modForm = (doc) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
 		doc.idbayar = randomId()
 		doc.jenis = currentRoute()
@@ -50,3 +50,6 @@ if Meteor.isClient
 		after:
 			insert: -> closeForm()
 			'update-pushArray': -> closeForm()
+		formToDoc: (doc) ->
+			Session.set 'preview', modForm doc
+			doc

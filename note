@@ -11,13 +11,13 @@ rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
 27 Okt 2017
-1. Beri label pada semua pilihan radios
-2. Buat semua tabel berurut descending berdasarkan waktu terbaru
+oke 1. Beri label pada semua pilihan radios
+oke 2. Buat semua tabel berurut descending berdasarkan waktu terbaru
 3. Biaya pendaftaran 30rb + 10rb
-4. Request layanan yg nilai rupiah masih 0 tidak dimunculkan di daftar bayar
+oke 4. Request layanan yg nilai rupiah masih 0 tidak dimunculkan di daftar bayar
 5. Daftar nama pasien pada menu rawat jalan hanya untuk yg sudah bayar pendaftaran 30rb
-6. Otomasi check in data request rawat terbaru (langsung preview ketika buka pasien)
-7. Perbaiki preview harga sebelum simpan rawat jalan
+oke 6. Otomasi check in data request rawat terbaru (langsung preview ketika buka pasien)
+oke 7. Perbaiki preview harga sebelum simpan rawat jalan
 8. Cetak karcis pendaftaran setelah bayar 30rb atau 10+30
 9. Cetak pembayaran (file pembayaran) setelah konfirmasi bayar tindakan
 
