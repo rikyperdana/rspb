@@ -10,18 +10,31 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
+27 Okt 2017
+1. Beri label pada semua pilihan radios
+2. Buat semua tabel berurut descending berdasarkan waktu terbaru
+3. Biaya pendaftaran 30rb + 10rb
+4. Request layanan yg nilai rupiah masih 0 tidak dimunculkan di daftar bayar
+5. Daftar nama pasien pada menu rawat jalan hanya untuk yg sudah bayar pendaftaran 30rb
+6. Otomasi check in data request rawat terbaru (langsung preview ketika buka pasien)
+7. Perbaiki preview harga sebelum simpan rawat jalan
+8. Cetak karcis pendaftaran setelah bayar 30rb atau 10+30
+9. Cetak pembayaran (file pembayaran) setelah konfirmasi bayar tindakan
+
+24 Okt 2017
 oke 1. jadikan form "berikan peranan" dengan select peran dan grup
 oke 2. field petugas dan tanggal daftar tidak dimunculkan
 oke 3. ganti kata menu admin jadi tanggal hari ini
 oke 4. hilangkan kolom status bayar di pembayaran
 oke 5. hilangkan field pilihan layanan
-6. tampilkan request layanan terbaru sesuai poli
+wip 6. tampilkan request layanan terbaru sesuai poli
 fail 7. hapus kolom "lihat" dan tombol "preview", jadikan row double-click
 	tidak bisa karena tombol lihat digunakan untuk jembatan data antara pendaftaran dan poli
 oke 8. semua angka duit, dikasi pemisahan ribu
 oke 9. request rawat baru urut descending
 fail 10. daftar riwayat rawat hanya tampilkan yg sudah bayar
 	sama dengan fail no 7
+wip 11. Buatkan general consent (folder pendaftaran)
 
 Skenario Pasien Baru
 1. Ke pendaftaran, isi form pasien + pilih poli

@@ -86,7 +86,7 @@ template(name='pasien'): .container
 								td= pasien.no_mr
 								td= pasien.regis.nama_lengkap
 								td= hari(pasien.regis.date)
-								td Rp 10000
+								td Rp 10,000
 								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
 								td
 									a#payRegis(
@@ -203,6 +203,7 @@ template(name='pasien'): .container
 	if currentPar 'no_mr'
 		with pasiens
 			.left.purple.btn#card Cetak
+			.left.purple.btn#consent Consent
 			table
 				tr
 					th No MR
@@ -441,6 +442,7 @@ template(name='users'): .container
 					input(type='radio' name='group' id=name)
 					label(for=name)= full
 		input.btn(type='submit')
+	.right.orange.btn#close Close
 	h5 Daftar Karyawan
 	table
 		thead

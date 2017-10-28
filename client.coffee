@@ -19,7 +19,7 @@ if Meteor.isClient
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute()
 			if find then find.full else ''
-		today: -> moment(new Date).format('D-MM-YYYY')
+		today: -> moment().format('LLL')
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
 
@@ -96,16 +96,8 @@ if Meteor.isClient
 		'keypress #search': (event) ->
 			if event.key is 'Enter'
 				Session.set 'search', event.target.value
-		'click #card': ->
-			pdf = pdfMake.createPdf
-				content: [
-					'Nama: ' + coll.pasien.findOne().regis.nama_lengkap
-					'No. MR: ' + coll.pasien.findOne().no_mr
-				]
-				pageSize: 'B8'
-				pageMargins: [110, 50, 0, 0]
-				pageOrientation: 'landscape'
-			pdf.download coll.pasien.findOne().no_mr + '.pdf'
+		'click #card': -> makePdf.card()
+		'click #consent': -> makePdf.consent()
 		'dblclick #payRegis': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			dialog =
@@ -205,10 +197,11 @@ if Meteor.isClient
 			else
 				role = $('input[name="role"]:checked', event.target)[0].id
 				group = $('input[name="group"]:checked', event.target)[0].id
-				console.log onUser._id, [role], group
 				Meteor.call 'setRole', onUser._id, [role], group
 		'dblclick #row': ->
 			Session.set 'onUser', this
+		'click #close': ->
+			console.log 'tutup'
 
 	Template.login.events
 		'submit form': (event) ->
