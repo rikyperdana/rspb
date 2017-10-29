@@ -81,17 +81,23 @@ if Meteor.isClient
 				if sub.ready() then _.reverse coll.pasien.find().fetch()
 
 	Template.pasien.events
+		'click #showForm': ->
+			Session.set 'formDoc', null
+			Session.set 'preview', null
+			Session.set 'showForm', not Session.get 'showForm'
 		'dblclick #row': ->
 			Router.go '/' + currentRoute() + '/' + this.no_mr
-			Session.set 'formDoc', modForm _.last coll.pasien.findOne().rawat
 			Session.set 'showForm', true
-			later = ->
-				$('.autoform-remove-item').trigger 'click'
-				formDoc = Session.get 'formDoc'
-				_.map ['cara_bayar', 'klinik'], (i) ->
-					if formDoc then $('input[name="'+i+'"][value="'+formDoc[i]+'"]').prop 'checked', true
-					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
-			setTimeout later, 1000
+			last = _.last coll.pasien.findOne().rawat
+			if last.total.semua is 0
+				Session.set 'formDoc', modForm last, last.idbayar
+				later = ->
+					$('.autoform-remove-item').trigger 'click'
+					formDoc = Session.get 'formDoc'
+					_.map ['cara_bayar', 'klinik'], (i) ->
+						if formDoc then $('input[name="'+i+'"][value="'+formDoc[i]+'"]').prop 'checked', true
+						$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
+				setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 		'click #close': ->
 			Session.set 'showForm', false
@@ -127,7 +133,9 @@ if Meteor.isClient
 				callback: (err, res) -> if res.submit
 					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value
 		'click .modal-trigger': (event) ->
-			if this.idbayar then Session.set 'formDoc', modForm this
+			if this.idbayar
+				Session.set 'formDoc', modForm this
+				Session.set 'preview', modForm this
 			$('#preview').modal 'open'
 
 	Template.import.events
