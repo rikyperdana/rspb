@@ -10,6 +10,7 @@ if Meteor.isClient
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	search = -> Session.get 'search'
+	formDoc = -> Session.get 'formDoc'
 
 	Template.menu.helpers
 		menus: ->
@@ -49,11 +50,12 @@ if Meteor.isClient
 				when 'regis' then '+ Pasien'
 				when 'jalan' then '+ Rawat'
 		routeIs: (name) -> currentRoute() is name
-		formDoc: -> Session.get 'formDoc'
+		formDoc: -> formDoc()
 		preview: -> Session.get 'preview'
 		omitFields: ->
-			unless Session.get 'formDoc'
+			unless formDoc() and formDoc().billRegis
 				['tindakan', 'labor', 'radio', 'obat']
+
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
@@ -86,9 +88,8 @@ if Meteor.isClient
 			Session.set 'showForm', not Session.get 'showForm'
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
-				formDoc = Session.get 'formDoc'
 				_.map ['jenis', 'cara_bayar', 'klinik'], (i) ->
-					if formDoc then $('input[name="'+i+'"][value="'+formDoc[i]+'"]').prop 'checked', true
+					if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
 					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 			setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
@@ -101,15 +102,21 @@ if Meteor.isClient
 		'keypress #search': (event) ->
 			if event.key is 'Enter'
 				Session.set 'search', event.target.value
-		'click #card': -> makePdf.card()
+		'click #card': ->
+			Meteor.call 'billCard', currentPar('no_mr'), true
+			makePdf.card()
 		'click #consent': -> makePdf.consent()
-		'dblclick #payRegis': (event) ->
+		'dblclick #bill': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
+			idbayar = event.target.attributes.idbayar.nodeValue
 			dialog =
 				title: 'Pembayaran Pendaftaran'
 				message: 'Apakah yakin pasien sudah membayar?'
-			new Confirmation dialog, (ok) ->
-				if ok then Meteor.call 'payRegis', no_mr
+			new Confirmation dialog, (ok) -> if ok
+				if idbayar
+					Meteor.call 'billRegis', no_mr, idbayar, true
+				else
+					Meteor.call 'billCard', no_mr, false
 		'dblclick #bayar': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
