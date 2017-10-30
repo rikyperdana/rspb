@@ -13,9 +13,10 @@ if Meteor.isServer
 		import: (selector, modifier) ->
 			coll.pasien.upsert selector, $set: modifier
 
-		billCard: (no_mr, state) ->
+		bill: (no_mr, type, state) ->
 			selector = no_mr: parseInt no_mr
-			modifier = 'regis.billCard': state
+			modifier = {}
+			modifier['regis.bill' + type] = state
 			coll.pasien.update selector, $set: modifier
 
 		billRegis: (no_mr, idbayar, state) ->

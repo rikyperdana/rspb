@@ -13,10 +13,17 @@ admisi 1 admin 3 petugas menus['admisi']
 27 Okt 2017
 oke 1. Beri label pada semua pilihan radios
 oke 2. Buat semua tabel berurut descending berdasarkan waktu terbaru
+<<<<<<< HEAD
 oke 3. Biaya pendaftaran 30rb + 10rb
 oke 4. Request layanan yg nilai rupiah masih 0 tidak dimunculkan di daftar bayar
 fail 5. Daftar nama pasien pada menu rawat jalan hanya untuk yg sudah bayar pendaftaran 30rb
 fail 6. Otomasi check in data request rawat terbaru (langsung preview ketika buka pasien)
+=======
+3. Biaya pendaftaran 30rb + 10rb
+oke 4. Request layanan yg nilai rupiah masih 0 tidak dimunculkan di daftar bayar
+5. Daftar nama pasien pada menu rawat jalan hanya untuk yg sudah bayar pendaftaran 30rb
+oke 6. Otomasi check in data request rawat terbaru (langsung preview ketika buka pasien)
+>>>>>>> af8608b8cb7217620621bc9eabf3477f47a6c3d0
 oke 7. Perbaiki preview harga sebelum simpan rawat jalan
 8. Cetak karcis pendaftaran setelah bayar 30rb atau 10+30
 9. Cetak pembayaran (file pembayaran) setelah konfirmasi bayar tindakan

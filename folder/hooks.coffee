@@ -4,9 +4,9 @@ if Meteor.isClient
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
-	modForm = (doc) -> if currentRoute() is 'jalan'
+	@modForm = (doc, idbayar) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
-		doc.idbayar = randomId()
+		doc.idbayar = if idbayar then idbayar else randomId()
 		doc.jenis = currentRoute()
 		totalTindakan = 0; totalLabor = 0; totalObat = 0; totalRadio = 0;
 		if doc.tindakan

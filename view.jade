@@ -37,7 +37,7 @@ template(name='pasien'): .container
 		.col.m6
 			if showButton
 				.right.btn#showForm= showButtonText
-			if formDoc
+			if preview
 				a.btn.modal-trigger(href='#preview') View
 
 	if showForm
@@ -457,10 +457,12 @@ template(name='users'): .container
 			input(name='repeat' placeholder='Ulangi Password' type='password')
 		if onUser
 			.row
+				p Peranan
 				each val in selRoles
 					input(type='radio' name='role' id=val)
 					label(for=val)= startCase(val)
 			.row
+				p Grup
 				each modules
 					input(type='radio' name='group' id=name)
 					label(for=name)= full

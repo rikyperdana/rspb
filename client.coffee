@@ -93,7 +93,8 @@ if Meteor.isClient
 					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 			setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
-		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
+		'dblclick #row': ->
+			Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
 			Session.set 'showForm', false
 			Session.set 'formDoc', null
@@ -137,7 +138,7 @@ if Meteor.isClient
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this
-				Session.set 'preview', this
+				Session.set 'preview', modForm this
 			$('#preview').modal 'open'
 
 	Template.import.events
@@ -222,4 +223,5 @@ if Meteor.isClient
 			event.preventDefault()
 			username = event.target.children.username.value
 			password = event.target.children.password.value
-			Meteor.loginWithPassword username, password
+			Meteor.loginWithPassword username, password, (err) ->
+				if err then Materialize.toast 'Salah username / password', 3000
