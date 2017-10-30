@@ -32,6 +32,7 @@ if Meteor.isClient
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 	Template.registerHelper 'startCase', (val) -> _.startCase val
 	Template.registerHelper 'modules', -> modules
+	Template.registerHelper 'reverse', (arr) -> _.reverse arr
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -49,12 +50,14 @@ if Meteor.isClient
 				when 'jalan' then '+ Rawat'
 		routeIs: (name) -> currentRoute() is name
 		formDoc: -> Session.get 'formDoc'
+		preview: -> Session.get 'preview'
 		omitFields: ->
 			unless Session.get 'formDoc'
 				['tindakan', 'labor', 'radio', 'obat']
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
+		isZero: (val) -> val is 0
 		pasiens: ->
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
@@ -76,8 +79,7 @@ if Meteor.isClient
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				if sub.ready() then coll.pasien.find().fetch()
-		descended: -> _.reverse coll.pasien.findOne().rawat
+				if sub.ready() then _.reverse coll.pasien.find().fetch()
 
 	Template.pasien.events
 		'click #showForm': ->
@@ -85,13 +87,16 @@ if Meteor.isClient
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
 				formDoc = Session.get 'formDoc'
-				if formDoc then _.map ['jenis', 'cara_bayar', 'klinik'], (i) ->
-					$('input[name="'+i+'"][value="'+formDoc[i]+'"]').prop 'checked', true
+				_.map ['jenis', 'cara_bayar', 'klinik'], (i) ->
+					if formDoc then $('input[name="'+i+'"][value="'+formDoc[i]+'"]').prop 'checked', true
+					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 			setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
 			Session.set 'showForm', false
+			Session.set 'formDoc', null
+			Session.set 'preview', null
 			Router.go currentRoute()
 		'keypress #search': (event) ->
 			if event.key is 'Enter'
@@ -123,7 +128,9 @@ if Meteor.isClient
 				callback: (err, res) -> if res.submit
 					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value
 		'click .modal-trigger': (event) ->
-			if this.idbayar then Session.set 'formDoc', this
+			if this.idbayar
+				Session.set 'formDoc', this
+				Session.set 'preview', this
 			$('#preview').modal 'open'
 
 	Template.import.events

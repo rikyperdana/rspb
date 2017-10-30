@@ -1,5 +1,6 @@
 if Meteor.isClient
 
+	# SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
@@ -50,3 +51,6 @@ if Meteor.isClient
 		after:
 			insert: -> closeForm()
 			'update-pushArray': -> closeForm()
+		formToDoc: (doc) ->
+			Session.set 'preview', modForm doc
+			doc
