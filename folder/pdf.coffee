@@ -43,3 +43,39 @@ if Meteor.isClient
 					'TS: Tidak Setuju'
 				]
 			pdf.download doc.no_mr + '_consent.pdf'
+		payRawat: ->
+			doc = coll.pasien.findOne()
+			pdf = pdfMake.createPdf
+				content: [
+					'PEMERINTAH PROVINSI RIAU'
+					'RUMAH SAKIT UMUM DAERAH PETALA BUMI'
+					'JL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU'
+					'RINCIAN BIAYA RAWAT JALAN'
+					'IDENTITAS PASIEN'
+					'NO. MR'
+					'NAMA PASIEN'
+					'JENIS KELAMIN'
+					'TANGGAL LAHIR'
+					'UMUR'
+					'KLINIK'
+					'RINCIAN PEMBAYARAN'
+					'TOTAL BIAYA'
+					'PEKANBARU, TANGGAL BULAN TAHUN'
+					'PETUGAS'
+				]
+			pdf.download doc.no_mr + '_payRawat.pdf'
+		payRegCard: ->
+			doc = coll.pasien.findOne()
+			pdf = pdfMake.createPdf
+				content: [
+					'PEMERINTAH PROVINSI RIAU'
+					'RUMAH SAKIT UMUM DAERAH PETALA BUMI'
+					'JL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU'
+					'KARCIS'
+					'TANGGAL'
+					'NO. MR'
+					'NAMA PASIEN'
+					'TARIF'
+					'(terbilang)'
+				]
+			pdf.download doc.no_mr + '_payRegCard.pdf'

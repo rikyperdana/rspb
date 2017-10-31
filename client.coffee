@@ -118,14 +118,16 @@ if Meteor.isClient
 					Meteor.call 'billRegis', no_mr, idbayar, true
 				else
 					Meteor.call 'billCard', no_mr, false
+				makePdf.payRegCard()
 		'dblclick #bayar': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
 			dialog =
 				title: 'Konfirmasi Pembayaran'
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
-			new Confirmation dialog, (ok) ->
-				if ok then Meteor.call 'bayar', no_mr, idbayar
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'bayar', no_mr, idbayar
+				makePdf.payRawat()
 		'dblclick #request': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
