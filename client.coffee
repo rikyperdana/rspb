@@ -109,13 +109,13 @@ if Meteor.isClient
 		'click #consent': -> makePdf.consent()
 		'dblclick #bill': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
-			idbayar = event.target.attributes.idbayar.nodeValue
+			idbayar = -> event.target.attributes.idbayar.nodeValue
 			dialog =
 				title: 'Pembayaran Pendaftaran'
 				message: 'Apakah yakin pasien sudah membayar?'
 			new Confirmation dialog, (ok) -> if ok
-				if idbayar
-					Meteor.call 'billRegis', no_mr, idbayar, true
+				if event.target.attributes.idbayar
+					Meteor.call 'billRegis', no_mr, idbayar(), true
 				else
 					Meteor.call 'billCard', no_mr, false
 				makePdf.payRegCard()
@@ -140,7 +140,7 @@ if Meteor.isClient
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this
-				Session.set 'preview', modForm this
+				Session.set 'preview', modForm this, this.idbayar
 			$('#preview').modal 'open'
 
 	Template.import.events

@@ -13,17 +13,13 @@ if Meteor.isServer
 		import: (selector, modifier) ->
 			coll.pasien.upsert selector, $set: modifier
 
-		bill: (no_mr, type, state) ->
-			selector = no_mr: parseInt no_mr
-			modifier = {}
-			modifier['regis.bill' + type] = state
-			coll.pasien.update selector, $set: modifier
+		billCard: (no_mr, state) ->
+			selector = no_mr: parseInt
+			modifier = $set: 'regis.billCard': state
+			coll.pasien.update selector, modifier
 
 		billRegis: (no_mr, idbayar, state) ->
-			# find = _.find coll.pasien.findOne({no_mr: no_mr}).rawat, (i) -> i.idbayar is idbayar
-			selector =
-				no_mr: parseInt no_mr
-				'rawat.idbayar': idbayar
+			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
 			modifier = $set: 'rawat.$.billRegis': state
 			coll.pasien.update selector, modifier
 
