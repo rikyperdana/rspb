@@ -36,6 +36,7 @@ if Meteor.isClient
 			obat: totalObat
 			radio: totalRadio
 			semua: totalTindakan + totalLabor + totalObat + totalRadio
+		doc.billRegis = true if doc.total.semua > 0
 		doc
 
 	closeForm = ->
@@ -54,3 +55,4 @@ if Meteor.isClient
 		formToDoc: (doc) ->
 			Session.set 'preview', modForm doc
 			doc
+

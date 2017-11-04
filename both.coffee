@@ -39,11 +39,7 @@ schema.regis =
 		type: Date
 		autoform: type: 'hidden'
 		autoValue: -> new Date
-	'regis.billCard':
-		type: Boolean
-		optional: true
-		autoform: type: 'hidden'
-		autoValue: -> true
+	'regis.billCard': type: Boolean, optional: true, autoform: type: 'hidden'
 
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'

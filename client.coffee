@@ -88,9 +88,12 @@ if Meteor.isClient
 			Session.set 'showForm', not Session.get 'showForm'
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
-				_.map ['jenis', 'cara_bayar', 'klinik'], (i) ->
+				if currentRoute() is 'jalan' then _.map ['cara_bayar', 'klinik'], (i) ->
 					if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
 					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
+				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
+				if currentRoute() is 'regis' then _.map list, (i) ->
+					$('div[data-schema-key="regis.'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 			setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 		'dblclick #row': ->
