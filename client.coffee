@@ -60,6 +60,11 @@ if Meteor.isClient
 			find = _.find selects[option], (i) -> i.value is value
 			find[field]
 		isZero: (val) -> val is 0
+		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
+			find = _.find selects.klinik, (j) ->
+				j.label is _.startCase Meteor.user().roles.jalan[0]
+			i.klinik is find.value
+		userPoli: -> Meteor.user().roles.jalan
 		pasiens: ->
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
@@ -199,6 +204,7 @@ if Meteor.isClient
 		users: -> Meteor.users.find().fetch()
 		onUser: -> Session.get 'onUser'
 		selRoles: -> ['petugas', 'admin']
+		klinik: -> selects.klinik
 
 	Template.users.events
 		'submit form': (event) ->
@@ -217,7 +223,9 @@ if Meteor.isClient
 			else
 				role = $('input[name="role"]:checked', event.target)[0].id
 				group = $('input[name="group"]:checked', event.target)[0].id
-				Meteor.call 'setRole', onUser._id, [role], group
+				poli = $('input[name="poli"]:checked', event.target)[0]
+				theRole = unless poli then role else _.snakeCase poli.id
+				Meteor.call 'setRole', onUser._id, [theRole], group
 		'dblclick #row': ->
 			Session.set 'onUser', this
 		'click #close': ->

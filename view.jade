@@ -254,16 +254,28 @@ template(name='pasien'): .container
 							th Status Bayar
 							th Cek
 					tbody
-						each reverse rawat
-							tr
-								td= hari(tanggal)
-								td {{look 'klinik' klinik 'label'}}
-								td {{look 'cara_bayar' cara_bayar 'label'}}
-								if status_bayar
-									td Sudah
-								else
-									td Belum
-								td: a.modal-trigger(href='#preview') cek
+						if userPoli
+							each roleFilter rawat
+								tr
+									td= hari(tanggal)
+									td {{look 'klinik' klinik 'label'}}
+									td {{look 'cara_bayar' cara_bayar 'label'}}
+									if status_bayar
+										td Sudah
+									else
+										td Belum
+									td: a.modal-trigger(href='#preview') cek
+						else
+							each reverse rawat
+								tr
+									td= hari(tanggal)
+									td {{look 'klinik' klinik 'label'}}
+									td {{look 'cara_bayar' cara_bayar 'label'}}
+									if status_bayar
+										td Sudah
+									else
+										td Belum
+									td: a.modal-trigger(href='#preview') cek
 	with preview
 		.modal#preview
 			.modal-content
@@ -466,6 +478,11 @@ template(name='users'): .container
 				each modules
 					input(type='radio' name='group' id=name)
 					label(for=name)= full
+			.row
+				p Poli
+				each klinik
+					input(type='radio' name='poli' id=label)
+					label(for=label)= label
 		input.btn(type='submit')
 	.right.orange.btn#close Close
 	h5 Daftar Karyawan
