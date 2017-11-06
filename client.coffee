@@ -34,6 +34,8 @@ if Meteor.isClient
 	Template.registerHelper 'startCase', (val) -> _.startCase val
 	Template.registerHelper 'modules', -> modules
 	Template.registerHelper 'reverse', (arr) -> _.reverse arr
+	Template.registerHelper 'isTrue', (a, b) -> a is b
+	Template.registerHelper 'isFalse', (a, b) -> a isnt b
 
 	Template.body.events
 		'keypress #search': (event) ->

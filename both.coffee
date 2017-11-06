@@ -81,7 +81,7 @@ schema.rawat =
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'rawat.$.billRegis': type: Boolean, optional: true, autoform: type: 'hidden'
-	'rawat.$.status_bayar': type: Number, optional: true, autoform: type: 'hidden'
+	'rawat.$.status_bayar': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
 	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
 	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true

@@ -1,6 +1,6 @@
 if Meteor.isClient
 
-	# SimpleSchema.debug = true
+	SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
@@ -36,7 +36,9 @@ if Meteor.isClient
 			obat: totalObat
 			radio: totalRadio
 			semua: totalTindakan + totalLabor + totalObat + totalRadio
-		doc.billRegis = true if doc.total.semua > 0
+		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
+		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
+		if doc.cara_bayar isnt 1 then doc.total.semua += 30000
 		doc
 
 	closeForm = ->

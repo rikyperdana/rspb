@@ -106,19 +106,20 @@ template(name='pasien'): .container
 											pasien= pasien.no_mr
 											idbayar= item.idbayar
 										) Bayar
-							unless item.status_bayar
-								unless isZero item.total.semua
-									tr
-										td= pasien.no_mr
-										td= pasien.regis.nama_lengkap
-										td= hari(item.tanggal)
-										td= rupiah(item.total.semua)
-										td {{look 'cara_bayar' item.cara_bayar 'label'}}
-										td
-											a#bayar(
-												pasien= pasien.no_mr
-												idbayar= item.idbayar
-											) Bayar
+							if isTrue item.cara_bayar 1
+								unless item.status_bayar
+									unless isZero item.total.semua
+										tr
+											td= pasien.no_mr
+											td= pasien.regis.nama_lengkap
+											td= hari(item.tanggal)
+											td= rupiah(item.total.semua)
+											td {{look 'cara_bayar' item.cara_bayar 'label'}}
+											td
+												a#bayar(
+													pasien= pasien.no_mr
+													idbayar= item.idbayar
+												) Bayar
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -251,7 +252,7 @@ template(name='pasien'): .container
 							th Tanggal
 							th Klinik
 							th Cara Bayar
-							th Status Bayar
+							th Bayar Tindakan
 							th Cek
 					tbody
 						if userPoli
