@@ -82,6 +82,13 @@ if Meteor.isClient
 				options = fields: no_mr: 1, regis: 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.find().fetch()
+			else if Meteor.user().roles.jalan
+				sub = Meteor.subscribe 'coll', 'pasien', {}, {}
+				if sub.ready()
+					roleNum = _.find selects.klinik, (i) ->
+						Meteor.user().roles.jalan[0] is _.snakeCase i.label
+					_.filter coll.pasien.find().fetch(), (i) ->
+						i.rawat[i.rawat.length-1].klinik is roleNum.value
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1
@@ -126,9 +133,10 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				if event.target.attributes.idbayar
 					Meteor.call 'billRegis', no_mr, idbayar(), true
+					makePdf.payRegCard 30000, 'Tiga Puluh Ribu Rupiah'
 				else
 					Meteor.call 'billCard', no_mr, false
-				makePdf.payRegCard()
+					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
 		'dblclick #bayar': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
@@ -239,4 +247,8 @@ if Meteor.isClient
 			username = event.target.children.username.value
 			password = event.target.children.password.value
 			Meteor.loginWithPassword username, password, (err) ->
-				if err then Materialize.toast 'Salah username / password', 3000
+				if err
+					Materialize.toast 'Salah username / password', 3000
+				else
+					userGroups = _.keys Meteor.user().roles
+					Router.go '/' + userGroups[0]
