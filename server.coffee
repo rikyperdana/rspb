@@ -14,7 +14,7 @@ if Meteor.isServer
 			coll.pasien.upsert selector, $set: modifier
 
 		billCard: (no_mr, state) ->
-			selector = no_mr: parseInt
+			selector = no_mr: parseInt no_mr
 			modifier = $set: 'regis.billCard': state
 			coll.pasien.update selector, modifier
 

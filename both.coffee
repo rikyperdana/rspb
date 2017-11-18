@@ -76,6 +76,7 @@ schema.rawat =
 	no_mr: type: Number
 	rawat: type: Array
 	'rawat.$': type: Object
+	'rawat.$.tanggal': type: Date, autoform: type: 'hidden'
 	'rawat.$.idbayar': type: String, optional: true, autoform: type: 'hidden'
 	'rawat.$.jenis': type: String, optional: true, autoform: type: 'hidden'
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'

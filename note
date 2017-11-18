@@ -10,6 +10,18 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
+8 Nov 2017
+pending 1. Kartu pasien ditanggung semua jenis jaminan
+2. Buatkan tabel report range waktu dengan select start dan end day
+wip 3. Rapikan semua pdf (general consent, kartu, payregcard, paytindakan)
+oke 4. Pada rawat jalan, filter list pasien sesuai poli. Urut berdasarkan waktu regis
+wip 5. Fixkan tampilan login dan dashboard
+oke 6. Fix Routing pasca login
+
+1 Nov 2017
+oke 1. Pemisahan pembayaran umum dan jaminan
+oke 2. Filter daftar rawat pasien berdasarkan grup pengguna
+
 27 Okt 2017
 oke 1. Beri label pada semua pilihan radios
 oke 2. Buat semua tabel berurut descending berdasarkan waktu terbaru

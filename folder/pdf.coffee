@@ -16,11 +16,7 @@ if Meteor.isClient
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
 				content: [
-					text: 'PEMERINTAH PROVINSI RIAU', alignment: 'center'
-				,
-					text: 'RUMAH SAKIT UMUM DAERAH PETALA BUMI', alignment: 'center'
-				,
-					text: 'JL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'
+					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. Dr. Soetomo No. 65, Telp. (0761) 23024', alignment: 'center'}
 					'\nDATA UMUM PASIEN'
 					'\nNAMA LENGKAP : ' + doc.regis.nama_lengkap
 					'TEMPAT & TANGGAL LAHIR : ' + doc.regis.tmpt_lahir + ', tanggal ' + moment(doc.regis.tgl_lahir).format('D/MMMM/YYYY')
@@ -43,19 +39,15 @@ if Meteor.isClient
 					'\nPetunjuk :'
 					'S: Setuju'
 					'TS: Tidak Setuju'
-					text: 'Pekanbaru,                        .', alignment: 'right'
-				,
-					text: '\n\n\n__________________', alignment: 'right'
+					{text: 'Pekanbaru,                        .\n\n\n__________________', alignment: 'right'}
 				]
 			pdf.download doc.no_mr + '_consent.pdf'
 		payRawat: ->
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
 				content: [
-					'PEMERINTAH PROVINSI RIAU'
-					'RUMAH SAKIT UMUM DAERAH PETALA BUMI'
-					'JL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU'
-					'RINCIAN BIAYA RAWAT JALAN'
+					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
+					'\nRINCIAN BIAYA RAWAT JALAN'
 					'IDENTITAS PASIEN'
 					'NO. MR'
 					'NAMA PASIEN'
@@ -65,7 +57,7 @@ if Meteor.isClient
 					'KLINIK'
 					'RINCIAN PEMBAYARAN'
 					'TOTAL BIAYA'
-					'PEKANBARU, TANGGAL BULAN TAHUN'
+					'\nPEKANBARU, ' + moment().format('DD MM YYYY')
 					'PETUGAS'
 				]
 			pdf.download doc.no_mr + '_payRawat.pdf'

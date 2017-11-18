@@ -1,11 +1,12 @@
 if Meteor.isClient
 
-	SimpleSchema.debug = true
+	# SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
 	@modForm = (doc, idbayar) -> if currentRoute() is 'jalan'
 		randomId = -> Math.random().toString(36).slice(2)
+		doc.tanggal = new Date()
 		doc.idbayar = if idbayar then idbayar else randomId()
 		doc.jenis = currentRoute()
 		totalTindakan = 0; totalLabor = 0; totalObat = 0; totalRadio = 0;

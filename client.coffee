@@ -67,6 +67,8 @@ if Meteor.isClient
 				j.label is _.startCase Meteor.user().roles.jalan[0]
 			i.klinik is find.value
 		userPoli: -> Meteor.user().roles.jalan
+		inRange: (date) ->
+			true if Session.get('startDate') < date < Session.get('endDate')
 		pasiens: ->
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
@@ -87,7 +89,8 @@ if Meteor.isClient
 				if sub.ready()
 					roleNum = _.find selects.klinik, (i) ->
 						Meteor.user().roles.jalan[0] is _.snakeCase i.label
-					_.filter coll.pasien.find().fetch(), (i) ->
+					sorter = 'rawat[0].tanggal': 1
+					_.filter coll.pasien.find({}, sorter).fetch(), (i) ->
 						i.rawat[i.rawat.length-1].klinik is roleNum.value
 			else
 				selector = {}
@@ -95,7 +98,7 @@ if Meteor.isClient
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				if sub.ready() then _.reverse coll.pasien.find().fetch()
+				if sub.ready() then coll.pasien.find({}).fetch()
 
 	Template.pasien.events
 		'click #showForm': ->
@@ -160,6 +163,11 @@ if Meteor.isClient
 				Session.set 'formDoc', this
 				Session.set 'preview', modForm this, this.idbayar
 			$('#preview').modal 'open'
+		'click .datepicker': (event) ->
+			type = event.target.attributes.date.nodeValue
+			$('#'+type).pickadate
+				onSet: (data) ->
+					Session.set type+'Date', data.select
 
 	Template.import.events
 		'change :file': (event, template) ->

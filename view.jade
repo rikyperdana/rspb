@@ -14,8 +14,8 @@ template(name='menu')
 				li: a#logout Logout
 			else			
 				li: a(href='/login') Login
-	ul.fixed.side-nav.z-depth-2
-		if currentUser
+	if currentUser
+		ul.fixed.side-nav.z-depth-2
 			li.grey.lighten-2: a.center: b= today
 			each menus
 				li: a.waves-effect.waves-teal(href='/{{name}}')
@@ -120,6 +120,24 @@ template(name='pasien'): .container
 													pasien= pasien.no_mr
 													idbayar= item.idbayar
 												) Bayar
+			br
+			h5 Laporan Bayar
+			.row
+				.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
+				.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
+			table
+				thead
+					th No MR
+					th Nama
+					th Klinik
+					th Cara Bayar
+					th Total Bayar
+				tbody
+					each pasien in pasiens
+						each rawat in pasien.rawat
+							if inRange rawat.tanggal
+								tr
+									td berhasil
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
