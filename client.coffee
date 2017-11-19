@@ -36,6 +36,7 @@ if Meteor.isClient
 	Template.registerHelper 'reverse', (arr) -> _.reverse arr
 	Template.registerHelper 'isTrue', (a, b) -> a is b
 	Template.registerHelper 'isFalse', (a, b) -> a isnt b
+	Template.registerHelper 'isAdmin', -> Meteor.user().roles.admin
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -70,6 +71,9 @@ if Meteor.isClient
 		inRange: (date) ->
 			true if Session.get('startDate') < date < Session.get('endDate')
 		pasiens: ->
+			start = -> Session.get 'startDate'
+			end = -> Session.get 'endDate'
+			range = -> true if start() and end()
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
@@ -90,8 +94,10 @@ if Meteor.isClient
 					roleNum = _.find selects.klinik, (i) ->
 						Meteor.user().roles.jalan[0] is _.snakeCase i.label
 					sorter = 'rawat[0].tanggal': 1
-					_.filter coll.pasien.find({}, sorter).fetch(), (i) ->
+					todays = _.filter coll.pasien.find({}, sorter).fetch(), (i) ->
 						i.rawat[i.rawat.length-1].klinik is roleNum.value
+					_.reverse _.filter todays, (i) ->
+						true unless i.rawat[0].total.semua
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1

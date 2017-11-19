@@ -30,6 +30,7 @@ template(name='loading'): .container
 
 template(name='pasien'): .container
 	h5 Daftar Nama Pasien
+	.row: .col.m4: .divider
 	.row
 		.col.m6
 			unless currentPar 'no_mr'
@@ -68,7 +69,8 @@ template(name='pasien'): .container
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
-		+import
+		if isAdmin
+			+import
 		if routeIs 'bayar'
 			h5 Daftar Bayar
 			table.bordered
@@ -127,6 +129,7 @@ template(name='pasien'): .container
 				.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
 			table
 				thead
+					th Tanggal
 					th No MR
 					th Nama
 					th Klinik
@@ -137,7 +140,12 @@ template(name='pasien'): .container
 						each rawat in pasien.rawat
 							if inRange rawat.tanggal
 								tr
-									td berhasil
+									td= hari(rawat.tanggal)
+									td= pasien.no_mr
+									td= pasien.regis.nama_lengkap
+									td {{look 'klinik' rawat.klinik 'label'}}
+									td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
+									td= rupiah(rawat.total.semua)
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered

@@ -10,9 +10,18 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
+18 Nov 2017
+1. Untuk org pembayaran, list pasien hanya dengan menu search
+2. Semua tabel buat pagination, dengan limit per 10
+3. Yg masuk laporan hanya yg udah bayar
+4. Fixkan range tanggal +- 1 hari
+5. Tampilkan aksi hapus untuk data rawat yg batal
+6. Tampilkan aksi hapus untuk data obat yg tidak tersedia lagi
+7. Jangan tampilkan data rawat poli yg sudah selesai tindakan
+
 8 Nov 2017
 pending 1. Kartu pasien ditanggung semua jenis jaminan
-2. Buatkan tabel report range waktu dengan select start dan end day
+oke 2. Buatkan tabel report range waktu dengan select start dan end day
 wip 3. Rapikan semua pdf (general consent, kartu, payregcard, paytindakan)
 oke 4. Pada rawat jalan, filter list pasien sesuai poli. Urut berdasarkan waktu regis
 wip 5. Fixkan tampilan login dan dashboard
