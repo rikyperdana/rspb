@@ -169,6 +169,13 @@ if Meteor.isClient
 				Session.set 'formDoc', this
 				Session.set 'preview', modForm this, this.idbayar
 			$('#preview').modal 'open'
+		'click #rmRawat': ->
+			self = this
+			dialog =
+				title: 'Konfirmasi Hapus'
+				message: 'Apakah yakin hapus data rawat pasien ini?'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'rmRawat', currentPar('no_mr'), self.idbayar
 		'click .datepicker': (event) ->
 			type = event.target.attributes.date.nodeValue
 			$('#'+type).pickadate

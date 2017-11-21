@@ -15,9 +15,9 @@ admisi 1 admin 3 petugas menus['admisi']
 2. Semua tabel buat pagination, dengan limit per 10
 3. Yg masuk laporan hanya yg udah bayar
 4. Fixkan range tanggal +- 1 hari
-5. Tampilkan aksi hapus untuk data rawat yg batal
+oke 5. Tampilkan aksi hapus untuk data rawat yg batal
 6. Tampilkan aksi hapus untuk data obat yg tidak tersedia lagi
-7. Jangan tampilkan data rawat poli yg sudah selesai tindakan
+oke 7. Jangan tampilkan data rawat poli yg sudah selesai tindakan
 
 8 Nov 2017
 pending 1. Kartu pasien ditanggung semua jenis jaminan

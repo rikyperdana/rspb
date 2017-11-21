@@ -123,29 +123,30 @@ template(name='pasien'): .container
 													idbayar= item.idbayar
 												) Bayar
 			br
-			h5 Laporan Bayar
-			.row
-				.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
-				.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
-			table
-				thead
-					th Tanggal
-					th No MR
-					th Nama
-					th Klinik
-					th Cara Bayar
-					th Total Bayar
-				tbody
-					each pasien in pasiens
-						each rawat in pasien.rawat
-							if inRange rawat.tanggal
-								tr
-									td= hari(rawat.tanggal)
-									td= pasien.no_mr
-									td= pasien.regis.nama_lengkap
-									td {{look 'klinik' rawat.klinik 'label'}}
-									td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
-									td= rupiah(rawat.total.semua)
+			if isAdmin
+				h5 Laporan Bayar
+				.row
+					.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
+					.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
+				table
+					thead
+						th Tanggal
+						th No MR
+						th Nama
+						th Klinik
+						th Cara Bayar
+						th Total Bayar
+					tbody
+						each pasien in pasiens
+							each rawat in pasien.rawat
+								if inRange rawat.tanggal
+									tr
+										td= hari(rawat.tanggal)
+										td= pasien.no_mr
+										td= pasien.regis.nama_lengkap
+										td {{look 'klinik' rawat.klinik 'label'}}
+										td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
+										td= rupiah(rawat.total.semua)
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -280,6 +281,7 @@ template(name='pasien'): .container
 							th Cara Bayar
 							th Bayar Tindakan
 							th Cek
+							th Hapus
 					tbody
 						if userPoli
 							each roleFilter rawat
@@ -303,6 +305,7 @@ template(name='pasien'): .container
 									else
 										td Belum
 									td: a.modal-trigger(href='#preview') cek
+									td: a#rmRawat hapus
 	with preview
 		.modal#preview
 			.modal-content
