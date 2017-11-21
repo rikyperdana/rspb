@@ -139,14 +139,15 @@ template(name='pasien'): .container
 					tbody
 						each pasien in pasiens
 							each rawat in pasien.rawat
-								if inRange rawat.tanggal
-									tr
-										td= hari(rawat.tanggal)
-										td= pasien.no_mr
-										td= pasien.regis.nama_lengkap
-										td {{look 'klinik' rawat.klinik 'label'}}
-										td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
-										td= rupiah(rawat.total.semua)
+								if rawat.status_bayar
+									if inRange rawat.tanggal
+										tr
+											td= hari(rawat.tanggal)
+											td= pasien.no_mr
+											td= pasien.regis.nama_lengkap
+											td {{look 'klinik' rawat.klinik 'label'}}
+											td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
+											td= rupiah(rawat.total.semua)
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -281,7 +282,8 @@ template(name='pasien'): .container
 							th Cara Bayar
 							th Bayar Tindakan
 							th Cek
-							th Hapus
+							if isAdmin
+								th Hapus
 					tbody
 						if userPoli
 							each roleFilter rawat
@@ -305,7 +307,8 @@ template(name='pasien'): .container
 									else
 										td Belum
 									td: a.modal-trigger(href='#preview') cek
-									td: a#rmRawat hapus
+									if isAdmin
+										td: a#rmRawat hapus
 	with preview
 		.modal#preview
 			.modal-content
@@ -442,6 +445,7 @@ template(name='gudang'): .container
 					th Jenis Barang
 					th Nama Barang
 					th Harga Barang
+					th Hapus
 			tbody
 				each gudangs
 					tr#row
@@ -449,6 +453,7 @@ template(name='gudang'): .container
 						td= jenis
 						td= nama
 						td= harga
+						td: a#rmBarang hapus
 
 	if currentPar 'idbarang'
 		h5 Rincian Barang

@@ -36,7 +36,9 @@ if Meteor.isClient
 	Template.registerHelper 'reverse', (arr) -> _.reverse arr
 	Template.registerHelper 'isTrue', (a, b) -> a is b
 	Template.registerHelper 'isFalse', (a, b) -> a isnt b
-	Template.registerHelper 'isAdmin', -> Meteor.user().roles.admin
+	Template.registerHelper 'isAdmin', ->
+		role = _.keys Meteor.user().roles
+		Meteor.user().roles[role][0] is 'admin'
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -93,18 +95,20 @@ if Meteor.isClient
 				if sub.ready()
 					roleNum = _.find selects.klinik, (i) ->
 						Meteor.user().roles.jalan[0] is _.snakeCase i.label
-					sorter = 'rawat[0].tanggal': 1
-					todays = _.filter coll.pasien.find({}, sorter).fetch(), (i) ->
-						i.rawat[i.rawat.length-1].klinik is roleNum.value
-					_.reverse _.filter todays, (i) ->
-						true unless i.rawat[0].total.semua
+					filter = _.filter coll.pasien.find().fetch(), (i) ->
+						a = -> i.rawat[i.rawat.length-1].klinik is roleNum.value
+						b = -> not i.rawat[i.rawat.length-1].total.semua
+						a() and b()
+					_.reverse _.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				if sub.ready() then coll.pasien.find({}).fetch()
+				if sub.ready()
+					unless currentRoute() is 'bayar'
+						coll.pasien.find().fetch()
 
 	Template.pasien.events
 		'click #showForm': ->
@@ -227,6 +231,13 @@ if Meteor.isClient
 				message: 'Transfer Gudang > Apotek'
 				callback: (err, res) -> if res.submit
 					Meteor.call 'transfer', currentPar('idbarang'), data.idbatch, parseInt res.value
+		'click #rmBarang': ->
+			self = this
+			dialog =
+				title: 'Hapus Jenis Obat'
+				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'rmBarang', self.idbarang
 
 	Template.users.onRendered ->
 		Meteor.subscribe 'users'
@@ -247,7 +258,8 @@ if Meteor.isClient
 					password: event.target.children.password.value
 				repeat = event.target.children.repeat.value
 				if doc.password is repeat
-					Accounts.createUser doc
+					Meteor.call 'newUser', doc
+					# Accounts.createUser doc
 					$('input').val ''
 				else
 					Materialize.toast 'Password tidak mirip', 3000

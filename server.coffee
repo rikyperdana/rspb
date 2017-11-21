@@ -66,3 +66,9 @@ if Meteor.isServer
 				Roles.setUserRoles id, poli, group
 			else
 				Roles.setUserRoles id, roles, group
+
+		newUser: (doc) ->
+			Accounts.createUser doc
+
+		rmBarang: (idbarang) ->
+			coll.gudang.remove idbarang: idbarang

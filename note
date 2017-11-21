@@ -11,12 +11,12 @@ rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
 18 Nov 2017
-1. Untuk org pembayaran, list pasien hanya dengan menu search
+oke 1. Untuk org pembayaran, list pasien hanya dengan menu search
 2. Semua tabel buat pagination, dengan limit per 10
 3. Yg masuk laporan hanya yg udah bayar
 4. Fixkan range tanggal +- 1 hari
 oke 5. Tampilkan aksi hapus untuk data rawat yg batal
-6. Tampilkan aksi hapus untuk data obat yg tidak tersedia lagi
+oke 6. Tampilkan aksi hapus untuk data obat yg tidak tersedia lagi
 oke 7. Jangan tampilkan data rawat poli yg sudah selesai tindakan
 
 8 Nov 2017
