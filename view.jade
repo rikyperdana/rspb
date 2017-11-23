@@ -322,6 +322,11 @@ template(name='pasien'): .container
 						td {{look 'klinik' klinik 'label'}}
 					br
 					br
+				if anamesa
+					h5 Anamesa Pasien
+					p= anamesa
+				br
+				br
 				if tindakan
 					h5 Daftar Tindakan
 					table

@@ -10,11 +10,16 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
+21 Nov 2017
+oke 1. Tambahkan field anamesa (string) 1 untuk setiap data rawat
+2. Tampilan login dibaguskan
+3. Instalasi server
+
 18 Nov 2017
-oke 1. Untuk org pembayaran, list pasien hanya dengan menu search
+wip 1. Untuk org pembayaran, list pasien hanya dengan menu search
 2. Semua tabel buat pagination, dengan limit per 10
-3. Yg masuk laporan hanya yg udah bayar
-4. Fixkan range tanggal +- 1 hari
+oke 3. Yg masuk laporan hanya yg udah bayar
+oke 4. Fixkan range tanggal +- 1 hari
 oke 5. Tampilkan aksi hapus untuk data rawat yg batal
 oke 6. Tampilkan aksi hapus untuk data obat yg tidak tersedia lagi
 oke 7. Jangan tampilkan data rawat poli yg sudah selesai tindakan

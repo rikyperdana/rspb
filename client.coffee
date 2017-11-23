@@ -59,7 +59,7 @@ if Meteor.isClient
 		preview: -> Session.get 'preview'
 		omitFields: ->
 			unless formDoc() and formDoc().billRegis
-				['tindakan', 'labor', 'radio', 'obat']
+				['anamesa', 'tindakan', 'labor', 'radio', 'obat']
 
 		look: (option, value, field) ->
 			find = _.find selects[option], (i) -> i.value is value
@@ -71,7 +71,13 @@ if Meteor.isClient
 			i.klinik is find.value
 		userPoli: -> Meteor.user().roles.jalan
 		inRange: (date) ->
-			true if Session.get('startDate') < date < Session.get('endDate')
+			onDate = (date, val) ->
+				date = new Date date
+				date.setDate date.getDate() + val
+				new Date date
+			a = -> onDate Session.get('startDate'), -1
+			b = -> onDate Session.get('endDate'), 1
+			a() < date < b()
 		pasiens: ->
 			start = -> Session.get 'startDate'
 			end = -> Session.get 'endDate'
@@ -99,16 +105,14 @@ if Meteor.isClient
 						a = -> i.rawat[i.rawat.length-1].klinik is roleNum.value
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						a() and b()
-					_.reverse _.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
+					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else
 				selector = {}
 				options = limit: 5, fields: no_mr: 1, regis: 1
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				if sub.ready()
-					unless currentRoute() is 'bayar'
-						coll.pasien.find().fetch()
+				if sub.ready() then coll.pasien.find().fetch()
 
 	Template.pasien.events
 		'click #showForm': ->
@@ -134,9 +138,18 @@ if Meteor.isClient
 			if event.key is 'Enter'
 				Session.set 'search', event.target.value
 		'click #card': ->
-			Meteor.call 'billCard', currentPar('no_mr'), true
-			makePdf.card()
-		'click #consent': -> makePdf.consent()
+			dialog =
+				title: 'Cetak Kartu'
+				message: 'Yakin untuk cetak kartu ini?'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'billCard', currentPar('no_mr'), true
+				makePdf.card()
+		'click #consent': ->
+			dialog =
+				title: 'Cetak General Consent'
+				message: 'Yakin untuk cetak persetujuan pasien?'
+			new Confirmation dialog, (ok) -> if ok
+				makePdf.consent()
 		'dblclick #bill': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = -> event.target.attributes.idbayar.nodeValue
