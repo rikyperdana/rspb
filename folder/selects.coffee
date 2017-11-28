@@ -224,11 +224,20 @@
 		value: 2
 		harga: 1500000
 	]
+	###
 	dokter: [
 		label: 'Muhammad Rafi'
 		value: 1
 	,
 		label: 'Sabrina Maharani'
+		value: 2
+	]
+	###
+	tipe_dokter: [
+		label: 'Umum'
+		value: 1
+	,
+		label: 'Spesialis'
 		value: 2
 	]
 	obat: -> if Meteor.isClient
@@ -237,4 +246,10 @@
 		if sub.ready() then _.map uniqs, (i) ->
 			i.label = i.nama
 			i.value = i.nama
+			i
+	dokter: -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', 'dokter', {}, {}
+		if sub.ready() then _.map coll.dokter.find().fetch(), (i) ->
+			i.label = i.nama
+			i.value = i._id
 			i

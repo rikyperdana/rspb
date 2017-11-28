@@ -496,13 +496,13 @@ template(name='gudang'): .container
 							td= diapotik
 							td= suplier
 
-template(name='users'): .container
+template(name='manajemen'): .container
 	h5
 		unless onUser
 			span Tambahkan Karyawan
 		else
 			span Berikan Peranan
-	form
+	form#userForm
 		input(name='username' placeholder='Username' value= onUser.username)
 		unless onUser
 			input(name='password' placeholder='Password' type='password')
@@ -536,6 +536,27 @@ template(name='users'): .container
 				tr#row
 					td= username
 					td= stringify(roles)
+
+	h5 Tambahkan Dokter
+	+quickForm(
+		collection= coll.dokter
+		schema= schemadokter
+		type= 'insert'
+		id= 'formDokter'
+	)
+	h5 Daftar Dokter
+	table
+		thead
+			tr
+				th Nama
+				th Tipe
+				th Poli
+		tbody
+			each dokters
+				tr
+					td= nama
+					td {{look 'tipe_dokter' tipe 'label'}}
+					td {{look 'klinik' poli 'label'}}
 
 template(name='login'): .container
 	h5.center Login SIMRS

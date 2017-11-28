@@ -58,4 +58,9 @@
 	full: 'Gudang Logistik'
 	icon: 'rv_hookup'
 	color: 'blue-grey'
+,
+	name: 'manajemen'
+	full: 'Manajemen'
+	icon: 'people'
+	color: 'orange'
 ]

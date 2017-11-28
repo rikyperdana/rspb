@@ -10,6 +10,8 @@ Router.route '/',
 @coll = {}
 @schema = {}
 
+randomId = -> Math.random().toString(36).substring(7)
+
 schema.regis =
 	no_mr: type: Number
 	regis: type: Object
@@ -117,17 +119,29 @@ schema.gudang =
 
 schema.farmasi = Object.assign {}, schema.gudang
 
-coll.pasien = new Meteor.Collection 'pasien'
-coll.pasien.allow
+schema.dokter =
+	nama:
+		type: String
+	tipe:
+		type: Number
+		autoform: options: selects.tipe_dokter
+	poli:
+		type: Number
+		autoform: options: selects.klinik
+
+allowAll =
 	insert: -> true
 	update: -> true
 	remove: -> true
 
+coll.pasien = new Meteor.Collection 'pasien'
+coll.pasien.allow allowAll
+
 coll.gudang = new Meteor.Collection 'gudang'
-coll.gudang.allow
-	insert: -> true
-	update: -> true
-	remove: -> true
+coll.gudang.allow allowAll
+
+coll.dokter = new Meteor.Collection 'dokter'
+coll.dokter.allow allowAll
 
 makePasien = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
@@ -143,8 +157,8 @@ makeGudang = (modul) ->
 
 makeGudang i.name for i in modules[10..11]
 
-Router.route '/users',
-	action: -> this.render 'users'
+Router.route '/manajemen',
+	action: -> this.render 'manajemen'
 
 Router.route '/login', ->
 	action: -> this.render 'login'

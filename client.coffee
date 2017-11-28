@@ -36,6 +36,9 @@ if Meteor.isClient
 	Template.registerHelper 'reverse', (arr) -> _.reverse arr
 	Template.registerHelper 'isTrue', (a, b) -> a is b
 	Template.registerHelper 'isFalse', (a, b) -> a isnt b
+	Template.registerHelper 'look', (option, value, field) ->
+		find = _.find selects[option], (i) -> i.value is value
+		find[field]
 	Template.registerHelper 'isAdmin', ->
 		role = _.keys Meteor.user().roles
 		Meteor.user().roles[role][0] is 'admin'
@@ -60,10 +63,6 @@ if Meteor.isClient
 		omitFields: ->
 			unless formDoc() and formDoc().billRegis
 				['anamesa', 'tindakan', 'labor', 'radio', 'obat']
-
-		look: (option, value, field) ->
-			find = _.find selects[option], (i) -> i.value is value
-			find[field]
 		isZero: (val) -> val is 0
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			find = _.find selects.klinik, (j) ->
@@ -252,17 +251,20 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
 
-	Template.users.onRendered ->
+	Template.manajemen.onRendered ->
 		Meteor.subscribe 'users'
-	
-	Template.users.helpers
+		Meteor.subscribe 'coll', 'dokter', {}, {}
+
+	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()
 		onUser: -> Session.get 'onUser'
 		selRoles: -> ['petugas', 'admin']
 		klinik: -> selects.klinik
+		schemadokter: -> new SimpleSchema schema.dokter
+		dokters: -> coll.dokter.find().fetch()
 
-	Template.users.events
-		'submit form': (event) ->
+	Template.manajemen.events
+		'submit #userForm': (event) ->
 			event.preventDefault()
 			onUser = Session.get 'onUser'
 			unless onUser

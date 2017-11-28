@@ -46,7 +46,7 @@ if Meteor.isClient
 		Session.set 'showForm', null
 		Session.set 'formDoc', null
 
-	AutoForm.addHooks null,
+	AutoForm.addHooks 'formPasien',
 		before:
 			'update-pushArray': (doc) ->
 				formDoc = Session.get 'formDoc'

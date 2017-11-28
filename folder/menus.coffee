@@ -27,4 +27,7 @@ if Meteor.isClient
 	,
 		group: 'admisi'
 		list: ['admisi']
+	,
+		group: 'manajemen'
+		list: ['manajemen']
 	]
