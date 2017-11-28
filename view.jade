@@ -558,6 +558,26 @@ template(name='manajemen'): .container
 					td {{look 'tipe_dokter' tipe 'label'}}
 					td {{look 'klinik' poli 'label'}}
 
+	h5 Tambahkan Tarif
+	+quickForm(
+		collection= coll.tarif
+		schema= schematarif
+		type= 'insert'
+		id= 'formTarif'
+	)
+	table
+		thead
+			tr
+				th Nama
+				th Umum
+				th Spesialis
+		tbody
+			each tarifs
+				tr
+					td= nama
+					td= rupiah(umum)
+					td= rupiah(spes)
+
 template(name='login'): .container
 	h5.center Login SIMRS
 	form

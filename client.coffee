@@ -254,6 +254,7 @@ if Meteor.isClient
 	Template.manajemen.onRendered ->
 		Meteor.subscribe 'users'
 		Meteor.subscribe 'coll', 'dokter', {}, {}
+		Meteor.subscribe 'coll', 'tarif', {}, {}
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()
@@ -261,7 +262,9 @@ if Meteor.isClient
 		selRoles: -> ['petugas', 'admin']
 		klinik: -> selects.klinik
 		schemadokter: -> new SimpleSchema schema.dokter
+		schematarif: -> new SimpleSchema schema.tarif
 		dokters: -> coll.dokter.find().fetch()
+		tarifs: -> coll.tarif.find().fetch()
 
 	Template.manajemen.events
 		'submit #userForm': (event) ->

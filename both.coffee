@@ -46,7 +46,7 @@ schema.regis =
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'
 	diagnosa: type: String
-	nama: type: Number, autoform: options: selects.tindakan
+	nama: type: Number, autoform: options: selects.tarif
 	dokter: type: Number, autoform: options: selects.dokter
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 
@@ -120,14 +120,14 @@ schema.gudang =
 schema.farmasi = Object.assign {}, schema.gudang
 
 schema.dokter =
-	nama:
-		type: String
-	tipe:
-		type: Number
-		autoform: options: selects.tipe_dokter
-	poli:
-		type: Number
-		autoform: options: selects.klinik
+	nama: type: String
+	tipe: type: Number, autoform: options: selects.tipe_dokter
+	poli: type: Number, autoform: options: selects.klinik
+
+schema.tarif =
+	nama: type: String
+	umum: type: Number
+	spes: type: Number
 
 allowAll =
 	insert: -> true
@@ -142,6 +142,9 @@ coll.gudang.allow allowAll
 
 coll.dokter = new Meteor.Collection 'dokter'
 coll.dokter.allow allowAll
+
+coll.tarif = new Meteor.Collection 'tarif'
+coll.tarif.allow allowAll
 
 makePasien = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
