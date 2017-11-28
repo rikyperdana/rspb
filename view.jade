@@ -8,7 +8,6 @@ template(name='menu')
 			li: a Home
 		a.brand-logo.center= navTitle
 		ul.right
-			li: a(href='/users') Users
 			if currentUser
 				li: a= startCase(currentUser.username)
 				li: a#logout Logout
@@ -578,9 +577,18 @@ template(name='manajemen'): .container
 					td= rupiah(umum)
 					td= rupiah(spes)
 
-template(name='login'): .container
-	h5.center Login SIMRS
-	form
-		input(name='username' placeholder='Username')
-		input(name='password' placeholder='Password' type='password')
-		input.btn(type='submit' value='Masuk')
+template(name='login')
+	.fullscreen.slider: ul.slides: li
+		img(src='http://medimoon.com/wp-content/uploads/2014/10/Hospital.jpg')
+		.caption.center-align
+			br
+			br
+			br
+			.row
+				.col.m4
+				.col.m4
+					h5.center Login SIMRS
+					form
+						input(name='username' placeholder='Username')
+						input(name='password' placeholder='Password' type='password')
+						input.btn(type='submit' value='Masuk')

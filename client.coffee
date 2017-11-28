@@ -292,6 +292,9 @@ if Meteor.isClient
 		'click #close': ->
 			console.log 'tutup'
 
+	Template.login.onRendered ->
+		$('.slider').slider()
+
 	Template.login.events
 		'submit form': (event) ->
 			event.preventDefault()

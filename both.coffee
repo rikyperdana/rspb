@@ -129,22 +129,12 @@ schema.tarif =
 	umum: type: Number
 	spes: type: Number
 
-allowAll =
-	insert: -> true
-	update: -> true
-	remove: -> true
-
-coll.pasien = new Meteor.Collection 'pasien'
-coll.pasien.allow allowAll
-
-coll.gudang = new Meteor.Collection 'gudang'
-coll.gudang.allow allowAll
-
-coll.dokter = new Meteor.Collection 'dokter'
-coll.dokter.allow allowAll
-
-coll.tarif = new Meteor.Collection 'tarif'
-coll.tarif.allow allowAll
+_.map ['pasien', 'gudang', 'dokter', 'tarif'], (i) ->
+	coll[i] = new Meteor.Collection i
+	coll[i].allow
+		insert: -> true
+		update: -> true
+		remove: -> true
 
 makePasien = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
