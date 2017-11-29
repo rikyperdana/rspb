@@ -46,8 +46,8 @@ schema.regis =
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'
 	diagnosa: type: String
-	nama: type: Number, autoform: options: selects.tarif
-	dokter: type: Number, autoform: options: selects.dokter
+	nama: type: String, autoform: options: selects.tarif
+	dokter: type: String, autoform: options: selects.dokter
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 
 schema.labor =
@@ -118,6 +118,7 @@ schema.gudang =
 	'batch.$.suplier': type: Number
 
 schema.farmasi = Object.assign {}, schema.gudang
+schema.logistik = Object.assign {}, schema.gudang
 
 schema.dokter =
 	nama: type: String
@@ -126,8 +127,7 @@ schema.dokter =
 
 schema.tarif =
 	nama: type: String
-	umum: type: Number
-	spes: type: Number
+	harga: type: Number
 
 _.map ['pasien', 'gudang', 'dokter', 'tarif'], (i) ->
 	coll[i] = new Meteor.Collection i
@@ -140,6 +140,9 @@ makePasien = (modul) ->
 	Router.route '/'+modul+'/:no_mr?',
 		name: modul
 		action: -> this.render 'pasien'
+		waitOn: ->
+			_.map ['dokter', 'tarif', 'gudang'], (i) ->
+				Meteor.subscribe 'coll', i, {}, {}
 
 makePasien i.name for i in modules[0..9]
 

@@ -39,6 +39,9 @@ if Meteor.isClient
 	Template.registerHelper 'look', (option, value, field) ->
 		find = _.find selects[option], (i) -> i.value is value
 		find[field]
+	Template.registerHelper 'look2', (option, value, field) ->
+		find = _.find coll[option].find().fetch(), (i) -> i._id is value
+		find[field]
 	Template.registerHelper 'isAdmin', ->
 		role = _.keys Meteor.user().roles
 		Meteor.user().roles[role][0] is 'admin'

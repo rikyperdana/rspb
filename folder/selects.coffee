@@ -227,7 +227,7 @@
 		uniqs = _.uniqBy coll.gudang.find().fetch(), 'nama'
 		if sub.ready() then _.map uniqs, (i) ->
 			i.label = i.nama
-			i.value = i.nama
+			i.value = i._id
 			i
 	dokter: -> if Meteor.isClient
 		sub = Meteor.subscribe 'coll', 'dokter', {}, {}

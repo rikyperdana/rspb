@@ -13,7 +13,8 @@ if Meteor.isClient
 		if doc.tindakan
 			for i in doc.tindakan
 				i.idtindakan = randomId()
-				i.harga = (_.find selects.tindakan, (j) -> j.value is i.nama).harga
+				find = _.find coll.tarif.find().fetch(), (j) -> j._id is i.nama
+				i.harga = find.harga
 				totalTindakan += i.harga
 		if doc.labor
 			for i in doc.labor
@@ -23,7 +24,8 @@ if Meteor.isClient
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
-				i.harga = (_.find coll.gudang.find().fetch(), (j) -> j.nama is i.nama).harga
+				find = _.find coll.gudang.find().fetch(), (j) -> j._id is i.nama
+				i.harga = find.harga
 				i.subtotal = i.harga * i.jumlah
 				totalObat += i.subtotal
 		if doc.radio
