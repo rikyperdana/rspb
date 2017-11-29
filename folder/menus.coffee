@@ -11,7 +11,7 @@ if Meteor.isClient
 		list: ['jalan', 'farmasi']
 	,
 		group: 'inap'
-		list: ['inap', 'obat']
+		list: ['inap', 'farmasi']
 	,
 		group: 'labor'
 		list: ['labor']

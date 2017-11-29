@@ -64,7 +64,7 @@ schema.radio =
 
 schema.obat =
 	idobat: type: String, optional: true, autoform: type: 'hidden'
-	nama: type: String, autoform: options: selects.obat
+	nama: type: String, autoform: options: selects.gudang
 	aturan: type: Object
 	'aturan.kali': type: Number
 	'aturan.dosis': type: Number

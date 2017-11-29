@@ -222,22 +222,11 @@
 		label: 'Spesialis'
 		value: 2
 	]
-	obat: -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'gudang', {}, {}
-		uniqs = _.uniqBy coll.gudang.find().fetch(), 'nama'
-		if sub.ready() then _.map uniqs, (i) ->
-			i.label = i.nama
-			i.value = i._id
-			i
-	dokter: -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'dokter', {}, {}
-		if sub.ready() then _.map coll.dokter.find().fetch(), (i) ->
-			i.label = i.nama
-			i.value = i._id
-			i
-	tarif: -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'tarif', {}, {}
-		if sub.ready() then _.map coll.tarif.find().fetch(), (i) ->
-			i.label = i.nama
-			i.value = i._id
-			i
+
+_.map ['gudang', 'dokter', 'tarif'], (i) ->
+	selects[i] = -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', i, {}, {}
+		if sub.ready() then _.map coll[i].find().fetch(), (j) ->
+			j.label = j.nama
+			j.value = j._id
+			j

@@ -449,7 +449,8 @@ template(name='gudang'): .container
 					th Jenis Barang
 					th Nama Barang
 					th Harga Barang
-					th Hapus
+					if isAdmin
+						th Hapus
 			tbody
 				each gudangs
 					tr#row
@@ -457,7 +458,8 @@ template(name='gudang'): .container
 						td= jenis
 						td= nama
 						td= harga
-						td: a#rmBarang hapus
+						if isAdmin
+							td: a#rmBarang hapus
 
 	if currentPar 'idbarang'
 		h5 Rincian Barang

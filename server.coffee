@@ -47,18 +47,6 @@ if Meteor.isServer
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
-						
-					
-						###
-						findStock = coll.gudang.findOne nama: j.nama
-						for k in [1..j.jumlah]
-							filtered = _.filter findStock.batch, (l) -> l.diapotik > 0
-							sorted = _.sortBy filtered, (l) -> - new Date(l.masuk).getTime()
-							sorted[0].diapotik -= 1
-						selector = nama: findStock.nama
-						modifier = $set: batch: findStock.batch
-						coll.gudang.update selector, modifier
-						###
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
