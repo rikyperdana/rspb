@@ -8,7 +8,7 @@ if Meteor.isClient
 		list: ['bayar']
 	,
 		group: 'jalan'
-		list: ['jalan', 'obat']
+		list: ['jalan', 'farmasi']
 	,
 		group: 'inap'
 		list: ['inap', 'obat']

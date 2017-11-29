@@ -230,7 +230,7 @@ template(name='pasien'): .container
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
-												td= obat.nama
+												td {{look2 'gudang' obat.nama 'nama'}}
 												td= obat.aturan.kali
 												td= obat.aturan.dosis
 												td {{look 'bentuk' obat.aturan.bentuk 'label'}}
