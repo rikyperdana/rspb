@@ -203,22 +203,36 @@ if Meteor.isClient
 
 	Template.import.events
 		'change :file': (event, template) ->
-			Papa.parse event.target.files[0],
-				header: true
-				step: (result) ->
-					data = result.data[0]
-					selector = no_mr: parseInt data.no_mr
-					modifier = regis:
-						nama_lengkap: _.startCase data.nama_lengkap
-						alamat: _.startCase data.alamat
-						agama: parseInt data.agama
-						ayah: _.startCase data.ayah
-						nikah: parseInt data.nikah
-						pekerjaan: parseInt data.pekerjaan
-						pendidikan: parseInt data.pendidikan
-						tgl_lahir: new Date data.tgl_lahir
-						tmpt_kelahiran: _.startCase data.tmpt_kelahiran
-					Meteor.call 'import', selector, modifier
+			if currentRoute() is 'regis'
+				Papa.parse event.target.files[0],
+					header: true
+					step: (result) ->
+						data = result.data[0]
+						selector = no_mr: parseInt data.no_mr
+						modifier = regis:
+							nama_lengkap: _.startCase data.nama_lengkap
+							alamat: _.startCase data.alamat
+							agama: parseInt data.agama
+							ayah: _.startCase data.ayah
+							nikah: parseInt data.nikah
+							pekerjaan: parseInt data.pekerjaan
+							pendidikan: parseInt data.pendidikan
+							tgl_lahir: new Date data.tgl_lahir
+							tmpt_kelahiran: _.startCase data.tmpt_kelahiran
+						Meteor.call 'import', 'pasien', selector, modifier
+			else if currentRoute() is 'manajemen'
+				Papa.parse event.target.files[0],
+					header: true
+					step: (result) ->
+						data = result.data[0]
+						if data.tipe
+							selector = nama: data.nama
+							modifier = tipe: data.tipe, poli: data.poli
+							Meteor.call 'import', 'dokter', selector, modifier
+						else if data.harga
+							selector = nama: data.nama
+							modifier = harga: data.harga
+							Meteor.call 'import', 'tarif', selector, modifier
 
 	Template.gudang.helpers
 		gudangs: ->
@@ -253,11 +267,6 @@ if Meteor.isClient
 				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
-
-	Template.manajemen.onRendered ->
-		Meteor.subscribe 'users'
-		Meteor.subscribe 'coll', 'dokter', {}, {}
-		Meteor.subscribe 'coll', 'tarif', {}, {}
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()

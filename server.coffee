@@ -10,8 +10,8 @@ if Meteor.isServer
 		Meteor.users.find({})
 
 	Meteor.methods
-		import: (selector, modifier) ->
-			coll.pasien.upsert selector, $set: modifier
+		import: (name, selector, modifier) ->
+			coll[name].upsert selector, $set: modifier
 
 		billCard: (no_mr, state) ->
 			selector = no_mr: parseInt no_mr

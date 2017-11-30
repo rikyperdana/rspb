@@ -155,6 +155,11 @@ makeGudang i.name for i in modules[10..11]
 
 Router.route '/manajemen',
 	action: -> this.render 'manajemen'
+	waitOn: -> [
+		Meteor.subscribe 'users'
+		Meteor.subscribe 'coll', 'dokter', {}, {}
+		Meteor.subscribe 'coll', 'tarif', {}, {}
+	]
 
 Router.route '/login', ->
 	action: -> this.render 'login'

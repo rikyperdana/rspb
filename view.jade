@@ -64,7 +64,7 @@ template(name='pasien'): .container
 				each pasiens
 					tr#row
 						td= no_mr
-						td= regis.nama_lengkap
+						td= startCase(regis.nama_lengkap)
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
@@ -566,6 +566,7 @@ template(name='manajemen'): .container
 		type= 'insert'
 		id= 'formTarif'
 	)
+	h5 Daftar Tarif
 	table
 		thead
 			tr
@@ -576,6 +577,7 @@ template(name='manajemen'): .container
 				tr
 					td= nama
 					td= rupiah(harga)
+	+import
 
 template(name='login')
 	.fullscreen.slider: ul.slides: li
