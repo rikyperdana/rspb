@@ -42,9 +42,12 @@ if Meteor.isClient
 	Template.registerHelper 'look2', (option, value, field) ->
 		find = _.find coll[option].find().fetch(), (i) -> i._id is value
 		find[field]
-	Template.registerHelper 'isAdmin', ->
-		role = _.keys Meteor.user().roles
-		Meteor.user().roles[role][0] is 'admin'
+	Template.registerHelper 'routeIs', (name) ->
+		currentRoute() is name
+	Template.registerHelper 'userGroup', (name) ->
+		Meteor.user().roles[name]
+	Template.registerHelper 'userRole', (name) ->
+		Meteor.user().roles[currentRoute()][0] is name
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -60,7 +63,6 @@ if Meteor.isClient
 			switch currentRoute()
 				when 'regis' then '+ Pasien'
 				when 'jalan' then '+ Rawat'
-		routeIs: (name) -> currentRoute() is name
 		formDoc: -> formDoc()
 		preview: -> Session.get 'preview'
 		omitFields: ->

@@ -68,7 +68,7 @@ template(name='pasien'): .container
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
-		if isAdmin
+		if userRole 'admin'
 			+import
 		if routeIs 'bayar'
 			h5 Daftar Bayar
@@ -122,7 +122,7 @@ template(name='pasien'): .container
 													idbayar= item.idbayar
 												) Bayar
 			br
-			if isAdmin
+			if userRole 'admin'
 				h5 Laporan Bayar
 				.row
 					.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
@@ -281,7 +281,7 @@ template(name='pasien'): .container
 							th Cara Bayar
 							th Bayar Tindakan
 							th Cek
-							if isAdmin
+							if userRole 'admin'
 								th Hapus
 					tbody
 						if userPoli
@@ -306,7 +306,7 @@ template(name='pasien'): .container
 									else
 										td Belum
 									td: a.modal-trigger(href='#preview') cek
-									if isAdmin
+									if userRole 'admin'
 										td: a#rmRawat hapus
 	with preview
 		.modal#preview
@@ -433,7 +433,8 @@ template(name='gudang'): .container
 		.col.m8
 			.input-field: input#search(value= search placeholder='Nama Obat / Batch')
 		.col.m4
-			.right.btn#showForm Tambah
+			if userGroup 'farmasi'
+				.right.btn#showForm Tambah
 	if showForm
 		+quickForm(
 			collection= coll.gudang
@@ -449,7 +450,7 @@ template(name='gudang'): .container
 					th Jenis Barang
 					th Nama Barang
 					th Harga Barang
-					if isAdmin
+					if userRole 'admin'
 						th Hapus
 			tbody
 				each gudangs
@@ -458,7 +459,7 @@ template(name='gudang'): .container
 						td= jenis
 						td= nama
 						td= harga
-						if isAdmin
+						if userRole 'admin'
 							td: a#rmBarang hapus
 
 	if currentPar 'idbarang'
@@ -591,6 +592,6 @@ template(name='login')
 				.col.m4: .card.z-depth-5: .card-content
 					.card-title.grey-text.center Login SIMRS
 					form
-						input(name='username' placeholder='Username')
-						input(name='password' placeholder='Password' type='password')
+						input.black-text(name='username' placeholder='Username')
+						input.black-text(name='password' placeholder='Password' type='password')
 						input.btn(type='submit' value='Masuk')
