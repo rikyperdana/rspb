@@ -109,8 +109,8 @@ schema.gudang =
 	batch: type: Array
 	'batch.$': type: Object
 	'batch.$.idbatch': type: String
-	'batch.$.masuk': type: Date
-	'batch.$.kadaluarsa': type: Date
+	'batch.$.masuk': type: Date, autoform: type: 'pickadate'
+	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate'
 	'batch.$.digudang': type: Number
 	'batch.$.diapotik': type: Number
 	'batch.$.beli': type: Number
@@ -152,6 +152,12 @@ makeGudang = (modul) ->
 		action: -> this.render 'gudang'
 
 makeGudang i.name for i in modules[10..11]
+
+makeOther = (name) ->
+	Router.route '/' + name,
+		action: -> this.render name
+
+makeOther i for i in ['panduan']
 
 Router.route '/manajemen',
 	action: -> this.render 'manajemen'

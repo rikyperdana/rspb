@@ -19,7 +19,7 @@ if Meteor.isClient
 			if find then  _.map find.list, (i) -> _.find modules, (j) -> j.name is i
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute()
-			if find then find.full else ''
+			if find then find.full else _.startCase currentRoute()
 		today: -> moment().format('LLL')
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
