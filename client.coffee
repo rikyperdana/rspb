@@ -227,11 +227,13 @@ if Meteor.isClient
 						data = result.data[0]
 						if data.tipe
 							selector = nama: data.nama
-							modifier = tipe: data.tipe, poli: data.poli
+							modifier =
+								tipe: parseInt data.tipe
+								poli: parseInt data.poli
 							Meteor.call 'import', 'dokter', selector, modifier
 						else if data.harga
 							selector = nama: data.nama
-							modifier = harga: data.harga
+							modifier = harga: parseInt data.harga
 							Meteor.call 'import', 'tarif', selector, modifier
 
 	Template.gudang.helpers
@@ -256,10 +258,11 @@ if Meteor.isClient
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.idbarang
 		'dblclick #transfer': ->
 			data = this
-			MaterializeModal.prompt
-				message: 'Transfer Gudang > Apotek'
-				callback: (err, res) -> if res.submit
-					Meteor.call 'transfer', currentPar('idbarang'), data.idbatch, parseInt res.value
+			if Meteor.user().roles.farmasi
+				MaterializeModal.prompt
+					message: 'Transfer Gudang > Apotek'
+					callback: (err, res) -> if res.submit
+						Meteor.call 'transfer', currentPar('idbarang'), data.idbatch, parseInt res.value
 		'click #rmBarang': ->
 			self = this
 			dialog =
@@ -289,7 +292,6 @@ if Meteor.isClient
 				repeat = event.target.children.repeat.value
 				if doc.password is repeat
 					Meteor.call 'newUser', doc
-					# Accounts.createUser doc
 					$('input').val ''
 				else
 					Materialize.toast 'Password tidak mirip', 3000

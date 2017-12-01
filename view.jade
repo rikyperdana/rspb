@@ -581,15 +581,15 @@ template(name='manajemen'): .container
 
 template(name='login')
 	.fullscreen.slider: ul.slides: li
-		img(src='http://medimoon.com/wp-content/uploads/2014/10/Hospital.jpg')
+		img(src='login_bg.jpg')
 		.caption.center-align
 			br
 			br
 			br
 			.row
 				.col.m4
-				.col.m4
-					h5.center Login SIMRS
+				.col.m4: .card.z-depth-5: .card-content
+					.card-title.grey-text.center Login SIMRS
 					form
 						input(name='username' placeholder='Username')
 						input(name='password' placeholder='Password' type='password')
