@@ -1,0 +1,29 @@
+template(name='panduan'): .container
+	h5 Panduan Penggunaan
+	if userGroup 'regis'
+		p Petugas dan Admin Pendaftaran dapat mengakses daftar pasien, menambahkan pasien baru, dan menambahkan rawat jalan untuk masing-masing pasien tersebut
+		p Pada menu Pendaftaran user akan disuguhkan 5 nama pasien yang terakhir mendaftar ke dalam database. Petugas dapat menggunakan menu pencarian untuk mencari data pasien sesuai dengan kata yang diketikkan
+		p Field pencarian dapat menerima nama ataupun nomor MR. Jika pencarian dilakukan dengan menggunakan No MR maka harus menggunakan 6 angka
+		p Setiap pasien yang datang harap untuk ditanyakan apakah sudah pernah berobat di RSUD ini. Upayakan cari nama pasien tersebut pada field pencarian untuk menghindari duplikasi data yang sama di dalam database. Jika pasien tersebut memang belum terdapat datanya, lakukan Input Pasien Baru, jika ada maka skip ke Input Rawat Jalan
+		p Tutorial Input Pasien Baru
+		ol
+			li Klik menu Pendaftaran
+			li Klik tombol +Pasien
+			li Isikan data pasien yang tersedia. Beberapa field bersifat wajib untuk diisi
+			li Klik tombol Simpan jika Anda sudah yakin bahwa data pasien tersebut adalah benar
+			li Jika data pasien sudah berhasil masuk ke dalam sistem, user bisa cetak kartu MR dan General Consent
+		p Tutorial Input Rawat Jalan
+		ol
+			li Klik menu Rawat Jalan
+			li Lakukan pencarian atas nama pasien atau dengan menggunakan No MR
+			li Pastikan untuk mengkonfirmasi data pasien dengan menanyakan tanggal lahir
+			li Jika nama data pasien yang cocok ditemukan, klik dua kali pada baris nama pasien bersangkutan
+			li Klik tombol +Rawat
+			li Pilih jenis Cara Bayar
+			li Pilih poli yang dituju pasien
+			li Klik tombol Simpan
+			li Arahkan pasien untuk membayar ke Kasir (Rp 10.000,- untuk kartu dan/atau Rp 30.000,- untuk pendaftaran)
+	else if userGroup 'bayar'
+		p untuk orang pembayaran
+	else if userGroup 'jalan'
+		p untuk orang poli

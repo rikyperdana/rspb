@@ -42,8 +42,14 @@ if Meteor.isClient
 					{text: 'Pekanbaru,                        .\n\n\n__________________', alignment: 'right'}
 				]
 			pdf.download doc.no_mr + '_consent.pdf'
-		payRawat: ->
-			doc = coll.pasien.findOne()
+		payRawat: (doc) ->
+			pasien = coll.pasien.findOne()
+			rows = [['Uraian', 'Harga']]
+			for i in ['tindakan', 'labor', 'radio', 'obat']
+				if doc[i] then for j in doc[i]
+					rows.push [_.toString(j.nama), _.toString(j.harga)]
+			table = table: widths: [400, 100], body: rows
+			console.log table
 			pdf = pdfMake.createPdf
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
@@ -55,12 +61,13 @@ if Meteor.isClient
 					'TANGGAL LAHIR'
 					'UMUR'
 					'KLINIK'
-					'RINCIAN PEMBAYARAN'
-					'TOTAL BIAYA'
+					'\n\nRINCIAN PEMBAYARAN'
+					table
+					'TOTAL BIAYA' + doc.total.semua
 					'\nPEKANBARU, ' + moment().format('DD MM YYYY')
 					'PETUGAS'
 				]
-			pdf.download doc.no_mr + '_payRawat.pdf'
+			pdf.download pasien.no_mr + '_payRawat.pdf'
 		payRegCard: (amount, words) ->
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
@@ -72,9 +79,9 @@ if Meteor.isClient
 					text: 'JL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'
 					'\nKARCIS'
 					'TANGGAL : ' + moment().format('DD MM YYYY')
-					'NO. MR : ' + doc.no_mr
+					'NO. MR : ' + _.toString doc.no_mr
 					'NAMA PASIEN : ' + doc.regis.nama_lengkap
-					'\nTARIF : Rp ' + amount
+					'\nTARIF : Rp ' + _.toString amount
 				,
 					text: '(' + words + ')', italics: true
 				]

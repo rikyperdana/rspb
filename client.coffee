@@ -175,7 +175,9 @@ if Meteor.isClient
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'bayar', no_mr, idbayar
-				makePdf.payRawat()
+				pasien = coll.pasien.findOne no_mr: parseInt no_mr
+				doc = _.find pasien.rawat, (i) -> i.idbayar is idbayar
+				makePdf.payRawat doc
 		'dblclick #request': (event) ->
 			no_mr = event.target.attributes.pasien.nodeValue
 			idbayar = event.target.attributes.idbayar.nodeValue
