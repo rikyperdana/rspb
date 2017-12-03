@@ -47,7 +47,10 @@ if Meteor.isClient
 			rows = [['Uraian', 'Harga']]
 			for i in ['tindakan', 'labor', 'radio', 'obat']
 				if doc[i] then for j in doc[i]
-					rows.push [_.toString(j.nama), _.toString(j.harga)]
+					rows.push [
+						_.toString j.nama
+						_.toString j.harga
+					]
 			table = table: widths: [400, 100], body: rows
 			console.log table
 			pdf = pdfMake.createPdf
@@ -63,7 +66,7 @@ if Meteor.isClient
 					'KLINIK'
 					'\n\nRINCIAN PEMBAYARAN'
 					table
-					'TOTAL BIAYA' + doc.total.semua
+					'TOTAL BIAYA' + 'Rp ' + _.toString numeral(doc.total.semua).format('0,0')
 					'\nPEKANBARU, ' + moment().format('DD MM YYYY')
 					'PETUGAS'
 				]

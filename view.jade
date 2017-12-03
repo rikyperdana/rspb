@@ -572,13 +572,17 @@ template(name='manajemen'): .container
 	table
 		thead
 			tr
+				th Jenis
 				th Nama
 				th Harga
+				th Grup
 		tbody
 			each tarifs
 				tr
-					td= nama
+					td= startCase(jenis)
+					td= startCase(nama)
 					td= rupiah(harga)
+					td= grup
 	+import
 
 template(name='login')

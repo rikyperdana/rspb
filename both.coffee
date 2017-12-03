@@ -126,8 +126,11 @@ schema.dokter =
 	poli: type: Number, autoform: options: selects.klinik
 
 schema.tarif =
+	idtarif: type: String
+	jenis: type: String
 	nama: type: String
 	harga: type: Number
+	grup: type: String, optional: true
 
 _.map ['pasien', 'gudang', 'dokter', 'tarif'], (i) ->
 	coll[i] = new Meteor.Collection i

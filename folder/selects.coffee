@@ -161,43 +161,6 @@
 	,
 		label: 'Faskes Lainnya'
 		value: 4
-	,
-	]
-	labor: [
-		value: 1
-		label: 'Hemoglobin'
-		grup: 'Hematologi'
-		harga: 25000
-		normal: 'Pr 12 - 14'
-		satuan: 'g/dl'
-	,
-		value: 2
-		label: 'Leukosit'
-		grup: 'Hematologi'
-		harga: 30000
-		normal: '4000 - 10000'
-		satuan: '/mm'
-	,
-		value: 3
-		label: 'Warna'
-		grup: 'Urinalisa'
-		harga: 15000
-		normal: 'Kuning Jernih'
-	,
-		value: 4
-		label: 'Berat'
-		grup: 'Urinalisa'
-		harga: 18000
-		normal: '1.003 - 1.030'
-	]
-	radio: [
-		value: 1
-		label: 'Rontgen'
-		harga: 150000
-	,
-		value: 2
-		label: 'MRI'
-		harga: 2500000
 	]
 	bentuk: [
 		value: 1
@@ -229,4 +192,13 @@ _.map ['gudang', 'dokter', 'tarif'], (i) ->
 		if sub.ready() then _.map coll[i].find().fetch(), (j) ->
 			j.label = j.nama
 			j.value = j._id
+			j
+
+_.map ['labor', 'radio'], (i) ->
+	selects[i] = -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', 'tarif', {}, {}
+		selector = jenis: i
+		if sub.ready() then _.map coll.tarif.find(selector).fetch(), (j) ->
+			j.label = j.nama
+			j.value = j.idtarif
 			j
