@@ -185,8 +185,15 @@
 		label: 'Spesialis'
 		value: 2
 	]
+	tindakan: -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', 'tarif', {}, {}
+		selector = jenis: Meteor.user().roles.jalan[0]
+		if sub.ready() then _.map coll.tarif.find(selector).fetch(), (i) ->
+			i.label = _.startCase i.nama
+			i.value = i.idtarif
+			i
 
-_.map ['gudang', 'dokter', 'tarif'], (i) ->
+_.map ['gudang', 'dokter'], (i) ->
 	selects[i] = -> if Meteor.isClient
 		sub = Meteor.subscribe 'coll', i, {}, {}
 		if sub.ready() then _.map coll[i].find().fetch(), (j) ->

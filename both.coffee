@@ -46,7 +46,7 @@ schema.regis =
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'
 	diagnosa: type: String
-	nama: type: String, autoform: options: selects.tarif
+	nama: type: String, autoform: options: selects.tindakan
 	dokter: type: String, autoform: options: selects.dokter
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 
