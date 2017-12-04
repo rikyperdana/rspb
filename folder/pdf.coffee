@@ -49,7 +49,7 @@ if Meteor.isClient
 				if doc[i] then for j in doc[i]
 					find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
 					rows.push [
-						_.snakeCase find.nama
+						_.startCase find.nama
 						_.toString j.harga
 					]
 			table = table: widths: [400, 100], body: rows

@@ -52,13 +52,13 @@ schema.tindakan =
 
 schema.labor =
 	idlabor: type: String, optional: true, autoform: type: 'hidden'
-	nama: type: Number, autoform: options: selects.labor
+	nama: type: String, autoform: options: selects.labor
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 	hasil: type: String, optional: true, autoform: type: 'hidden'
 
 schema.radio =
 	idradio: type: String, optional: true, autoform: type: 'hidden'
-	nama: type: Number, autoform: options: selects.radio
+	nama: type: String, autoform: options: selects.radio
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 	hasil: type: String, optional: true, autoform: type: 'hidden'
 
@@ -105,7 +105,6 @@ schema.gudang =
 	idbarang: type: String
 	jenis: type: Number
 	nama: type: String
-	harga: type: Number
 	batch: type: Array
 	'batch.$': type: Object
 	'batch.$.idbatch': type: String

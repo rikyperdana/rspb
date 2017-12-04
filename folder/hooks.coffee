@@ -1,6 +1,6 @@
 if Meteor.isClient
 
-	# SimpleSchema.debug = true
+	SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
@@ -19,19 +19,29 @@ if Meteor.isClient
 		if doc.labor
 			for i in doc.labor
 				i.idlabor = randomId()
-				i.harga = (_.find selects.labor, (j) -> j.value is i.nama).harga
+				find = _.find coll.tarif.find().fetch(), (j) -> j._id is i.nama
+				i.harga = find.harga
 				totalLabor += i.harga
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
 				find = _.find coll.gudang.find().fetch(), (j) -> j._id is i.nama
+				i.harga = find.batch[find.batch.length-1].jual
+				i.subtotal = i.harga * i.jumlah
+				totalObat += i.subtotal
+				
+				
+				###
+				find = _.find coll.gudang.find().fetch(), (j) -> j._id is i.nama
 				i.harga = find.harga
 				i.subtotal = i.harga * i.jumlah
 				totalObat += i.subtotal
+				###
 		if doc.radio
 			for i in doc.radio
 				i.idradio = randomId()
-				i.harga = (_.find selects.radio, (j) -> j.value is i.nama).harga
+				find = _.find coll.tarif.find().fetch(), (j) -> j._id is i.nama
+				i.harga = find.harga
 				totalRadio += i.harga
 		doc.total =
 			tindakan: totalTindakan

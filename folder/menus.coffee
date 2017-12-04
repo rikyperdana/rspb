@@ -30,4 +30,7 @@ if Meteor.isClient
 	,
 		group: 'manajemen'
 		list: ['manajemen']
+	,
+		group: 'farmasi'
+		list: ['farmasi']
 	]

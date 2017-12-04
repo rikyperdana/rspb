@@ -157,8 +157,6 @@ template(name='pasien'): .container
 						th Pasien
 						th Grup
 						th Order
-						th Normal
-						th Satuan
 						th Aksi
 				tbody
 					each pasien in pasiens
@@ -172,8 +170,6 @@ template(name='pasien'): .container
 												td= pasien.regis.nama_lengkap
 												td {{look 'labor' labor.nama 'grup'}}
 												td {{look 'labor' labor.nama 'label'}}
-												td {{look 'labor' labor.nama 'normal'}}
-												td {{look 'labor' labor.nama 'satuan'}}
 												td
 													a#request(
 														pasien= pasien.no_mr
@@ -352,16 +348,12 @@ template(name='pasien'): .container
 							tr
 								th Grup
 								th Order
-								th Normal
-								th Satuan
 								th Hasil
 						tbody
 							each labor
 								tr
-									td {{look 'labor' nama 'grup'}}
-									td {{look 'labor' nama 'label'}}
-									td {{look 'labor' nama 'normal'}}
-									td {{look 'labor' nama 'satuan'}}
+									td {{look2 'tarif' nama 'grup'}}
+									td {{look2 'tarif' nama 'nama'}}
 									td= hasil
 					br
 					br
@@ -395,7 +387,7 @@ template(name='pasien'): .container
 						tbody
 							each radio
 								tr
-									td {{look 'radio' nama 'label'}}
+									td {{look2 'tarif' nama 'nama'}}
 									td= hasil
 					br
 					br
@@ -450,7 +442,6 @@ template(name='gudang'): .container
 					th ID Barang
 					th Jenis Barang
 					th Nama Barang
-					th Harga Barang
 					if userRole 'admin'
 						th Hapus
 			tbody
@@ -459,7 +450,6 @@ template(name='gudang'): .container
 						td= idbarang
 						td= jenis
 						td= nama
-						td= harga
 						if userRole 'admin'
 							td: a#rmBarang hapus
 
@@ -473,9 +463,7 @@ template(name='gudang'): .container
 				tr
 					th Nama
 					td= nama
-				tr
-					th Harga
-					td= harga
+			br
 			table
 				thead
 					tr
