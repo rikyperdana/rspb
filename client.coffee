@@ -236,9 +236,8 @@ if Meteor.isClient
 								poli: parseInt data.poli
 							Meteor.call 'import', 'dokter', selector, modifier
 						else if data.harga
-							selector = idtarif: data.idtarif
+							selector = nama: _.snakeCase data.nama
 							modifier =
-								nama: _.snakeCase data.nama
 								harga: parseInt data.harga
 								jenis: _.snakeCase data.jenis
 							if data.grup

@@ -190,7 +190,7 @@
 		selector = jenis: Meteor.user().roles.jalan[0]
 		if sub.ready() then _.map coll.tarif.find(selector).fetch(), (i) ->
 			i.label = _.startCase i.nama
-			i.value = i.idtarif
+			i.value = i._id
 			i
 
 _.map ['gudang', 'dokter'], (i) ->
@@ -207,5 +207,5 @@ _.map ['labor', 'radio'], (i) ->
 		selector = jenis: i
 		if sub.ready() then _.map coll.tarif.find(selector).fetch(), (j) ->
 			j.label = j.nama
-			j.value = j.idtarif
+			j.value = j._id
 			j

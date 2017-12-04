@@ -126,7 +126,6 @@ schema.dokter =
 	poli: type: Number, autoform: options: selects.klinik
 
 schema.tarif =
-	idtarif: type: String
 	jenis: type: String
 	nama: type: String
 	harga: type: Number
