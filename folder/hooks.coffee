@@ -1,6 +1,6 @@
 if Meteor.isClient
 
-	SimpleSchema.debug = true
+	# SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
 	
@@ -9,47 +9,27 @@ if Meteor.isClient
 		doc.tanggal = new Date()
 		doc.idbayar = if idbayar then idbayar else randomId()
 		doc.jenis = currentRoute()
-		totalTindakan = 0; totalLabor = 0; totalObat = 0; totalRadio = 0;
-		if doc.tindakan
-			for i in doc.tindakan
-				i.idtindakan = randomId()
-				find = _.find coll.tarif.find().fetch(), (j) -> j._id is i.nama
-				i.harga = find.harga
-				totalTindakan += i.harga
-		if doc.labor
-			for i in doc.labor
-				i.idlabor = randomId()
-				find = _.find coll.tarif.find().fetch(), (j) -> j._id is i.nama
-				i.harga = find.harga
-				totalLabor += i.harga
+		total = tindakan: 0, labor: 0, radio: 0, obat: 0
+		_.map ['tindakan', 'labor', 'radio'], (i) ->
+			if doc[i] then for j in doc[i]
+				j['id'+i] = randomId()
+				find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
+				j.harga = find.harga
+				total[i] += j.harga
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
 				find = _.find coll.gudang.find().fetch(), (j) -> j._id is i.nama
 				i.harga = find.batch[find.batch.length-1].jual
 				i.subtotal = i.harga * i.jumlah
-				totalObat += i.subtotal
-				
-				
-				###
-				find = _.find coll.gudang.find().fetch(), (j) -> j._id is i.nama
-				i.harga = find.harga
-				i.subtotal = i.harga * i.jumlah
-				totalObat += i.subtotal
-				###
-		if doc.radio
-			for i in doc.radio
-				i.idradio = randomId()
-				find = _.find coll.tarif.find().fetch(), (j) -> j._id is i.nama
-				i.harga = find.harga
-				totalRadio += i.harga
+				total.obat += i.subtotal
 		doc.total =
-			tindakan: totalTindakan
-			labor: totalLabor
-			obat: totalObat
-			radio: totalRadio
+			tindakan: total.tindakan
+			labor: total.labor
+			radio: total.radio
+			obat: total.obat
 		if doc.cara_bayar isnt 1 then doc.total.tindakan += 30000
-		doc.total.semua = totalTindakan + totalLabor + totalObat + totalRadio
+		doc.total.semua = doc.total.tindakan + doc.total.labor + doc.total.radio + doc.total.obat
 		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
 		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
 		doc

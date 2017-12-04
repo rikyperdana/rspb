@@ -45,7 +45,7 @@ if Meteor.isClient
 		payRawat: (doc) ->
 			pasien = coll.pasien.findOne()
 			rows = [['Uraian', 'Harga']]
-			for i in ['tindakan', 'labor', 'radio', 'obat']
+			for i in ['tindakan', 'labor', 'radio']
 				if doc[i] then for j in doc[i]
 					find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
 					rows.push [
