@@ -192,14 +192,21 @@
 			i.label = _.startCase i.nama
 			i.value = i._id
 			i
-
-_.map ['gudang', 'dokter'], (i) ->
-	selects[i] = -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', i, {}, {}
-		if sub.ready() then _.map coll[i].find().fetch(), (j) ->
-			j.label = j.nama
-			j.value = j._id
-			j
+	dokter: -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', 'dokter', {}, {}
+		find = _.find selects.klinik, (i) ->
+			Meteor.user().roles.jalan[0] is _.snakeCase i.label
+		selector = poli: find.value
+		if sub.ready() then _.map coll.dokter.find(selector).fetch(), (i) ->
+			i.label = i.nama
+			i.value = i._id
+			i
+	gudang: -> if Meteor.isClient
+		sub = Meteor.subscribe 'coll', 'gudang', {}, {}
+		if sub.ready() then _.map coll.gudang.find().fetch(), (i) ->
+			i.label = i.nama
+			i.value = i._id
+			i
 
 _.map ['labor', 'radio'], (i) ->
 	selects[i] = -> if Meteor.isClient
