@@ -18,7 +18,9 @@ if Meteor.isClient
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
-	Template.registerHelper 'rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')
+	Template.registerHelper 'rupiah', (val, ins) ->
+		if ins then val += 30000
+		'Rp ' + numeral(val).format('0,0')
 	Template.registerHelper 'currentPar', (param) -> currentPar param
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 	Template.registerHelper 'startCase', (val) -> _.startCase val

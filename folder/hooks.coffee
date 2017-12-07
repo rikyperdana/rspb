@@ -28,7 +28,6 @@ if Meteor.isClient
 			labor: total.labor
 			radio: total.radio
 			obat: total.obat
-		if doc.cara_bayar isnt 1 then doc.total.tindakan += 30000
 		doc.total.semua = doc.total.tindakan + doc.total.labor + doc.total.radio + doc.total.obat
 		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
 		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1

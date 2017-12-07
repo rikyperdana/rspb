@@ -147,7 +147,10 @@ template(name='pasien'): .container
 											td= pasien.regis.nama_lengkap
 											td {{look 'klinik' rawat.klinik 'label'}}
 											td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
-											td= rupiah(rawat.total.semua)
+											if isFalse rawat.cara_bayar 1
+												td {{rupiah rawat.total.semua true}}
+											else
+												td= rupiah(rawat.total.semua)
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
