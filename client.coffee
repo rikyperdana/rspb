@@ -11,18 +11,8 @@ if Meteor.isClient
 	currentPar = (param) -> Router.current().params[param]
 	search = -> Session.get 'search'
 	formDoc = -> Session.get 'formDoc'
-
-	Template.menu.helpers
-		menus: ->
-			keys = _.keys Meteor.user().roles
-			find = _.find rights, (i) -> i.group is keys[0]
-			if find then  _.map find.list, (i) -> _.find modules, (j) -> j.name is i
-		navTitle: ->
-			find = _.find modules, (i) -> i.name is currentRoute()
-			if find then find.full else _.startCase currentRoute()
-		today: -> moment().format('LLL')
-	Template.menu.events
-		'click #logout': -> Meteor.logout()
+	@limit = -> Session.get 'limit'
+	page = -> Session.get 'page'
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
@@ -48,11 +38,34 @@ if Meteor.isClient
 		Meteor.user().roles[name]
 	Template.registerHelper 'userRole', (name) ->
 		Meteor.user().roles[currentRoute()][0] is name
+	Template.registerHelper 'pagins', (name) ->
+		limit = Session.get 'limit'
+		length = coll[name].find().fetch().length
+		modulo = length % limit
+		range = length - modulo
+		end = range / limit
+		[1..end]
 
 	Template.body.events
 		'keypress #search': (event) ->
 			if event.key is 'Enter'
 				Session.set 'search', event.target.value
+
+	Template.layout.onRendered ->
+		Session.set 'limit', 10
+		Session.set 'page', 1
+
+	Template.menu.helpers
+		menus: ->
+			keys = _.keys Meteor.user().roles
+			find = _.find rights, (i) -> i.group is keys[0]
+			if find then  _.map find.list, (i) -> _.find modules, (j) -> j.name is i
+		navTitle: ->
+			find = _.find modules, (i) -> i.name is currentRoute()
+			if find then find.full else _.startCase currentRoute()
+		today: -> moment().format('LLL')
+	Template.menu.events
+		'click #logout': -> Meteor.logout()
 
 	Template.pasien.helpers
 		route: -> currentRoute()
@@ -286,8 +299,14 @@ if Meteor.isClient
 		klinik: -> selects.klinik
 		schemadokter: -> new SimpleSchema schema.dokter
 		schematarif: -> new SimpleSchema schema.tarif
-		dokters: -> coll.dokter.find().fetch()
-		tarifs: -> coll.tarif.find().fetch()
+		dokters: ->
+			selector = {}
+			options = limit: limit(), skip: page() * limit()
+			coll.dokter.find(selector, options).fetch()
+		tarifs: ->
+			selector = {}
+			options = limit: limit(), skip: page() * limit()
+			coll.tarif.find(selector, options).fetch()
 
 	Template.manajemen.events
 		'submit #userForm': (event) ->
@@ -328,3 +347,7 @@ if Meteor.isClient
 				else
 					userGroups = _.keys Meteor.user().roles
 					Router.go '/' + userGroups[0]
+
+	Template.pagination.events
+		'click #num': (event) ->
+			Session.set 'page', parseInt event.target.innerText

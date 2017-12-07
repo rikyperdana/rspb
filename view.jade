@@ -548,6 +548,7 @@ template(name='manajemen'): .container
 					td= nama
 					td {{look 'tipe_dokter' tipe 'label'}}
 					td {{look 'klinik' poli 'label'}}
+	+pagination(name= 'dokter')
 
 	h5 Tambahkan Tarif
 	+quickForm(
@@ -571,6 +572,7 @@ template(name='manajemen'): .container
 					td= startCase(nama)
 					td= rupiah(harga)
 					td= grup
+	+pagination(name= 'tarif')
 	+import
 
 template(name='login')
@@ -588,3 +590,10 @@ template(name='login')
 						input.black-text(name='username' placeholder='Username')
 						input.black-text(name='password' placeholder='Password' type='password')
 						input.btn(type='submit' value='Masuk')
+
+template(name='pagination')
+	ul.pagination.center
+		li: a(href='#'): i.material-icons#prev chevron_left
+		each val in pagins name
+			li: a#num(href='#')= val
+		li: a(href='#'): i.material-icons#next chevron_right
