@@ -11,6 +11,7 @@ template(name='menu')
 			if currentUser
 				li: a= startCase(currentUser.username)
 				li: a(href='/panduan') Panduan
+				li: a#refresh Refresh
 				li: a#logout Logout
 			else			
 				li: a(href='/login') Login
@@ -34,7 +35,7 @@ template(name='pasien'): .container
 	.row
 		.col.m6
 			unless currentPar 'no_mr'
-				.input-field: input#search(value= search placeholder= 'Nama Pasien / No.MR')
+				.input-field: input#search(value= search placeholder= 'Cari Nama Pasien / No.MR')
 		.col.m6
 			if showButton
 				.right.btn#showForm= showButtonText
@@ -53,7 +54,7 @@ template(name='pasien'): .container
 			omitFields= omitFields
 		)
 	unless currentPar 'no_mr'
-		table
+		table.bordered
 			thead
 				tr
 					th No MR
@@ -69,6 +70,7 @@ template(name='pasien'): .container
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
+		+pagination(name= 'pasien')
 		if userRole 'admin'
 			+import
 		if routeIs 'bayar'
@@ -128,7 +130,7 @@ template(name='pasien'): .container
 				.row
 					.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
 					.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
-				table
+				table.bordered
 					thead
 						th Tanggal
 						th No MR
@@ -273,7 +275,7 @@ template(name='pasien'): .container
 							td= umur(regis.tgl_lahir)
 			.right.orange.btn#close Tutup
 			if rawat
-				table
+				table.bordered
 					thead
 						tr
 							th Tanggal

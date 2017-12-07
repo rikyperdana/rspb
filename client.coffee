@@ -12,7 +12,7 @@ if Meteor.isClient
 	search = -> Session.get 'search'
 	formDoc = -> Session.get 'formDoc'
 	@limit = -> Session.get 'limit'
-	page = -> Session.get 'page'
+	@page = -> Session.get 'page'
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
@@ -68,6 +68,7 @@ if Meteor.isClient
 		today: -> moment().format('LLL')
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
+		'click #refresh': -> document.location.reload()
 
 	Template.pasien.helpers
 		route: -> currentRoute()
@@ -98,9 +99,6 @@ if Meteor.isClient
 			b = -> onDate Session.get('endDate'), 1
 			a() < date < b()
 		pasiens: ->
-			start = -> Session.get 'startDate'
-			end = -> Session.get 'endDate'
-			range = -> true if start() and end()
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
@@ -127,11 +125,12 @@ if Meteor.isClient
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else
 				selector = {}
-				options = limit: 5, fields: no_mr: 1, regis: 1
+				options = limit: 100, fields: no_mr: 1, regis: 1
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				if sub.ready() then coll.pasien.find().fetch()
+				opt = limit: limit(), skip: page() * limit()
+				if sub.ready() then coll.pasien.find({}, opt).fetch()
 
 	Template.pasien.events
 		'click #showForm': ->
@@ -351,5 +350,7 @@ if Meteor.isClient
 					Router.go '/' + userGroups[0]
 
 	Template.pagination.events
+		'click #next': -> Session.set 'page', 1 + page()
+		'click #prev': -> Session.set 'page', -1 + page()
 		'click #num': (event) ->
 			Session.set 'page', parseInt event.target.innerText
