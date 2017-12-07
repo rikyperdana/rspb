@@ -10,6 +10,15 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
+7 Des 2017
+1. Fix billRegis di laporan pembayaran, 30rb
+2. Fix daftar pasien poli
+3. Perbaharui daftar dokter poli
+4. Input data Obat
+5. Registrasikan user berikut peranan
+6. Kecilkan filesize login_bg.jpg
+7. Pada regis, hapus tabel daftar pasien
+
 21 Nov 2017
 oke 1. Tambahkan field anamesa (string) 1 untuk setiap data rawat
 2. Tampilan login dibaguskan

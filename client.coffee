@@ -55,7 +55,7 @@ if Meteor.isClient
 
 	Template.layout.onRendered ->
 		Session.set 'limit', 10
-		Session.set 'page', 1
+		Session.set 'page', 0
 
 	Template.menu.helpers
 		menus: ->
@@ -129,8 +129,7 @@ if Meteor.isClient
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				opt = limit: limit(), skip: page() * limit()
-				if sub.ready() then coll.pasien.find({}, opt).fetch()
+				if sub.ready() then coll.pasien.find().fetch()
 
 	Template.pasien.events
 		'click #showForm': ->
