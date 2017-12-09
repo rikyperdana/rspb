@@ -18,9 +18,7 @@ if Meteor.isClient
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
-	Template.registerHelper 'rupiah', (val, ins) ->
-		if ins then val += 30000
-		'Rp ' + numeral(val).format('0,0')
+	Template.registerHelper 'rupiah', (val, ins) -> 'Rp ' + numeral(val).format('0,0')
 	Template.registerHelper 'currentPar', (param) -> currentPar param
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 	Template.registerHelper 'startCase', (val) -> _.startCase val
@@ -98,6 +96,7 @@ if Meteor.isClient
 			a = -> onDate Session.get('startDate'), -1
 			b = -> onDate Session.get('endDate'), 1
 			a() < date < b()
+		insurance: (val) -> 'Rp ' + numeral(val+30000).format('0,0')
 		pasiens: ->
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
@@ -114,15 +113,19 @@ if Meteor.isClient
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.find().fetch()
 			else if Meteor.user().roles.jalan
-				sub = Meteor.subscribe 'coll', 'pasien', {}, {}
+				now = new Date()
+				past = new Date now.getDate()-2
+				roleNum = _.find selects.klinik, (i) ->
+					Meteor.user().roles.jalan[0] is _.snakeCase i.label
+				selector = rawat: $elemMatch: klinik: roleNum.value, tanggal: $gt: past
+				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready()
-					roleNum = _.find selects.klinik, (i) ->
-						Meteor.user().roles.jalan[0] is _.snakeCase i.label
 					filter = _.filter coll.pasien.find().fetch(), (i) ->
 						a = -> i.rawat[i.rawat.length-1].klinik is roleNum.value
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						a() and b()
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
+			###
 			else
 				selector = {}
 				options = limit: 100, fields: no_mr: 1, regis: 1
@@ -130,6 +133,7 @@ if Meteor.isClient
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.find().fetch()
+			###
 
 	Template.pasien.events
 		'click #showForm': ->

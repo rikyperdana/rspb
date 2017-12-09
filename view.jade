@@ -70,7 +70,8 @@ template(name='pasien'): .container
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
-		+pagination(name= 'pasien')
+		if pasiens
+			+pagination(name= 'pasien')
 		if userRole 'admin'
 			+import
 		if routeIs 'bayar'
@@ -150,7 +151,7 @@ template(name='pasien'): .container
 											td {{look 'klinik' rawat.klinik 'label'}}
 											td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
 											if isFalse rawat.cara_bayar 1
-												td {{rupiah rawat.total.semua true}}
+												td= insurance(rawat.total.semua)
 											else
 												td= rupiah(rawat.total.semua)
 		if routeIs 'labor'
