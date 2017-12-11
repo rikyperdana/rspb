@@ -22,13 +22,13 @@ schema.regis =
 	'regis.kelamin': type: Number, autoform: options: selects.kelamin, type: 'select-radio-inline'
 	'regis.agama': type: Number, autoform: options: selects.agama, type: 'select-radio-inline'
 	'regis.nikah': type: Number, autoform: options: selects.nikah, type: 'select-radio-inline'
-	'regis.pendidikan': type: Number, autoform: options: selects.pendidikan, type: 'select-radio-inline'
-	'regis.darah': type: Number, autoform: options: selects.darah, type: 'select-radio-inline'
+	'regis.pendidikan': type: Number, optional: true, autoform: options: selects.pendidikan, type: 'select-radio-inline'
+	'regis.darah': type: Number, optional: true, autoform: options: selects.darah, type: 'select-radio-inline'
 	'regis.pekerjaan': type: Number, autoform: options: selects.pekerjaan, type: 'select-radio-inline'
 	'regis.alamat': type: String
-	'regis.kelurahan': type: String
-	'regis.kecamatan': type: String
-	'regis.kabupaten': type: String
+	'regis.kelurahan': type: String, optional: true
+	'regis.kecamatan': type: String, optional: true
+	'regis.kabupaten': type: String, optional: true
 	'regis.kontak': type: String
 	'regis.ayah': type: String
 	'regis.ibu': type: String

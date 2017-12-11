@@ -18,7 +18,7 @@ if Meteor.isClient
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
-	Template.registerHelper 'rupiah', (val, ins) -> 'Rp ' + numeral(val).format('0,0')
+	Template.registerHelper 'rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')
 	Template.registerHelper 'currentPar', (param) -> currentPar param
 	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
 	Template.registerHelper 'startCase', (val) -> _.startCase val
@@ -125,6 +125,13 @@ if Meteor.isClient
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						a() and b()
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
+			else if currentRoute() is 'bayar'
+				selector = rawat: $elemMatch: $or: [
+					'total.semua': 0
+					'status_bayar': $ne: true
+				]
+				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
+				if sub.ready() then coll.pasien.find().fetch()
 			###
 			else
 				selector = {}
@@ -132,7 +139,8 @@ if Meteor.isClient
 				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
 					options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				if sub.ready() then coll.pasien.find().fetch()
+				opts = limit: limit(), skip: page() * limit()
+				if sub.ready() then coll.pasien.find({}, opts).fetch()
 			###
 
 	Template.pasien.events
