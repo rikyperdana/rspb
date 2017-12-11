@@ -98,6 +98,8 @@ if Meteor.isClient
 			a() < date < b()
 		insurance: (val) -> 'Rp ' + numeral(val+30000).format('0,0')
 		pasiens: ->
+			labradob = ->
+				_.filter ['labor', 'radio', 'obat'], (i) -> currentRoute() is i
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
@@ -113,8 +115,7 @@ if Meteor.isClient
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.find().fetch()
 			else if Meteor.user().roles.jalan
-				now = new Date()
-				past = new Date now.getDate()-2
+				now = new Date(); past = new Date now.getDate()-2
 				roleNum = _.find selects.klinik, (i) ->
 					Meteor.user().roles.jalan[0] is _.snakeCase i.label
 				selector = rawat: $elemMatch: klinik: roleNum.value, tanggal: $gt: past
@@ -128,9 +129,16 @@ if Meteor.isClient
 			else if currentRoute() is 'bayar'
 				selector = rawat: $elemMatch: $or: [
 					'total.semua': 0
+				,
 					'status_bayar': $ne: true
 				]
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
+				if sub.ready() then coll.pasien.find().fetch()
+			else if labradob()[0]
+				elem = {'status_bayar': true}
+				elem[currentRoute()] = $exists: true, $elemMatch: hasil: $exists: false
+				selSub = rawat: $elemMatch: elem
+				sub = Meteor.subscribe 'coll', 'pasien', selSub, {}
 				if sub.ready() then coll.pasien.find().fetch()
 			###
 			else

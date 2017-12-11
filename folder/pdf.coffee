@@ -53,16 +53,15 @@ if Meteor.isClient
 						_.toString j.harga
 					]
 			table = table: widths: [400, 100], body: rows
-			console.log table
 			pdf = pdfMake.createPdf
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
 					'\nRINCIAN BIAYA RAWAT JALAN'
 					'IDENTITAS PASIEN'
-					'NO. MR'
-					'NAMA PASIEN'
-					'JENIS KELAMIN'
-					'TANGGAL LAHIR'
+					'NO. MR' + pasien.no_mr
+					'NAMA PASIEN' + pasien.regis.nama_lengkap
+					'JENIS KELAMIN' + _.toString pasien.regis.kelamin
+					'TANGGAL LAHIR' + pasien.regis.tgl_lahir
 					'UMUR'
 					'KLINIK'
 					'\n\nRINCIAN PEMBAYARAN'

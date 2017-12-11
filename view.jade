@@ -174,8 +174,8 @@ template(name='pasien'): .container
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
-												td {{look 'labor' labor.nama 'grup'}}
-												td {{look 'labor' labor.nama 'label'}}
+												td {{look2 'tarif' labor.nama 'grup'}}
+												td {{look2 'tarif' labor.nama 'nama'}}
 												td
 													a#request(
 														pasien= pasien.no_mr
