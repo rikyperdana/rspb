@@ -24,6 +24,47 @@ template(name='panduan'): .container
 			li Klik tombol Simpan
 			li Arahkan pasien untuk membayar ke Kasir (Rp 10.000,- untuk kartu dan/atau Rp 30.000,- untuk pendaftaran)
 	else if userGroup 'bayar'
-		p untuk orang pembayaran
+		p Petugas Pembayaran/Kasir dapat melihat daftar tagihan terbaru yang dikenakan kepada pasien. Baris data yang muncul pada Daftar Bayar dapat berasal dari tagihan kartu, biaya pendaftaran, ataupun biaya jasa lainnya seperti tindakan, laboratorium, dan radiologi
+		p Kepada petugas sistem akan secara otomatis menghitungkan berapa uang yang harus dibayarkan pasien kepada kasir
+		p Tutorial Terima Bayar
+		ol
+			li Kepada pasien yang datang tanyakan nama pasien tersebut dan temukan pada daftar bayar tagihan yang bersangkutan
+			li Konfirmasi tagihan dengan menyebutkan nama, tujuan pembayaran, dan nilai tagihannya
+			li Jika pasien setuju untuk membayar dan uang sudah diterima oleh kasir, klik 'Bayar' pada baris data yang bersangkutan
+			li Sistem akan secara otomatis mengeluarkan file .pdf tanda terima pembayaran tersebut
+			li Petugas printkan bukti bayar tersebut dan beritahukan kepada pasien bahwa pembayaran berhasil
+			li Bila pada tagihan tersebut sudah termasuk dengan biaya labor dan radio, maka persilahkan pasien untuk langsung ke unit bersangkutan
 	else if userGroup 'jalan'
-		p untuk orang poli
+		p Petugas dan Admin Rawat Jalan dapat mengakses daftar pasien yang sudah mendaftar berobat dan melakukan pembayaran.
+		p Bila pasien yang datang ke poli mengakui bahwa namanya sudah didaftarkan, dan nama pasien tersebut tidak muncul. Kemungkinan pasien tersebut belum melakukan pembayaran pendaftaran
+		p Petugas poli yang login hanya akan ditampilkan daftar pasien yang mendaftar ke poli bersangkutan. Tidak memungkinkan bagi petugas untuk mengakses rawat jalan pada poli lain
+		p Baris nama pada Daftar Rawat Jalan yang ada di layar petugas sudah mewakili nomor antrian dari pasien tersebut. Baris nama teratas adalah pasien yang harus terlebih dahulu dilayani.
+		p Pasien yang sudah selesai urusan rawat jalannya akan dihilangkan dari daftar antrian. Dan akan menggeser nama berikutnya ke barisan teratas.
+		p Tutorial Input Data Rawat
+		ol
+			li Klik dua kali pada nama pasien yang berada pada baris paling atas
+			li Sistem akan secara otomtasi mengisikan pilihan poli dan pilihan cara bayar
+			li Petugas mengisikan Anamesa dari pasien yang bersangkutan
+			li Di bawah field anamesa petugas akan mendapati grup form Tindakan, Labor, Radio, dan Obat
+			li Form dapat menampung 1 atau lebih tindakan/labor/radio/obat jika diperlukan dengan klik 'Add' atau 'Remove'
+			li Setiap kali petugas melakukan perubahan pada isi form, sistem akan secara otomatis menghitungkan item biaya berikut totalnya. Dan petugas dapat klik tombol 'View' yang berada di atas layar untuk meninjau data yang diinputkan sebelum dikonfirmasi untuk disimpan ke dalam database
+			li Jika petugas sudah selesai meninjau data, dan sudah yakin bahwa data yang diinput adalah benar, klik 'Simpan'
+		p Apabila masih juga terjadi kesalahan setelah menyimpan data ke database, petugas harus meminta Admin Rawat Jalan atau Admin Pendaftaran untuk melakukan penghapusan data yang salah tersebut.
+		p Tentang Sub-Form Tindakan
+		ol
+			li Field Diagnosa adalah field yang diisi sesuai dengan keterangan dokter tentang tindakan yang dilakukan terhadap pasien tersebut
+			li Field Nama adalah pilihan nama tindakan yang dilakukan oleh dokter
+			li Field Dokter adalah pilihan dari nama dokter yang tersedia untuk Poli bersangkutan
+		p Tentang Sub-Form Labor
+		ol
+			li Field Nama adalah pilihan dari jenis Order Labor yang disyaratkan oleh dokter kepada pasien untuk dicek
+		p Tentang Sub-Form Radio
+		ol
+			li Field Nama adalah pilihan dari jenis Radiologi yang disyaratkan oleh dokter kepada pasien untuk dicek
+		p Tentang Sub-Form Obat
+		ol
+			li Field Nama adalah pilihan nama obat yang harus dikonsumsi oleh pasien
+			li Field Aturan Kali adalah angka berapa kali obat tersebut harus dikonsumsi pasien dalam satu hari
+			li Field Aturan Dosis adalah angka ukuran dosis yang harus dikonsumsi konsumen untuk setiap kali mengkonsumsi obat tersebut
+			li Field Aturan Bentuk adalah pilihan bentuk dari obat yang akan dikonsumsi oleh pasien tersebut
+			li Field Jumlah adalah jumlah satuan dari obat yang akan diserahkan kepada konsumen untuk dikonsumsi

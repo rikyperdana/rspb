@@ -98,8 +98,7 @@ if Meteor.isClient
 			a() < date < b()
 		insurance: (val) -> 'Rp ' + numeral(val+30000).format('0,0')
 		pasiens: ->
-			labradob = ->
-				_.filter ['labor', 'radio', 'obat'], (i) -> currentRoute() is i
+			labradob = -> _.filter ['labor', 'radio', 'obat'], (i) -> currentRoute() is i
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
@@ -140,16 +139,6 @@ if Meteor.isClient
 				selSub = rawat: $elemMatch: elem
 				sub = Meteor.subscribe 'coll', 'pasien', selSub, {}
 				if sub.ready() then coll.pasien.find().fetch()
-			###
-			else
-				selector = {}
-				options = limit: 100, fields: no_mr: 1, regis: 1
-				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
-					options.fields.rawat = 1
-				sub = Meteor.subscribe 'coll', 'pasien', selector, options
-				opts = limit: limit(), skip: page() * limit()
-				if sub.ready() then coll.pasien.find({}, opts).fetch()
-			###
 
 	Template.pasien.events
 		'click #showForm': ->
