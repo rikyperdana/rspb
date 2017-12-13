@@ -19,23 +19,14 @@ if Meteor.isClient
 		if doc.obat
 			for i in doc.obat
 				i.idobat = randomId()
-				find = _.find coll.gudang.find().fetch(), (j) -> j._id is i.nama
-				i.harga = find.batch[find.batch.length-1].jual
-				i.subtotal = i.harga * i.jumlah
-				total.obat += i.subtotal
 		doc.total =
 			tindakan: total.tindakan
 			labor: total.labor
 			radio: total.radio
-			obat: total.obat
 		doc.total.semua = doc.total.tindakan + doc.total.labor + doc.total.radio
 		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
 		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
-		medOnly = ->
-			a = -> 0 is doc.total.tindakan + doc.total.labor + doc.total.radio
-			b = -> doc.total.obat > 0
-			a() and b()
-		if medOnly()
+		if doc.obat and 0 is doc.total.semua
 			doc.billRegis = true
 			doc.status_bayar = true
 		doc
