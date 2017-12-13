@@ -28,9 +28,16 @@ if Meteor.isClient
 			labor: total.labor
 			radio: total.radio
 			obat: total.obat
-		doc.total.semua = doc.total.tindakan + doc.total.labor + doc.total.radio + doc.total.obat
+		doc.total.semua = doc.total.tindakan + doc.total.labor + doc.total.radio
 		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
 		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
+		medOnly = ->
+			a = -> 0 is doc.total.tindakan + doc.total.labor + doc.total.radio
+			b = -> doc.total.obat > 0
+			a() and b()
+		if medOnly()
+			doc.billRegis = true
+			doc.status_bayar = true
 		doc
 
 	closeForm = ->
