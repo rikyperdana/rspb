@@ -108,13 +108,17 @@ schema.gudang =
 	batch: type: Array
 	'batch.$': type: Object
 	'batch.$.idbatch': type: String
+	'batch.$.nobatch': type: String
 	'batch.$.masuk': type: Date, autoform: type: 'pickadate'
 	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate'
 	'batch.$.digudang': type: Number
 	'batch.$.diapotik': type: Number
-	'batch.$.beli': type: Number
-	'batch.$.jual': type: Number
-	'batch.$.suplier': type: Number
+	'batch.$.beli': type: Number, decimal: true
+	'batch.$.jual': type: Number, decimal: true
+	'batch.$.suplier': type: String
+	'batch.$.anggaran': type: String
+	'batch.$.pengadaan': type: Number
+	'batch.$.retur': type: String, optional: true
 
 schema.farmasi = Object.assign {}, schema.gudang
 schema.logistik = Object.assign {}, schema.gudang

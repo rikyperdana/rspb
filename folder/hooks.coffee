@@ -16,9 +16,7 @@ if Meteor.isClient
 				find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
 				j.harga = find.harga
 				total[i] += j.harga
-		if doc.obat
-			for i in doc.obat
-				i.idobat = randomId()
+		i.idobat = randomId() for i in doc.obat if doc.obat
 		doc.total =
 			tindakan: total.tindakan
 			labor: total.labor

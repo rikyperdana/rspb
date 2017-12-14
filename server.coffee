@@ -42,8 +42,9 @@ if Meteor.isServer
 						findStock = coll.gudang.findOne _id: j.nama
 						for k in [1..j.jumlah]
 							filtered = _.filter findStock.batch, (l) -> l.diapotik > 0
-							sorted = _.sortBy filtered, (l) -> new Date(l.masuk).getTime()
-							sorted[0].diapotik -= 1
+							sortedIn = _.sortBy filtered, (l) -> new Date(l.masuk).getTime()
+							sortedEd = _.sortBy sortedIn, (l) -> new Date(l.kadaluarsa).getTime()
+							sortedEd[0].diapotik -= 1
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
@@ -68,7 +69,12 @@ if Meteor.isServer
 				Roles.setUserRoles id, roles, group
 
 		newUser: (doc) ->
-			Accounts.createUser doc
+			find = Accounts.findUserByUsername doc.username
+			if find
+				Accounts.setUsername find._id, doc.username
+				Accounts.setPassword find._id, doc.password
+			else
+				Accounts.createUser doc
 
 		rmBarang: (idbarang) ->
 			coll.gudang.remove idbarang: idbarang
