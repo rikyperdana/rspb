@@ -148,6 +148,18 @@
 	,
 		label: 'Fisioterapi'
 		value: 12
+	,
+		label: 'Gizi'
+		value: 13
+	,
+		label: 'Metadon'
+		value: 14
+	,
+		label: 'Psikologi'
+		value: 15
+	,
+		label: 'Tindakan'
+		value: 16
 	]
 	nama_rujukan: [
 		label: 'Datang Sendiri'

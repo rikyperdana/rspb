@@ -208,7 +208,8 @@ if Meteor.isClient
 			MaterializeModal.prompt
 				message: 'Isikan data requestnya'
 				callback: (err, res) -> if res.submit
-					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value
+					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value, (err, res) ->
+						if res then console.log res
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this

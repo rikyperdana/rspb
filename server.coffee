@@ -36,6 +36,7 @@ if Meteor.isServer
 					if j['id'+jenis] is idjenis then j.hasil = hasil
 			modifier = rawat: findPasien.rawat
 			coll.pasien.update selector, $set: modifier
+			give = {}
 			if jenis is 'obat' then for i in findPasien.rawat
 				if i.obat then for j in i.obat
 					if j.idobat is idjenis
@@ -45,9 +46,12 @@ if Meteor.isServer
 							sortedIn = _.sortBy filtered, (l) -> new Date(l.masuk).getTime()
 							sortedEd = _.sortBy sortedIn, (l) -> new Date(l.kadaluarsa).getTime()
 							sortedEd[0].diapotik -= 1
+							unless give[sortedEd[0].idbatch] then give[sortedEd[0].idbatch] = 0
+							give[sortedEd[0].idbatch] += 1
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
+						give
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
