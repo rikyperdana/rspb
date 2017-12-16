@@ -209,7 +209,11 @@ if Meteor.isClient
 				message: 'Isikan data requestnya'
 				callback: (err, res) -> if res.submit
 					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value, (err, res) ->
-						if res then console.log res
+						if res
+							message = ''
+							for key, val of res
+								message += key + ':' + val
+							MaterializeModal.message title: 'Penyerahan Obat', message: message
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this
@@ -266,6 +270,9 @@ if Meteor.isClient
 							if data.grup
 								modifier.grup = _.startCase data.grup
 							Meteor.call 'import', 'tarif', selector, modifier
+						else if data.password
+							Meteor.call 'newUser', data
+							Meteor.call 'setRole', data.username, [data.role], data.group
 
 	Template.gudang.helpers
 		gudangs: ->
