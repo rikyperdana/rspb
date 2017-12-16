@@ -51,7 +51,7 @@ if Meteor.isServer
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
-						give
+			give
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.digudang': $gt: amount

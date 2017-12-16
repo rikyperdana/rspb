@@ -212,8 +212,10 @@ if Meteor.isClient
 						if res
 							message = ''
 							for key, val of res
-								message += key + ':' + val
-							MaterializeModal.message title: 'Penyerahan Obat', message: message
+								message += '</p>'+key+': '+val+'</p>'
+							MaterializeModal.message
+								title: 'Penyerahan Obat'
+								message: message
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this
