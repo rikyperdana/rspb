@@ -528,11 +528,13 @@ template(name='manajemen'): .container
 			tr
 				th Username
 				th Peran
+				th Aksi
 		tbody
 			each users
 				tr#row
 					td= username
 					td= stringify(roles)
+					td: a#reset Reset
 
 	h5 Tambahkan Dokter
 	+quickForm(

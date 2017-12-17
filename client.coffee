@@ -56,10 +56,11 @@ if Meteor.isClient
 		Session.set 'page', 0
 
 	Template.menu.helpers
-		menus: ->
+		menus: ->			
 			keys = _.keys Meteor.user().roles
-			find = _.find rights, (i) -> i.group is keys[0]
-			if find then  _.map find.list, (i) -> _.find modules, (j) -> j.name is i
+			_.flatten _.map keys, (i) ->
+				find = _.find rights, (j) -> j.group is i
+				_.map find.list, (j) -> _.find modules, (k) -> k.name is j
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute()
 			if find then find.full else _.startCase currentRoute()
@@ -115,13 +116,16 @@ if Meteor.isClient
 				if sub.ready() then coll.pasien.find().fetch()
 			else if Meteor.user().roles.jalan
 				now = new Date(); past = new Date now.getDate()-2
-				roleNum = _.find selects.klinik, (i) ->
-					Meteor.user().roles.jalan[0] is _.snakeCase i.label
-				selector = rawat: $elemMatch: klinik: roleNum.value, tanggal: $gt: past
+				roles = _.map Meteor.user().roles.jalan, (i) ->
+					find = _.find selects.klinik, (j) -> i is _.snakeCase j.label
+					find.value
+				selector = rawat: $elemMatch:
+					klinik: $in: roles
+					tanggal: $gt: past
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready()
 					filter = _.filter coll.pasien.find().fetch(), (i) ->
-						a = -> i.rawat[i.rawat.length-1].klinik is roleNum.value
+						a = -> _.includes roles, i.rawat[i.rawat.length-1].klinik
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						a() and b()
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
@@ -274,7 +278,7 @@ if Meteor.isClient
 							Meteor.call 'import', 'tarif', selector, modifier
 						else if data.password
 							Meteor.call 'newUser', data
-							Meteor.call 'setRole', data.username, [data.role], data.group
+							Meteor.call 'addRole', data.username, [data.role], data.group
 
 	Template.gudang.helpers
 		gudangs: ->
@@ -346,11 +350,16 @@ if Meteor.isClient
 				group = $('input[name="group"]:checked', event.target)[0].id
 				poli = $('input[name="poli"]:checked', event.target)[0]
 				theRole = unless poli then role else _.snakeCase poli.id
-				Meteor.call 'setRole', onUser._id, [theRole], group
-		'dblclick #row': ->
-			Session.set 'onUser', this
-		'click #close': ->
-			console.log 'tutup'
+				Meteor.call 'addRole', onUser._id, [theRole], group
+		'dblclick #row': -> Session.set 'onUser', this
+		'dblclick #reset': ->
+			self = this
+			dialog =
+				title: 'Reset Peranan'
+				message: 'Anda yakin untuk menghapus semua perannya?'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'rmRole', self._id
+		'click #close': -> console.log 'tutup'
 
 	Template.login.onRendered ->
 		$('.slider').slider()

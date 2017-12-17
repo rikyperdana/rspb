@@ -63,18 +63,14 @@ if Meteor.isServer
 			modifier = $pull: rawat: idbayar: idbayar
 			coll.pasien.update selector, modifier
 
-		setRole: (id, roles, group, poli) ->
-			user = Accounts.findUserByUsername id
-			if user # if id is username
-				Roles.setUserRoles user._id, roles, group
-			else # if id is _id
-				selector = _id: id
-				modifier = $set: roles: {}
-				Meteor.users.update selector, modifier
-				if poli
-					Roles.setUserRoles id, poli, group
-				else
-					Roles.setUserRoles id, roles, group
+		addRole: (id, roles, group, poli) ->
+			role = poli or roles
+			Roles.addUsersToRoles id, role, group
+
+		rmRole: (id) ->
+			selector = _id: id
+			modifier = $set: roles: {}
+			Meteor.users.update selector, modifier
 
 		newUser: (doc) ->
 			find = Accounts.findUserByUsername doc.username
