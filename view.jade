@@ -37,6 +37,11 @@ template(name='pasien'): .container
 			unless currentPar 'no_mr'
 				.input-field: input#search(value= search placeholder= 'Cari Nama Pasien / No.MR')
 		.col.m6
+			with selPol
+				form#selPol
+					each selPol
+						input(name='poli' type='radio' id= value)
+						label(for= value)= label
 			if showButton
 				.right.btn#showForm= showButtonText
 			if preview

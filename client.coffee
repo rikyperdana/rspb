@@ -97,6 +97,8 @@ if Meteor.isClient
 			b = -> onDate Session.get('endDate'), 1
 			a() < date < b()
 		insurance: (val) -> 'Rp ' + numeral(val+30000).format('0,0')
+		selPol: -> _.map Meteor.user().roles.jalan, (i) ->
+			_.find selects.klinik, (j) -> i is _.snakeCase j.label
 		pasiens: ->
 			labradob = -> _.filter ['labor', 'radio', 'obat'], (i) -> currentRoute() is i
 			if currentPar 'no_mr'
@@ -126,7 +128,9 @@ if Meteor.isClient
 					filter = _.filter coll.pasien.find().fetch(), (i) ->
 						a = -> _.includes roles, i.rawat[i.rawat.length-1].klinik
 						b = -> not i.rawat[i.rawat.length-1].total.semua
-						a() and b()
+						selPol = Session.get 'selPol'
+						c = -> i.rawat[i.rawat.length-1].klinik is selPol
+						if selPol then b() and c() else a() and b()
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else if currentRoute() is 'bayar'
 				selector = rawat: $elemMatch: $or: [
@@ -237,6 +241,8 @@ if Meteor.isClient
 			$('#'+type).pickadate
 				onSet: (data) ->
 					Session.set type+'Date', data.select
+		'change #selPol': (event) ->
+			Session.set 'selPol', parseInt event.target.id
 
 	Template.import.events
 		'change :file': (event, template) ->
