@@ -10,13 +10,21 @@ apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
 rekam_medik 1 admin menus['rekam', 'pendaftaran']
 admisi 1 admin 3 petugas menus['admisi']
 
+18 Des 2017
+1. Buatkan select poli untuk user multirole
+2. Buat hitungan SPM (standar pelayan minimal)
+3. Tambahkan field keluar pada schema rawat
+4. Tambahkan field pindah pada schema rawat
+5. Rawat yg mengandung data pindah, autocreate rawat polinya
+6. Laporan rawat jalan per poli dengan range waktu
+
 7 Des 2017
 oke 1. Fix billRegis di laporan pembayaran, 30rb
 oke 2. Fix daftar pasien poli
-3. Perbaharui daftar dokter poli
-4. Input data Obat
-5. Registrasikan user berikut peranan
-6. Kecilkan filesize login_bg.jpg
+oke 3. Perbaharui daftar dokter poli
+oke 4. Input data Obat
+oke 5. Registrasikan user berikut peranan
+oke 6. Kecilkan filesize login_bg.jpg
 oke 7. Pada regis, hapus tabel daftar pasien
 
 21 Nov 2017
