@@ -12,8 +12,8 @@ admisi 1 admin 3 petugas menus['admisi']
 
 18 Des 2017
 1. Buatkan select poli untuk user multirole
-2. Buat hitungan SPM (standar pelayan minimal)
-3. Tambahkan field keluar pada schema rawat
+oke 2. Buat hitungan SPM (standar pelayan minimal)
+oke 3. Tambahkan field keluar pada schema rawat
 4. Tambahkan field pindah pada schema rawat
 5. Rawat yg mengandung data pindah, autocreate rawat polinya
 6. Laporan rawat jalan per poli dengan range waktu

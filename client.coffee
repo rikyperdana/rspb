@@ -82,8 +82,7 @@ if Meteor.isClient
 		preview: -> Session.get 'preview'
 		omitFields: ->
 			unless formDoc() and formDoc().billRegis
-				['anamesa', 'tindakan', 'labor', 'radio', 'obat']
-		isZero: (val) -> val is 0
+				['anamesa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar']
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			find = _.find selects.klinik, (j) ->
 				j.label is _.startCase Meteor.user().roles.jalan[0]
@@ -157,6 +156,7 @@ if Meteor.isClient
 					$('div[data-schema-key="regis.'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 			setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
+			Session.set 'begin', moment()
 		'dblclick #row': ->
 			Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->

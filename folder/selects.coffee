@@ -197,6 +197,13 @@
 		label: 'Spesialis'
 		value: 2
 	]
+	keluar: [
+		label: 'Pulang'
+		value: 1
+	,
+		label: 'Rujuk'
+		value: 2
+	]
 	tindakan: -> if Meteor.isClient
 		sub = Meteor.subscribe 'coll', 'tarif', {}, {}
 		selector = jenis: Meteor.user().roles.jalan[0]

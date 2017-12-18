@@ -27,6 +27,8 @@ if Meteor.isClient
 		if doc.obat and 0 is doc.total.semua
 			doc.billRegis = true
 			doc.status_bayar = true
+		begin = Session.get 'begin'; stop = moment()
+		doc.spm = stop.diff begin, 'minutes'
 		doc
 
 	closeForm = ->

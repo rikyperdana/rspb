@@ -96,6 +96,8 @@ schema.rawat =
 	'rawat.$.total.radio': type: Number, optional: true
 	'rawat.$.total.obat': type: Number, optional: true
 	'rawat.$.total.semua': type: Number, optional: true
+	'rawat.$.spm': type: Number, optional: true, autoform: type: 'hidden'
+	'rawat.$.keluar': type: Number, optional: true, autoform: options: selects.keluar, type: 'select-radio-inline'
 
 schema.jalan = Object.assign {}, schema.rawat
 schema.inap = Object.assign {}, schema.rawat

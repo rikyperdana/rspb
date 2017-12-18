@@ -113,7 +113,7 @@ template(name='pasien'): .container
 										) Bayar
 							if isTrue item.cara_bayar 1
 								unless item.status_bayar
-									unless isZero item.total.semua
+									unless isTrue item.total.semua 0
 										tr
 											td= pasien.no_mr
 											td= pasien.regis.nama_lengkap
