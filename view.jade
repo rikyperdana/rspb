@@ -89,6 +89,7 @@ template(name='pasien'): .container
 						th Tanggal
 						th Total Biaya
 						th Cara Bayar
+						th Klinik
 						th Aksi
 				tbody
 					each pasien in pasiens
@@ -99,6 +100,7 @@ template(name='pasien'): .container
 								td= hari(pasien.regis.date)
 								td Rp 10,000
 								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
+								td -
 								td
 									a#bill(
 										pasien= pasien.no_mr
@@ -111,6 +113,7 @@ template(name='pasien'): .container
 									td= hari(item.tanggal)
 									td Rp 30,000
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
+									td -
 									td
 										a#bill(
 											pasien= pasien.no_mr
@@ -125,6 +128,7 @@ template(name='pasien'): .container
 											td= hari(item.tanggal)
 											td= rupiah(item.total.semua)
 											td {{look 'cara_bayar' item.cara_bayar 'label'}}
+											td {{look 'klinik' item.klinik 'label'}}
 											td
 												a#bayar(
 													pasien= pasien.no_mr
