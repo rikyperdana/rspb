@@ -17,6 +17,7 @@ oke 3. Tambahkan field keluar pada schema rawat
 4. Tambahkan field pindah pada schema rawat
 5. Rawat yg mengandung data pindah, autocreate rawat polinya
 6. Laporan rawat jalan per poli dengan range waktu
+7. Hanya dokter yg boleh isi data rawat, bukan perawat
 
 7 Des 2017
 oke 1. Fix billRegis di laporan pembayaran, 30rb

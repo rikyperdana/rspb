@@ -82,3 +82,14 @@ if Meteor.isServer
 
 		rmBarang: (idbarang) ->
 			coll.gudang.remove idbarang: idbarang
+
+		pindah: (no_mr, cara_bayar, klinik) ->
+			find = coll.pasien.findOne 'no_mr': parseInt no_mr
+			selector = _id: find._id
+			modifier = $push: rawat:
+				idbayar: Math.random().toString(36).slice(2)
+				tanggal: new Date()
+				cara_bayar: cara_bayar
+				klinik: klinik
+				billRegis: true
+			coll.pasien.update selector, modifier

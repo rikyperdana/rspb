@@ -40,6 +40,8 @@ if Meteor.isClient
 			'update-pushArray': (doc) ->
 				formDoc = Session.get 'formDoc'
 				if formDoc then Meteor.call 'rmRawat', currentPar('no_mr'), formDoc.idbayar
+				if doc.pindah
+					Meteor.call 'pindah', currentPar('no_mr'), doc.cara_bayar, doc.pindah
 				this.result modForm doc
 		after:
 			insert: -> closeForm()
