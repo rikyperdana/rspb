@@ -1,231 +1,42 @@
 @selects =
-	rawat: [
-		label: 'Rawat Jalan'
-		value: 1
-	,
-		label: 'Rawat Inap'
-		value: 2
-	,
-		label: 'IGD'
-		value: 3
-	]
-	pekerjaan: [
-		label: 'Pegawai Negeri'
-		value: 1
-	,
-		label: 'Karyawan Swasta'
-		value: 2
-	,
-		label: 'Wirausaha'
-		value: 3
-	,
-		label: 'Petani'
-		value: 4
-	,
-		label: 'Tidak Bekerja'
-		value: 5
-	]
-	kelamin: [
-		label: 'Laki-laki'
-		value: 1
-	,
-		label: 'Perempuan'
-		value: 2
-	]
-	agama: [
-		label: 'Islam'
-		value: 1
-	,
-		label: 'Katolik'
-		value: 2
-	,
-		label: 'Protestan'
-		value: 3
-	,
-		label: 'Budha'
-		value: 4
-	,
-		label: 'Hindu'
-		value: 5
-	,
-		label: 'Kong Hu Chu'
-		value: 6
-	]
-	pendidikan: [
-		label: 'Sekolah Dasar'
-		value: 1
-	,
-		label: 'Sekolah Menengah'
-		value: 2
-	,
-		label: 'Sekolah Atas'
-		value: 3
-	,
-		label: 'Strata 1'
-		value: 4
-	,
-		label: 'Strata 2'
-		value: 5
-	,
-		label: 'Tidak Sekolah'
-		value: 6
-	]
-	darah: [
-		label: 'A'
-		value: 1
-	,
-		label: 'B'
-		value: 2
-	,
-		label: 'AB'
-		value: 3
-	,
-		label: 'O'
-		value: 4
-	]
-	cara_bayar: [
-		label: 'Umum'
-		value: 1
-	,
-		label: 'BPJS'
-		value: 2
-	,
-		label: 'Jamkesda Pekanbaru'
-		value: 3
-	,
-		label: 'Jamkesda Kampar'
-		value: 4
-	,
-		label: 'Lapas/Dinsos'
-		value: 5
-	]
-	nikah: [
-		label: 'Nikah'
-		value: 1
-	,
-		label: 'Belum Nikah'
-		value: 2
-	,
-		label: 'Janda'
-		value: 3
-	,
-		label: 'Duda'
-		value: 4
-	]
-	klinik: [
-		label: 'Penyakit Dalam'
-		value: 1
-	,
-		label: 'Gigi'
-		value: 2
-	,
-		label: 'Kebidanan'
-		value: 3
-	,
-		label: 'THT'
-		value: 4
-	,
-		label: 'Anak'
-		value: 5
-	,
-		label: 'Saraf'
-		value: 6
-	,
-		label: 'Mata'
-		value: 7
-	,
-		label: 'Bedah'
-		value: 8
-	,
-		label: 'Paru'
-		value: 9
-	,
-		label: 'Tb. Dots'
-		value: 10
-	,
-		label: 'Kulit'
-		value: 11
-	,
-		label: 'Fisioterapi'
-		value: 12
-	,
-		label: 'Gizi'
-		value: 13
-	,
-		label: 'Metadon'
-		value: 14
-	,
-		label: 'Psikologi'
-		value: 15
-	,
-		label: 'Tindakan'
-		value: 16
-	]
-	nama_rujukan: [
-		label: 'Datang Sendiri'
-		value: 1
-	,
-		label: 'RS Lain'
-		value: 2
-	,
-		label: 'Puskesmas'
-		value: 3
-	,
-		label: 'Faskes Lainnya'
-		value: 4
-	]
-	bentuk: [
-		value: 1
-		label: 'butir'
-	,
-		value: 2
-		label: 'kapsul'
-	,
-		value: 3
-		label: 'tablet'
-	,
-		value: 4
-		label: 'sendok makan'
-	,
-		value: 5
-		label: 'sendok teh'
-	]
-	tipe_dokter: [
-		label: 'Umum'
-		value: 1
-	,
-		label: 'Spesialis'
-		value: 2
-	]
-	keluar: [
-		label: 'Pulang'
-		value: 1
-	,
-		label: 'Rujuk'
-		value: 2
-	]
-	tindakan: -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'tarif', {}, {}
-		selector = jenis: Meteor.user().roles.jalan[0]
-		if sub.ready() then _.map coll.tarif.find(selector).fetch(), (i) ->
-			i.label = _.startCase i.nama
-			i.value = i._id
-			i
-	dokter: -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'dokter', {}, {}
-		find = _.find selects.klinik, (i) ->
-			Meteor.user().roles.jalan[0] is _.snakeCase i.label
-		selector = poli: find.value
-		if sub.ready() then _.map coll.dokter.find(selector).fetch(), (i) ->
-			i.label = i.nama
-			i.value = i._id
-			i
-	gudang: -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'gudang', {}, {}
-		if sub.ready() then _.map coll.gudang.find().fetch(), (i) ->
-			i.label = i.nama
-			i.value = i._id
-			i
+	rawat: ['Rawat Jalan', 'Rawat Inap', 'IGD']
+	pekerjaan: ['Pegawa Negeri', 'Karyawan Swasta', 'Wirausaha', 'Petani', 'Tidak Bekerja']
+	kelamin: ['Laki-laki', 'Perempuan']
+	agama: ['Islam', 'Katolik', 'Protestan', 'Buddha', 'Hindu', 'Kong Hu Chu']
+	pendidikan: ['SD', 'SMP', 'SMA', 'Diploma', 'S1', 'S2', 'S3', 'Tidak Sekolah']
+	darah: ['A', 'B', 'C', 'AB', 'O']
+	cara_bayar: ['Umum', 'BPJS', 'Jamkesda Pekanbaru', 'Jamkesda Kampar', 'Lapas/Dinsos']
+	nikah: ['Nikah', 'Belum Nikah', 'Janda', 'Duda']
+	klinik: ['Penyakit Dalam', 'Gigi', 'Kebidanan', 'THT', 'Anak', 'Saraf', 'Mata', 'Bedah', 'Paru', 'Tb. Dots', 'Kulit', 'Fisioterapi', 'Gizi', 'Metadon', 'Psikologi', 'Tindakan']
+	nama_rujukan: ['Datang Sendiri', 'RS Lain', 'Puskesmas', 'Faskes Lainnya']
+	bentuk: ['butir', 'kapsul', 'tablet', 'sendok makan', 'sendok teh']
+	tipe_dokter: ['Umum', 'Spesialis']
+	keluar: ['Pulang', 'Rujuk']
+
+_.map (_.keys selects), (i) -> selects[i] = _.map selects[i], (j, x) -> label: j, value: x+1
+
+selects.tindakan = -> if Meteor.isClient
+	sub = Meteor.subscribe 'coll', 'tarif', {}, {}
+	selector = jenis: Meteor.user().roles.jalan[0]
+	if sub.ready() then _.map coll.tarif.find(selector).fetch(), (i) ->
+		i.label = _.startCase i.nama
+		i.value = i._id
+		i
+selects.dokter = -> if Meteor.isClient
+	sub = Meteor.subscribe 'coll', 'dokter', {}, {}
+	find = _.find selects.klinik, (i) ->
+		Meteor.user().roles.jalan[0] is _.snakeCase i.label
+	selector = poli: find.value
+	if sub.ready() then _.map coll.dokter.find(selector).fetch(), (i) ->
+		i.label = i.nama
+		i.value = i._id
+		i
+selects.gudang = -> if Meteor.isClient
+	sub = Meteor.subscribe 'coll', 'gudang', {}, {}
+	if sub.ready() then _.map coll.gudang.find().fetch(), (i) ->
+		i.label = i.nama
+		i.value = i._id
+		i
 
 _.map ['labor', 'radio'], (i) ->
 	selects[i] = -> if Meteor.isClient

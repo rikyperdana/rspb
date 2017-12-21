@@ -285,6 +285,12 @@ if Meteor.isClient
 						else if data.password
 							Meteor.call 'newUser', data
 							Meteor.call 'addRole', data.username, [data.role], data.group
+			else if currentRoute() is 'obat'
+				Papa.parse event.target.files[0],
+					header: true
+					step: (result) ->
+						data = result.data[0]
+						console.log data
 
 	Template.gudang.helpers
 		gudangs: ->
