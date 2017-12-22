@@ -93,5 +93,15 @@ if Meteor.isServer
 					cara_bayar: find.rawat[find.rawat.length-1].cara_bayar
 					klinik: find.rawat[find.rawat.length-1].pindah
 					billRegis: true
-					total: tindakan: 0, labor: 0, radio: 0, obat: 0, semua: 0
+					total: semua: 0
 				coll.pasien.update selector, modifier
+
+		report: (jenis) ->
+			if jenis is 'pasien'
+				selector = {}
+				modifier = {}
+				headers: ['Nama', 'Cara Bayar', 'Klinik']
+				rows: _.flatten _.map coll.pasien.find().fetch(), (i) ->
+					_.map i.rawat, (j) -> [i.regis.nama_lengkap, j.cara_bayar, j.klinik]
+			else if jenis is 'gudang'
+				headers: [], rows: []

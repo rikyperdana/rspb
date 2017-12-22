@@ -236,11 +236,6 @@ if Meteor.isClient
 				message: 'Apakah yakin hapus data rawat pasien ini?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmRawat', currentPar('no_mr'), self.idbayar
-		'click .datepicker': (event) ->
-			type = event.target.attributes.date.nodeValue
-			$('#'+type).pickadate
-				onSet: (data) ->
-					Session.set type+'Date', data.select
 		'change #selPol': (event) ->
 			Session.set 'selPol', parseInt event.target.id
 
@@ -393,3 +388,17 @@ if Meteor.isClient
 		'click #prev': -> Session.set 'page', -1 + page()
 		'click #num': (event) ->
 			Session.set 'page', parseInt event.target.innerText
+
+	Template.report.helpers
+		datas: (jenis) ->
+			Meteor.call 'report', jenis, (err, res) ->
+				if res then Session.set 'laporan', res
+			Session.get 'laporan'
+
+	Template.report.events
+		'click .datepicker': (event) ->
+			type = event.target.attributes.date.nodeValue
+			$('#'+type).pickadate
+				onSet: (data) ->
+					Session.set type+'Date', data.select
+

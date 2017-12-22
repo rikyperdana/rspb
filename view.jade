@@ -135,34 +135,7 @@ template(name='pasien'): .container
 													idbayar= item.idbayar
 												) Bayar
 			br
-			if userRole 'admin'
-				h5 Laporan Bayar
-				.row
-					.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
-					.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
-				table.bordered
-					thead
-						th Tanggal
-						th No MR
-						th Nama
-						th Klinik
-						th Cara Bayar
-						th Total Bayar
-					tbody
-						each pasien in pasiens
-							each rawat in pasien.rawat
-								if rawat.status_bayar
-									if inRange rawat.tanggal
-										tr
-											td= hari(rawat.tanggal)
-											td= pasien.no_mr
-											td= pasien.regis.nama_lengkap
-											td {{look 'klinik' rawat.klinik 'label'}}
-											td {{look 'cara_bayar' rawat.cara_bayar 'label'}}
-											if isFalse rawat.cara_bayar 1
-												td= insurance(rawat.total.semua)
-											else
-												td= rupiah(rawat.total.semua)
+			+report(jenis='pasien')
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -615,3 +588,18 @@ template(name='pagination')
 		each val in pagins name
 			li: a#num(href='#')= val
 		li: a(href='#'): i.material-icons#next chevron_right
+
+template(name='report')
+	h5 Laporan {{jenis}}
+	.row
+		.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
+		.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')
+		table.bordered
+			with datas jenis
+				thead
+					each val in headers
+						th= val
+				tbody
+					each val in rows
+						each item in val
+							td= item
