@@ -54,8 +54,8 @@ if Meteor.isServer
 			give
 
 		transfer: (idbarang, idbatch, amount) ->
-			selector = idbarang: idbarang, 'batch.digudang': $gt: amount
-			modifier = $inc: 'batch.$.diapotik': amount, 'batch.$.digudang': -amount
+			selector = idbarang: idbarang, 'batch.idbatch': idbatch
+			modifier = $inc: 'batch.$.digudang': -amount, 'batch.$.diapotik': amount
 			coll.gudang.update selector, modifier
 
 		rmRawat: (no_mr, idbayar) ->

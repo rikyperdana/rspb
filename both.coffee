@@ -17,22 +17,22 @@ schema.regis =
 	regis: type: Object
 	'regis.nama_lengkap': type: String
 	'regis.tgl_lahir': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
-	'regis.tmpt_lahir': type: String
+	'regis.tmpt_lahir': type: String, optional: true
 	'regis.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'regis.kelamin': type: Number, autoform: options: selects.kelamin, type: 'select-radio-inline'
 	'regis.agama': type: Number, autoform: options: selects.agama, type: 'select-radio-inline'
 	'regis.nikah': type: Number, autoform: options: selects.nikah, type: 'select-radio-inline'
 	'regis.pendidikan': type: Number, optional: true, autoform: options: selects.pendidikan, type: 'select-radio-inline'
 	'regis.darah': type: Number, optional: true, autoform: options: selects.darah, type: 'select-radio-inline'
-	'regis.pekerjaan': type: Number, autoform: options: selects.pekerjaan, type: 'select-radio-inline'
+	'regis.pekerjaan': type: Number, optional: true, autoform: options: selects.pekerjaan, type: 'select-radio-inline'
 	'regis.alamat': type: String
 	'regis.kelurahan': type: String, optional: true
 	'regis.kecamatan': type: String, optional: true
 	'regis.kabupaten': type: String, optional: true
-	'regis.kontak': type: String
-	'regis.ayah': type: String
-	'regis.ibu': type: String
-	'regis.pasangan': type: String
+	'regis.kontak': type: String, optional: true
+	'regis.ayah': type: String, optional: true
+	'regis.ibu': type: String, optional: true
+	'regis.pasangan': type: String, optional: true
 	'regis.petugas':
 		type: String
 		autoform: type: 'hidden'
@@ -45,7 +45,6 @@ schema.regis =
 
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'
-	diagnosa: type: String
 	nama: type: String, autoform: options: selects.tindakan
 	dokter: type: String, autoform: options: selects.dokter
 	harga: type: Number, optional: true, autoform: type: 'hidden'
@@ -86,6 +85,7 @@ schema.rawat =
 	'rawat.$.billRegis': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.status_bayar': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.anamesa': type: String, optional: true
+	'rawat.$.diagnosa': type: String, optional: true
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
 	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
 	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true
@@ -105,12 +105,18 @@ schema.inap = Object.assign {}, schema.rawat
 schema.igd = Object.assign {}, schema.rawat
 
 schema.gudang =
-	idbarang: type: String
+	idbarang:
+		type: String
+		autoform: type: 'hidden'
+		autoValue: -> randomId()
 	jenis: type: Number
 	nama: type: String
 	batch: type: Array
 	'batch.$': type: Object
-	'batch.$.idbatch': type: String
+	'batch.$.idbatch':
+		type: String
+		autoform: type: 'hidden'
+		autoValue: -> randomId()
 	'batch.$.nobatch': type: String
 	'batch.$.masuk': type: Date, autoform: type: 'pickadate'
 	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate'
@@ -121,7 +127,6 @@ schema.gudang =
 	'batch.$.suplier': type: String
 	'batch.$.anggaran': type: String
 	'batch.$.pengadaan': type: Number
-	'batch.$.retur': type: String, optional: true
 
 schema.farmasi = Object.assign {}, schema.gudang
 schema.logistik = Object.assign {}, schema.gudang
