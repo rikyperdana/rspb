@@ -7,7 +7,7 @@
 	darah: ['A', 'B', 'C', 'AB', 'O']
 	cara_bayar: ['Umum', 'BPJS', 'Jamkesda Pekanbaru', 'Jamkesda Kampar', 'Lapas/Dinsos']
 	nikah: ['Nikah', 'Belum Nikah', 'Janda', 'Duda']
-	klinik: ['Penyakit Dalam', 'Gigi', 'Kebidanan', 'THT', 'Anak', 'Saraf', 'Mata', 'Bedah', 'Paru', 'Tb. Dots', 'Kulit', 'Fisioterapi', 'Gizi', 'Metadon', 'Psikologi', 'Tindakan']
+	klinik: ['Penyakit Dalam', 'Gigi', 'Kebidanan', 'THT', 'Anak', 'Saraf', 'Mata', 'Bedah', 'Paru', 'Tb. Dots', 'Kulit', 'Fisioterapi', 'Gizi', 'Metadon', 'Psikologi', 'Tindakan', 'APS Labor', 'APS Radio']
 	nama_rujukan: ['Datang Sendiri', 'RS Lain', 'Puskesmas', 'Faskes Lainnya']
 	bentuk: ['butir', 'kapsul', 'tablet', 'sendok makan', 'sendok teh']
 	tipe_dokter: ['Umum', 'Spesialis']

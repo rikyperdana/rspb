@@ -419,9 +419,11 @@ template(name='gudang'): .container
 	if showForm
 		+quickForm(
 			collection= coll.gudang
-			schema= schema
+			schema= schemagudang
+			type= formType
 			id = 'formGudang'
-			type = 'insert'
+			scope = 'batch'
+			doc= gudangs
 		)
 	unless currentPar 'idbarang'
 		table.bordered

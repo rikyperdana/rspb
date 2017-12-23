@@ -288,6 +288,8 @@ if Meteor.isClient
 						console.log data
 
 	Template.gudang.helpers
+		schemagudang: -> new SimpleSchema schema.gudang
+		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
 		gudangs: ->
 			if currentPar 'idbarang'
 				selector = idbarang: currentPar 'idbarang'
