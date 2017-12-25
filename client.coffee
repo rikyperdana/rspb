@@ -389,11 +389,10 @@ if Meteor.isClient
 	Template.report.events
 		'click .datepicker': (event, template) ->
 			type = event.target.attributes.date.nodeValue
-			$('#'+type).pickadate
-				onSet: (data) ->
-					Session.set type+'Date', data.select
-					start = Session.get 'startDate'
-					end = Session.get 'endDate'
-					if start and end
-						Meteor.call 'report', template.data.jenis, start, end, (err, res) ->
-							if res then Session.set 'laporan', res
+			$('#'+type).pickadate onSet: (data) ->
+				Session.set type+'Date', data.select
+				start = Session.get 'startDate'
+				end = Session.get 'endDate'
+				if start and end
+					Meteor.call 'report', template.data.jenis, start, end, (err, res) ->
+						if res then Session.set 'laporan', res

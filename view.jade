@@ -79,6 +79,10 @@ template(name='pasien'): .container
 			+pagination(name= 'pasien')
 		if userRole 'admin'
 			+import
+			if routeIs 'regis'
+				+report(jenis='pendaftaran')
+			else if routeIs 'jalan'
+				+report(jenis='rawat_jalan')
 		if routeIs 'bayar'
 			h5 Daftar Bayar
 			table.bordered
@@ -135,7 +139,8 @@ template(name='pasien'): .container
 													idbayar= item.idbayar
 												) Bayar
 			br
-			+report(jenis='pembayaran')
+			if userRole 'admin'
+				+report(jenis='pembayaran')
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -592,7 +597,7 @@ template(name='pagination')
 		li: a(href='#'): i.material-icons#next chevron_right
 
 template(name='report')
-	h5 Laporan {{jenis}}
+	h5 Laporan {{startCase jenis}}
 	.row
 		.col.m6: input.datepicker#start(type='text' date='start' placeholder='Mulai')
 		.col.m6: input.datepicker#end(type='text' date='end' placeholder='Akhir')

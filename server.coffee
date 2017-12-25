@@ -99,15 +99,46 @@ if Meteor.isServer
 		report: (jenis, start, end) ->
 			filter = (arr) -> _.filter arr, (i) ->
 				new Date(start) < new Date(i.tanggal) < new Date(end)
+			look = (list, val) -> _.find selects[list], (i) -> i.value is val
 			if jenis is 'pendaftaran'
 				headers: ['No. MR', 'Nama', 'Status', 'Rujukan', 'Klinik', 'B/L']
 				rows: _.flatten _.map coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
-					[i.no_mr, i.regis.nama_lengkap, '-', j.rujukan, j.klinik, 'B']
+					[
+						i.no_mr
+						_.startCase i.regis.nama_lengkap
+						'-'
+						look('rujukan', j.rujukan).label
+						look('klinik', j.klinik).label
+						'L'
+					]
 			else if jenis is 'pembayaran'
 				headers: ['Tanggal', 'No. Bill', 'No. MR', 'Nama', 'Ruangan', 'Layanan', 'Harga', 'Petugas']
 				rows: _.flatten _.map coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
-					[j.tanggal, j.nobill, i.no_mr, i.regis.nama_lengkap, '-', '-', j.total.semua, j.petugas]
-			else if jenis is 'jalan'
+					[
+						moment(j.tanggal).format('D MMM YYYY')
+						j.nobill
+						i.no_mr
+						_.startCase i.regis.nama_lengkap
+						_.flatten _.map ['tindakan', 'labor', 'radio'], (k) -> _.filter j[k], (l) -> l
+						'-'
+						'Rp ' + j.total.semua
+						Meteor.users.findOne(_id: j.petugas).username
+					]
+			else if jenis is 'rawat_jalan'
 				headers: ['Tanggal', 'No. MR', 'Nama', 'Kelamin', 'Umur', 'Cara Bayar', 'Diagnosa', 'Tindakan', 'Dokter', 'Keluar', 'Rujukan']
 				rows: _.flatten _.map coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
-					[j.tanggal, i.no_mr, i.regis.nama_lengkap, i.regis.kelamin, i.regis.tgl_lahir, j.cara_bayar, j.diagnosa, j.tindakan[0]]
+					[
+						moment(j.tanggal).format('D MMM YYYY')
+						i.no_mr
+						_.startCase i.regis.nama_lengkap
+						look('kelamin', i.regis.kelamin).label
+						moment().diff(i.regis.tgl_lahir, 'years')
+						look('cara_bayar', j.cara_bayar).label
+						j.diagnosa
+						'-'
+						Meteor.user().username
+						look('keluar', j.keluar).label
+						look('rujukan', j.rujukan).label
+					]
+		testing: ->
+			Meteor.users.findOne()

@@ -29,6 +29,7 @@ if Meteor.isClient
 			doc.status_bayar = true
 		begin = Session.get 'begin'; stop = moment()
 		doc.spm = stop.diff begin, 'minutes'
+		doc.petugas = Meteor.userId()
 		doc
 
 	closeForm = ->
