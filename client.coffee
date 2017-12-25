@@ -88,14 +88,6 @@ if Meteor.isClient
 				j.label is _.startCase Meteor.user().roles.jalan[0]
 			i.klinik is find.value
 		userPoli: -> Meteor.user().roles.jalan
-		inRange: (date) ->
-			onDate = (date, val) ->
-				date = new Date date
-				date.setDate date.getDate() + val
-				new Date date
-			a = -> onDate Session.get('startDate'), -1
-			b = -> onDate Session.get('endDate'), 1
-			a() < date < b()
 		insurance: (val) -> 'Rp ' + numeral(val+30000).format('0,0')
 		selPol: -> _.map Meteor.user().roles.jalan, (i) ->
 			_.find selects.klinik, (j) -> i is _.snakeCase j.label
@@ -392,15 +384,16 @@ if Meteor.isClient
 			Session.set 'page', parseInt event.target.innerText
 
 	Template.report.helpers
-		datas: (jenis) ->
-			Meteor.call 'report', jenis, (err, res) ->
-				if res then Session.set 'laporan', res
-			Session.get 'laporan'
+		datas: -> Session.get 'laporan'
 
 	Template.report.events
-		'click .datepicker': (event) ->
+		'click .datepicker': (event, template) ->
 			type = event.target.attributes.date.nodeValue
 			$('#'+type).pickadate
 				onSet: (data) ->
 					Session.set type+'Date', data.select
-
+					start = Session.get 'startDate'
+					end = Session.get 'endDate'
+					if start and end
+						Meteor.call 'report', template.data.jenis, start, end, (err, res) ->
+							if res then Session.set 'laporan', res

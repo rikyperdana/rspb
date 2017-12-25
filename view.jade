@@ -135,7 +135,7 @@ template(name='pasien'): .container
 													idbayar= item.idbayar
 												) Bayar
 			br
-			+report(jenis='pasien')
+			+report(jenis='pembayaran')
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
@@ -603,5 +603,6 @@ template(name='report')
 						th= val
 				tbody
 					each val in rows
-						each item in val
-							td= item
+						tr
+							each item in val
+								td= item
