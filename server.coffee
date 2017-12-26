@@ -46,12 +46,12 @@ if Meteor.isServer
 							sortedIn = _.sortBy filtered, (l) -> new Date(l.masuk).getTime()
 							sortedEd = _.sortBy sortedIn, (l) -> new Date(l.kadaluarsa).getTime()
 							sortedEd[0].diapotik -= 1
-							unless give[sortedEd[0].idbatch] then give[sortedEd[0].idbatch] = 0
-							give[sortedEd[0].idbatch] += 1
+							unless give[sortedEd[0].nobatch] then give[sortedEd[0].nobatch] = 0
+							give[sortedEd[0].nobatch] += 1
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
-			give
+			if jenis is 'obat' then give
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.idbatch': idbatch
@@ -88,7 +88,7 @@ if Meteor.isServer
 			if find.rawat[find.rawat.length-1].pindah
 				selector = _id: find._id
 				modifier = $push: rawat:
-					idbayar: randomId()
+					idbayar: Math.random().toString(36).slice(2)
 					tanggal: new Date()
 					cara_bayar: find.rawat[find.rawat.length-1].cara_bayar
 					klinik: find.rawat[find.rawat.length-1].pindah
@@ -140,5 +140,3 @@ if Meteor.isServer
 						look('keluar', j.keluar).label
 						look('rujukan', j.rujukan).label
 					]
-		testing: ->
-			Meteor.users.findOne()

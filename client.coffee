@@ -82,7 +82,7 @@ if Meteor.isClient
 		preview: -> Session.get 'preview'
 		omitFields: ->
 			unless formDoc() and formDoc().billRegis
-				['anamesa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
+				['anamesa', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			find = _.find selects.klinik, (j) ->
 				j.label is _.startCase Meteor.user().roles.jalan[0]

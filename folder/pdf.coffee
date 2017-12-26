@@ -1,5 +1,6 @@
 if Meteor.isClient
 
+	look = (list, val) -> _.find selects[list], (i) -> i.value is val
 	@makePdf =
 		card: ->
 			doc = coll.pasien.findOne()
@@ -20,11 +21,11 @@ if Meteor.isClient
 					'\nDATA UMUM PASIEN'
 					'\nNAMA LENGKAP : ' + doc.regis.nama_lengkap
 					'TEMPAT & TANGGAL LAHIR : ' + doc.regis.tmpt_lahir + ', tanggal ' + moment(doc.regis.tgl_lahir).format('D/MMMM/YYYY')
-					'GOLONGAN DARAH : ' + doc.regis.darah
-					'JENIS KELAMIN : ' + doc.regis.kelamin
-					'AGAMA : ' + doc.regis.agama
-					'PENDIDIKAN : ' + doc.regis.pendidikan
-					'PEKERJAAN : ' + doc.regis.pekerjaan
+					'GOLONGAN DARAH : ' + look('darah', doc.regis.darah).label
+					'JENIS KELAMIN : ' + look('kelamin', doc.regis.kelamin).label
+					'AGAMA : ' + look('agama', doc.regis.agama).label
+					'PENDIDIKAN : ' + look('pendidikan', doc.regis.pendidikan).label
+					'PEKERJAAN : ' + look('pekerjaan', doc.regis.pekerjaan).label
 					'NAMA AYAH : ' + doc.regis.ayah
 					'NAMA IBU : ' + doc.regis.ibu
 					'NAMA SUAMI/ISTRI : ' + doc.regis.pasangan
@@ -60,9 +61,9 @@ if Meteor.isClient
 					'IDENTITAS PASIEN'
 					'NO. MR' + pasien.no_mr
 					'NAMA PASIEN' + pasien.regis.nama_lengkap
-					'JENIS KELAMIN' + _.toString pasien.regis.kelamin
-					'TANGGAL LAHIR' + pasien.regis.tgl_lahir
-					'UMUR'
+					'JENIS KELAMIN' + look('kelamin', pasien.regis.kelamin).label
+					'TANGGAL LAHIR' + moment(pasien.regis.tgl_lahir).format('D MM YYYY')
+					'UMUR' + _.toString moment().diff(pasien.regis.tgl_lahir, 'years')
 					'KLINIK'
 					'\n\nRINCIAN PEMBAYARAN'
 					table

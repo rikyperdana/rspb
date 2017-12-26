@@ -314,6 +314,9 @@ template(name='pasien'): .container
 				if anamesa
 					h5 Anamesa Pasien
 					p= anamesa
+				if diagnosa
+					h5 Diagnosa Pasien
+					p= diagnosa
 				br
 				br
 				if tindakan
@@ -321,14 +324,12 @@ template(name='pasien'): .container
 					table
 						thead
 							tr
-								th Diagnosa
 								th Tindakan
 								th Dokter
 								th Harga
 						tbody
 							each tindakan
 								tr
-									td= diagnosa
 									td {{look2 'tarif' nama 'nama'}}
 									td {{look2 'dokter' dokter 'nama'}}
 									td= rupiah(harga)
@@ -462,7 +463,7 @@ template(name='gudang'): .container
 			table
 				thead
 					tr
-						th ID Batch
+						th No. Batch
 						th Masuk
 						th Kadaluarsa
 						th Beli
@@ -473,7 +474,7 @@ template(name='gudang'): .container
 				tbody
 					each batch
 						tr#transfer
-							td= idbatch
+							td= nobatch
 							td= hari(masuk)
 							td= hari(kadaluarsa)
 							td= beli

@@ -84,7 +84,7 @@ schema.rawat =
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
 	'rawat.$.billRegis': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.status_bayar': type: Boolean, optional: true, autoform: type: 'hidden'
-	'rawat.$.rujukan': type: Number, optional: true, autoform: options: selects.rujukan
+	'rawat.$.rujukan': type: Number, optional: true, autoform: options: selects.rujukan, type: 'select-radio-inline'
 	'rawat.$.anamesa': type: String, optional: true
 	'rawat.$.diagnosa': type: String, optional: true
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
@@ -100,6 +100,7 @@ schema.rawat =
 	'rawat.$.spm': type: Number, optional: true, autoform: type: 'hidden'
 	'rawat.$.pindah': type: Number, optional: true, autoform: options: selects.klinik
 	'rawat.$.keluar': type: Number, optional: true, autoform: options: selects.keluar
+	'rawat.$.petugas': type: String, autoform: type: 'hidden'
 
 schema.jalan = Object.assign {}, schema.rawat
 schema.inap = Object.assign {}, schema.rawat
