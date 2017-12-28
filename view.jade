@@ -64,6 +64,7 @@ template(name='pasien'): .container
 				tr
 					th No MR
 					th Nama
+					th Orang Tua
 					th Alamat
 					th Jenis Kelamin
 					th Tgl Lahir
@@ -72,6 +73,9 @@ template(name='pasien'): .container
 					tr#row
 						td= no_mr
 						td= startCase(regis.nama_lengkap)
+						td
+							span= regis.ayah
+							span= regis.ibu
 						td= regis.alamat
 						td {{look 'kelamin' regis.kelamin 'label'}}
 						td= hari(regis.tgl_lahir)
@@ -189,7 +193,7 @@ template(name='pasien'): .container
 											tr
 												td= pasien.no_mr
 												td= pasien.regis.nama_lengkap
-												td= radio.nama
+												td {{look2 'tarif' radio.nama 'nama'}}
 												td
 													a#request(
 														pasien= pasien.no_mr

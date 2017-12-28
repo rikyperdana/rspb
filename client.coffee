@@ -31,7 +31,7 @@ if Meteor.isClient
 		find[field]
 	Template.registerHelper 'look2', (option, value, field) ->
 		find = _.find coll[option].find().fetch(), (i) -> i._id is value
-		find[field]
+		_.startCase find[field]
 	Template.registerHelper 'routeIs', (name) ->
 		currentRoute() is name
 	Template.registerHelper 'userGroup', (name) ->

@@ -1,11 +1,11 @@
 if Meteor.isClient
 
-	# SimpleSchema.debug = true
+	SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
+	randomId = -> Math.random().toString(36).slice(2)
 	
 	@modForm = (doc, idbayar) -> if currentRoute() is 'jalan'
-		randomId = -> Math.random().toString(36).slice(2)
 		doc.tanggal = new Date()
 		doc.idbayar = if idbayar then idbayar else randomId()
 		doc.jenis = currentRoute()
@@ -51,3 +51,9 @@ if Meteor.isClient
 			Session.set 'preview', modForm doc
 			doc
 
+	AutoForm.addHooks 'formGudang',
+		before:
+			insert: (doc) ->
+				doc.idbarang = randomId()
+				doc.batch[0].idbatch = randomId()
+				this.result doc

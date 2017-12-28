@@ -10,7 +10,7 @@ Router.route '/',
 @coll = {}
 @schema = {}
 
-randomId = -> Math.random().toString(36).substring(7)
+randomId = -> Math.random().toString(36).slice(2)
 
 schema.regis =
 	no_mr: type: Number
