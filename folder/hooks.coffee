@@ -57,3 +57,6 @@ if Meteor.isClient
 				doc.idbarang = randomId()
 				doc.batch[0].idbatch = randomId()
 				this.result doc
+			'update-pushArray': (doc) ->
+				doc.idbatch = randomId()
+				this.result doc

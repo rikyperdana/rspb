@@ -63,7 +63,8 @@ schema.radio =
 
 schema.obat =
 	idobat: type: String, optional: true, autoform: type: 'hidden'
-	nama: type: String, autoform: options: selects.gudang
+	nama: type: String, autoform: options: selects.obat
+	puyer: type: String, optional: true
 	aturan: type: Object
 	'aturan.kali': type: Number
 	'aturan.dosis': type: Number
@@ -111,7 +112,7 @@ schema.gudang =
 		type: String
 		autoform: type: 'hidden'
 		autoValue: -> randomId()
-	jenis: type: Number
+	jenis: type: Number, autoform: options: selects.barang
 	nama: type: String
 	batch: type: Array
 	'batch.$': type: Object

@@ -71,7 +71,11 @@ if Meteor.isClient
 
 	Template.pasien.helpers
 		route: -> currentRoute()
-		formType: -> if currentRoute() is 'regis' then 'insert' else 'update-pushArray'
+		formType: ->
+			if currentRoute() is 'regis'
+				if currentPar 'no_mr' then 'update' else 'insert'
+			else
+				'update-pushArray'
 		umur: (date) -> moment().diff(date, 'years') + ' tahun'
 		showButton: -> Router.current().params.no_mr or currentRoute() is 'regis'
 		showButtonText: ->

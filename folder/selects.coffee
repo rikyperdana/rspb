@@ -12,6 +12,7 @@
 	tipe_dokter: ['Umum', 'Spesialis']
 	rujukan: ['Datang Sendiri', 'RS Lain', 'Puskesmas', 'Faskes Lainnya']
 	keluar: ['Pulang', 'Rujuk']
+	barang: ['Obat', 'BHP']
 
 _.map (_.keys selects), (i) -> selects[i] = _.map selects[i], (j, x) -> label: j, value: x+1
 
@@ -29,9 +30,10 @@ selects.dokter = -> if Meteor.isClient
 	if sub.ready() then _.map coll.dokter.find(selector).fetch(), (i) ->
 		value: i._id, label: i.nama
 
-selects.gudang = -> if Meteor.isClient
+selects.obat = -> if Meteor.isClient
 	sub = Meteor.subscribe 'coll', 'gudang', {}, {}
-	if sub.ready() then _.map coll.gudang.find().fetch(), (i) ->
+	filter = (arr) -> _.filter arr, (i) -> i.jenis is 1
+	if sub.ready() then _.map filter(coll.gudang.find().fetch()), (i) ->
 		value: i._id, label: i.nama
 
 _.map ['labor', 'radio'], (i) ->
