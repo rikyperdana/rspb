@@ -280,28 +280,17 @@ template(name='pasien'): .container
 							if userRole 'admin'
 								th Hapus
 					tbody
-						if userPoli
-							each rawat
-								tr
-									td= hari(tanggal)
-									td {{look 'klinik' klinik 'label'}}
-									td {{look 'cara_bayar' cara_bayar 'label'}}
-									if status_bayar
-										td Sudah
-									else
-										td Belum
-									td: a.modal-trigger(href='#preview') cek
-						else
-							each reverse rawat
-								tr
-									td= hari(tanggal)
-									td {{look 'klinik' klinik 'label'}}
-									td {{look 'cara_bayar' cara_bayar 'label'}}
-									if status_bayar
-										td Sudah
-									else
-										td Belum
-									td: a.modal-trigger(href='#preview') cek
+						each sortBy rawat 'tanggal' 'asc'
+							tr
+								td= hari(tanggal)
+								td {{look 'klinik' klinik 'label'}}
+								td {{look 'cara_bayar' cara_bayar 'label'}}
+								if status_bayar
+									td Sudah
+								else
+									td Belum
+								td: a.modal-trigger(href='#preview') cek
+								if userGroup 'regis'
 									if userRole 'admin'
 										td: a#rmRawat hapus
 	with preview

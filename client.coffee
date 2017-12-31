@@ -24,6 +24,7 @@ if Meteor.isClient
 	Template.registerHelper 'startCase', (val) -> _.startCase val
 	Template.registerHelper 'modules', -> modules
 	Template.registerHelper 'reverse', (arr) -> _.reverse arr
+	Template.registerHelper 'sortBy', (arr, sel, sort) -> _.sortBy arr, (i) -> -i.tanggal.getTime()
 	Template.registerHelper 'isTrue', (a, b) -> a is b
 	Template.registerHelper 'isFalse', (a, b) -> a isnt b
 	Template.registerHelper 'look', (option, value, field) ->
