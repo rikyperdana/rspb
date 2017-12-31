@@ -32,14 +32,13 @@ if Meteor.isServer
 			selector = no_mr: parseInt no_mr
 			findPasien = coll.pasien.findOne selector
 			for i in findPasien.rawat
-				if i.idbayar is idbayar
-					if i[jenis] then for j in i[jenis]
-						if j['id'+jenis] is idjenis then j.hasil = hasil
+				if i.idbayar is idbayar then if i[jenis] then for j in i[jenis]
+					if j['id'+jenis] is idjenis then j.hasil = hasil
 			modifier = rawat: findPasien.rawat
 			coll.pasien.update selector, $set: modifier
 			give = {}
 			if jenis is 'obat' then for i in findPasien.rawat
-				if i.obat then for j in i.obat
+				if i.idbayar is idbayar then if i.obat then for j in i.obat
 					if j.idobat is idjenis
 						findStock = coll.gudang.findOne _id: j.nama
 						for k in [1..j.jumlah]
