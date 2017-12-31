@@ -1,10 +1,13 @@
 if Meteor.isClient
 
 	Router.onBeforeAction ->
-		unless Meteor.userId()
-			this.render 'login'
-		else
-			this.next()
+		unless Meteor.userId() then this.render 'login' else this.next()
+	Router.onAfterAction ->
+		own = ->
+			flat = _.uniq _.flatMap _.keys(Meteor.user().roles), (i) ->
+				_.find(rights, (j) -> j.group is i).list
+			_.includes flat, Router.current().route.getName()
+		Router.go '/' unless own()
 
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
