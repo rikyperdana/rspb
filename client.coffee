@@ -58,7 +58,7 @@ if Meteor.isClient
 	Template.menu.helpers
 		menus: ->			
 			keys = _.keys Meteor.user().roles
-			_.flatten _.map keys, (i) ->
+			_.flatMap keys, (i) ->
 				find = _.find rights, (j) -> j.group is i
 				_.map find.list, (j) -> _.find modules, (k) -> k.name is j
 		navTitle: ->
@@ -96,7 +96,6 @@ if Meteor.isClient
 		selPol: -> _.map Meteor.user().roles.jalan, (i) ->
 			_.find selects.klinik, (j) -> i is _.snakeCase j.label
 		pasiens: ->
-			labradob = -> _.filter ['labor', 'radio', 'obat'], (i) -> currentRoute() is i
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
@@ -136,8 +135,8 @@ if Meteor.isClient
 				]
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready() then coll.pasien.find().fetch()
-			else if labradob()[0]
-				elem = {'status_bayar': true}
+			else if _.includes(['labor', 'radio', 'obat'], currentRoute())
+				elem = 'status_bayar': true
 				elem[currentRoute()] = $exists: true, $elemMatch: hasil: $exists: false
 				selSub = rawat: $elemMatch: elem
 				sub = Meteor.subscribe 'coll', 'pasien', selSub, {}
@@ -148,7 +147,7 @@ if Meteor.isClient
 			Session.set 'showForm', not Session.get 'showForm'
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
-				if currentRoute() is 'jalan' then _.map ['cara_bayar', 'klinik'], (i) ->
+				if currentRoute() is 'jalan' then _.map ['cara_bayar', 'klinik', 'rujukan'], (i) ->
 					if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
 					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
@@ -234,6 +233,13 @@ if Meteor.isClient
 				Meteor.call 'rmRawat', currentPar('no_mr'), self.idbayar
 		'change #selPol': (event) ->
 			Session.set 'selPol', parseInt event.target.id
+		'click #rmPasien': ->
+			dialog =
+				title: 'Hapus Pasien'
+				message: 'Apakah yakin untuk menghapus pasien?'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'rmPasien', currentPar 'no_mr'
+				Router.go '/' + currentRoute()
 
 	Template.import.events
 		'change :file': (event, template) ->

@@ -58,6 +58,9 @@ if Meteor.isServer
 			modifier = $inc: 'batch.$.digudang': -amount, 'batch.$.diapotik': amount
 			coll.gudang.update selector, modifier
 
+		rmPasien: (no_mr) ->
+			coll.pasien.remove no_mr: parseInt no_mr
+
 		rmRawat: (no_mr, idbayar) ->
 			selector = no_mr: parseInt no_mr
 			modifier = $pull: rawat: idbayar: idbayar
@@ -101,32 +104,32 @@ if Meteor.isServer
 				new Date(start) < new Date(i.tanggal) < new Date(end)
 			look = (list, val) -> _.find selects[list], (i) -> i.value is val
 			if jenis is 'pendaftaran'
-				headers: ['No. MR', 'Nama', 'Status', 'Rujukan', 'Klinik', 'B/L']
-				rows: _.flatten _.map coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
+				headers: ['No. MR', 'Nama', 'Cara Bayar', 'Rujukan', 'Klinik', 'B/L']
+				rows: _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
 					[
 						i.no_mr
 						_.startCase i.regis.nama_lengkap
-						'-'
+						look('cara_bayar', j.cara_bayar).label
 						look('rujukan', j.rujukan).label
 						look('klinik', j.klinik).label
 						'L'
 					]
 			else if jenis is 'pembayaran'
 				headers: ['Tanggal', 'No. Bill', 'No. MR', 'Nama', 'Ruangan', 'Layanan', 'Harga', 'Petugas']
-				rows: _.flatten _.map coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
+				rows: _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
 					[
 						moment(j.tanggal).format('D MMM YYYY')
 						j.nobill
 						i.no_mr
 						_.startCase i.regis.nama_lengkap
-						_.flatten _.map ['tindakan', 'labor', 'radio'], (k) -> _.filter j[k], (l) -> l
-						'-'
+						look('klinik', j.klinik).label
+						_.flatMap ['tindakan', 'labor', 'radio'], (k) -> _.filter j[k], (l) -> l
 						'Rp ' + j.total.semua
 						Meteor.users.findOne(_id: j.petugas).username
 					]
 			else if jenis is 'rawat_jalan'
 				headers: ['Tanggal', 'No. MR', 'Nama', 'Kelamin', 'Umur', 'Cara Bayar', 'Diagnosa', 'Tindakan', 'Dokter', 'Keluar', 'Rujukan']
-				rows: _.flatten _.map coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
+				rows: _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
 					[
 						moment(j.tanggal).format('D MMM YYYY')
 						i.no_mr
