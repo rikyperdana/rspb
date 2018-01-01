@@ -25,10 +25,10 @@ schema.regis =
 	'regis.pendidikan': type: Number, optional: true, autoform: options: selects.pendidikan, type: 'select-radio-inline'
 	'regis.darah': type: Number, optional: true, autoform: options: selects.darah, type: 'select-radio-inline'
 	'regis.pekerjaan': type: Number, optional: true, autoform: options: selects.pekerjaan, type: 'select-radio-inline'
-	'regis.alamat': type: String
+	'regis.kabupaten': type: String, optional: true, autoform: options: selects.kabupaten
+	'regis.kecamatan': type: String, optional: true, autoform: options: selects.kecamatan, type: 'universe-select'
 	'regis.kelurahan': type: String, optional: true
-	'regis.kecamatan': type: String, optional: true
-	'regis.kabupaten': type: String, optional: true
+	'regis.alamat': type: String
 	'regis.kontak': type: String, optional: true
 	'regis.ayah': type: String, optional: true
 	'regis.ibu': type: String, optional: true

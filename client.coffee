@@ -3,11 +3,12 @@ if Meteor.isClient
 	Router.onBeforeAction ->
 		unless Meteor.userId() then this.render 'login' else this.next()
 	Router.onAfterAction ->
+		keys = _.keys Meteor.user().roles
 		own = ->
-			flat = _.uniq _.flatMap _.keys(Meteor.user().roles), (i) ->
+			flat = _.uniq _.flatMap keys, (i) ->
 				_.find(rights, (j) -> j.group is i).list
 			_.includes flat, Router.current().route.getName()
-		Router.go '/' unless own()
+		unless own() then Router.go '/' else Router.go '/' + keys[0]
 
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
@@ -53,7 +54,9 @@ if Meteor.isClient
 	Template.body.events
 		'keypress #search': (event) ->
 			if event.key is 'Enter'
-				Session.set 'search', event.target.value
+				term = event.target.value
+				if term.length > 2
+					Session.set 'search', term
 
 	Template.layout.onRendered ->
 		Session.set 'limit', 10
@@ -167,9 +170,6 @@ if Meteor.isClient
 			Session.set 'formDoc', null
 			Session.set 'preview', null
 			Router.go currentRoute()
-		'keypress #search': (event) ->
-			if event.key is 'Enter'
-				Session.set 'search', event.target.value
 		'click #card': ->
 			dialog =
 				title: 'Cetak Kartu'
