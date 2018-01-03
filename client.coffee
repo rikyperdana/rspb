@@ -20,6 +20,9 @@ if Meteor.isClient
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
+	Template.registerHelper 'zeros', (num) ->
+		size = _.size _.toString num
+		if size < 7 then '0'.repeat(6-size) + _.toString num
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
 	Template.registerHelper 'rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')

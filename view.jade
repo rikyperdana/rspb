@@ -71,7 +71,7 @@ template(name='pasien'): .container
 			tbody
 				each pasiens
 					tr#row
-						td= no_mr
+						td= zeros(no_mr)
 						td= startCase(regis.nama_lengkap)
 						td
 							span= regis.ayah
@@ -103,7 +103,7 @@ template(name='pasien'): .container
 					each pasien in pasiens
 						if pasien.regis.billCard
 							tr
-								td= pasien.no_mr
+								td= zeros(pasien.no_mr)
 								td= pasien.regis.nama_lengkap
 								td= hari(pasien.regis.date)
 								td Rp 10,000
@@ -116,7 +116,7 @@ template(name='pasien'): .container
 						each item in pasien.rawat
 							unless item.billRegis
 								tr
-									td= pasien.no_mr
+									td= zeros(pasien.no_mr)
 									td= pasien.regis.nama_lengkap
 									td= hari(item.tanggal)
 									td Rp 30,000
@@ -131,7 +131,7 @@ template(name='pasien'): .container
 								unless item.status_bayar
 									unless isTrue item.total.semua 0
 										tr
-											td= pasien.no_mr
+											td= zeros(pasien.no_mr)
 											td= pasien.regis.nama_lengkap
 											td= hari(item.tanggal)
 											td= rupiah(item.total.semua)
@@ -163,7 +163,7 @@ template(name='pasien'): .container
 									each labor in item.labor
 										unless labor.hasil
 											tr
-												td= pasien.no_mr
+												td= zeros(pasien.no_mr)
 												td= pasien.regis.nama_lengkap
 												td {{look2 'tarif' labor.nama 'grup'}}
 												td {{look2 'tarif' labor.nama 'nama'}}
@@ -191,7 +191,7 @@ template(name='pasien'): .container
 									each radio in item.radio
 										unless radio.hasil
 											tr
-												td= pasien.no_mr
+												td= zeros(pasien.no_mr)
 												td= pasien.regis.nama_lengkap
 												td {{look2 'tarif' radio.nama 'nama'}}
 												td
@@ -222,7 +222,7 @@ template(name='pasien'): .container
 									each obat in item.obat
 										unless obat.hasil
 											tr
-												td= pasien.no_mr
+												td= zeros(pasien.no_mr)
 												td= pasien.regis.nama_lengkap
 												td {{look2 'gudang' obat.nama 'nama'}}
 												td= obat.aturan.kali
@@ -247,7 +247,7 @@ template(name='pasien'): .container
 					table
 						tr
 							th No MR
-							td= no_mr
+							td= zeros(no_mr)
 						tr
 							th Nama Lengkap
 							td= regis.nama_lengkap
@@ -568,7 +568,6 @@ template(name='manajemen'): .container
 					td= grup
 	+pagination(name= 'tarif')
 	+import
-	+appDumpUI(advanced= true)
 
 template(name='login')
 	.fullscreen.slider: ul.slides: li
