@@ -568,6 +568,13 @@ template(name='manajemen'): .container
 					td= grup
 	+pagination(name= 'tarif')
 	+import
+	.row
+		.col.m2: .purple.btn#export Ekspor
+		.col.m10: .input-field: select#export
+			option(value='') Pilih jenis ekspor
+			option(value='regis') Identitas Pasien
+			option(value='jalan') Rawat Jalan
+			option(value='obat') Daftar Obat
 
 template(name='login')
 	.fullscreen.slider: ul.slides: li

@@ -3,12 +3,11 @@ if Meteor.isClient
 	Router.onBeforeAction ->
 		unless Meteor.userId() then this.render 'login' else this.next()
 	Router.onAfterAction ->
-		keys = _.keys Meteor.user().roles
 		own = ->
-			flat = _.uniq _.flatMap keys, (i) ->
+			flat = _.uniq _.flatMap _.keys(Meteor.user().roles), (i) ->
 				_.find(rights, (j) -> j.group is i).list
 			_.includes flat, Router.current().route.getName()
-		unless own() then Router.go '/' else Router.go '/' + keys[0]
+		Router.go '/' unless own()
 
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
@@ -333,6 +332,9 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
 
+	Template.manajemen.onRendered ->
+		$('select#export').material_select()
+
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()
 		onUser: -> Session.get 'onUser'
@@ -378,6 +380,11 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmRole', self._id
 		'click #close': -> console.log 'tutup'
+		'click #export': ->
+			select = $('select#export').val()
+			Meteor.call 'export', select, (err, content) -> if content
+				blob = new Blob [content], type: 'text/plain;charset=utf-8'
+				saveAs blob, select+'.csv'
 
 	Template.login.onRendered ->
 		$('.slider').slider()

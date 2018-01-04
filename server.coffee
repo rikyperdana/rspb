@@ -13,6 +13,24 @@ if Meteor.isServer
 		import: (name, selector, modifier) ->
 			coll[name].upsert selector, $set: modifier
 
+		export: (jenis) ->
+			if jenis is 'regis'
+				arr = _.map coll.pasien.find().fetch(), (i) ->
+					no_mr: i.no_mr
+					nama_lengkap: i.regis.nama_lengkap
+			else if jenis is 'jalan'
+				find = (type, value) ->
+					doc = _.find selects[type], (i) -> i.value is value
+					doc.label
+				arr = _.flatMap coll.pasien.find().fetch(), (i) ->
+					if i.rawat then _.map i.rawat, (j) ->
+						no_mr: i.no_mr
+						nama_lengkap: i.regis.nama_lengkap
+						idbayar: j.idbayar
+						cara_bayar: find 'cara_bayar', j.cara_bayar
+						klinik: find 'klinik', j.klinik
+			exportcsv.exportToCSV arr, true, ';'
+
 		billCard: (no_mr, state) ->
 			selector = no_mr: parseInt no_mr
 			modifier = $set: 'regis.billCard': state
