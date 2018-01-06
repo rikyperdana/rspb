@@ -122,42 +122,49 @@ if Meteor.isServer
 				new Date(start) < new Date(i.tanggal) < new Date(end)
 			look = (list, val) -> _.find selects[list], (i) -> i.value is val
 			if jenis is 'pendaftaran'
-				headers: ['No. MR', 'Nama', 'Cara Bayar', 'Rujukan', 'Klinik', 'B/L']
-				rows: _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
-					[
-						i.no_mr
-						_.startCase i.regis.nama_lengkap
-						look('cara_bayar', j.cara_bayar).label
-						look('rujukan', j.rujukan).label
-						look('klinik', j.klinik).label
-						'L'
+				docs = _.flatMapDeep coll.pasien.find().fetch(), (i) ->
+					_.map filter(i.rawat), (j) -> [
+						no_mr: i.no_mr
+						nama_lengkap: _.startCase i.regis.nama_lengkap
+						cara_bayar: look('cara_bayar', j.cara_bayar).label
+						rujukan: look('rujukan', j.rujukan).label
+						klinik: look('klinik', j.klinik).label
+						baru_lama: 'L'
 					]
+				headers: _.map _.keys(docs[0]), (i) -> _.startCase i
+				rows: _.map docs, (i) -> _.values i
+				csv: docs
 			else if jenis is 'pembayaran'
-				headers: ['Tanggal', 'No. Bill', 'No. MR', 'Nama', 'Ruangan', 'Layanan', 'Harga', 'Petugas']
-				rows: _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
-					[
-						moment(j.tanggal).format('D MMM YYYY')
-						j.nobill
-						i.no_mr
-						_.startCase i.regis.nama_lengkap
-						look('klinik', j.klinik).label
-						_.flatMap ['tindakan', 'labor', 'radio'], (k) -> _.filter j[k], (l) -> l
-						'Rp ' + j.total.semua
-						Meteor.users.findOne(_id: j.petugas).username
+				docs = _.flatMapDeep coll.pasien.find().fetch(), (i) ->
+					_.map filter(i.rawat), (j) -> [
+						tanggal: moment(j.tanggal).format('D MMM YYYY')
+						no_bill: j.nobill
+						no_mr: i.no_mr
+						nama_lengkap: _.startCase i.regis.nama_lengkap
+						klinik: look('klinik', j.klinik).label
+						layanan: _.flatMap ['tindakan', 'labor', 'radio'], (k) ->
+							_.filter j[k], (l) -> JSON.stringify l
+						harga: 'Rp ' + j.total.semua
+						petugas: Meteor.users.findOne(_id: j.petugas).username
 					]
+				headers: _.map _.keys(docs[0]), (i) -> _.startCase i
+				rows: _.map docs, (i) -> _.values i
+				csv: docs
 			else if jenis is 'rawat_jalan'
-				headers: ['Tanggal', 'No. MR', 'Nama', 'Kelamin', 'Umur', 'Cara Bayar', 'Diagnosa', 'Tindakan', 'Dokter', 'Keluar', 'Rujukan']
-				rows: _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
-					[
-						moment(j.tanggal).format('D MMM YYYY')
-						i.no_mr
-						_.startCase i.regis.nama_lengkap
-						look('kelamin', i.regis.kelamin).label
-						moment().diff(i.regis.tgl_lahir, 'years')
-						look('cara_bayar', j.cara_bayar).label
-						j.diagnosa
-						'-'
-						Meteor.user().username
-						look('keluar', j.keluar).label
-						look('rujukan', j.rujukan).label
+				docs = _.flatMapDeep coll.pasien.find().fetch(), (i) ->
+					_.map filter(i.rawat), (j) -> [
+						tanggal: moment(j.tanggal).format('D MMM YYYY')
+						no_mr: i.no_mr
+						nama_lengkap : _.startCase i.regis.nama_lengkap
+						kelamin: look('kelamin', i.regis.kelamin).label
+						umur: moment().diff(i.regis.tgl_lahir, 'years')
+						cara_bayar: look('cara_bayar', j.cara_bayar).label
+						diagnosa: j.diagnosa or ''
+						tindakan: '-'
+						petugas: Meteor.user().username
+						keluar: if j.keluar then look('keluar', j.keluar).label else ''
+						rujukan: if j.rujukan then look('rujukan', j.rujukan).label else ''
 					]
+				headers: _.map _.keys(docs[0]), (i) -> _.startCase i
+				rows: _.map docs, (i) -> _.values i
+				csv: docs

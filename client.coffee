@@ -418,5 +418,8 @@ if Meteor.isClient
 				start = Session.get 'startDate'
 				end = Session.get 'endDate'
 				if start and end
-					Meteor.call 'report', template.data.jenis, start, end, (err, res) ->
-						if res then Session.set 'laporan', res
+					Meteor.call 'report', template.data.jenis, start, end, (err, res) -> if res
+						Session.set 'laporan', res
+						content = exportcsv.exportToCSV Session.get('laporan').csv, true, ';'
+						blob = new Blob [content], type: 'text/plain;charset=utf-8'
+						saveAs blob, 'cobain.csv'
