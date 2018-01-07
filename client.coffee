@@ -108,8 +108,8 @@ if Meteor.isClient
 			if currentPar 'no_mr'
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
-				if currentRoute() is 'bayar' or 'jalan' or 'labor' or 'radio' or 'obat'
-					options.fields.rawat = 1
+				arr = ['bayar', 'jalan', 'labor', 'radio', 'obat']
+				if _.includes(arr, currentRoute()) then options.fields.rawat = 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.findOne()
 			else if search()

@@ -7,7 +7,7 @@ if Meteor.isServer
 		coll[name].find selector, options
 
 	Meteor.publish 'users', ->
-		Meteor.users.find({})
+		Meteor.users.find {}
 
 	Meteor.methods
 		import: (name, selector, modifier) ->
@@ -121,6 +121,7 @@ if Meteor.isServer
 			filter = (arr) -> _.filter arr, (i) ->
 				new Date(start) < new Date(i.tanggal) < new Date(end)
 			look = (list, val) -> _.find selects[list], (i) -> i.value is val
+			look2 = (list, id) -> _.find coll[list].find().fetch(), (i) -> i._id is id
 			if jenis is 'pendaftaran'
 				docs = _.flatMapDeep coll.pasien.find().fetch(), (i) ->
 					_.map filter(i.rawat), (j) -> [
@@ -143,7 +144,8 @@ if Meteor.isServer
 						nama_lengkap: _.startCase i.regis.nama_lengkap
 						klinik: look('klinik', j.klinik).label
 						layanan: _.flatMap ['tindakan', 'labor', 'radio'], (k) ->
-							_.filter j[k], (l) -> JSON.stringify l
+							saring = _.filter j[k], (l) -> l
+							_.map saring, (l) -> '/' + _.startCase look2('tarif', l.nama).nama
 						harga: 'Rp ' + j.total.semua
 						petugas: Meteor.users.findOne(_id: j.petugas).username
 					]
