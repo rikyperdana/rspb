@@ -108,7 +108,7 @@ template(name='pasien'): .container
 								td= hari(pasien.regis.date)
 								td Rp 10,000
 								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
-								td -
+								td Kartu
 								td
 									a#bill(
 										pasien= pasien.no_mr
@@ -121,7 +121,7 @@ template(name='pasien'): .container
 									td= hari(item.tanggal)
 									td Rp 30,000
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
-									td -
+									td Konsultasi
 									td
 										a#bill(
 											pasien= pasien.no_mr
@@ -275,6 +275,7 @@ template(name='pasien'): .container
 							th Tanggal
 							th Klinik
 							th Cara Bayar
+							th Bayar Pendaftaran
 							th Bayar Tindakan
 							th Cek
 							if userRole 'admin'
@@ -285,6 +286,10 @@ template(name='pasien'): .container
 								td= hari(tanggal)
 								td {{look 'klinik' klinik 'label'}}
 								td {{look 'cara_bayar' cara_bayar 'label'}}
+								if billRegis
+									td Sudah
+								else
+									td Belum
 								if status_bayar
 									td Sudah
 								else
@@ -614,3 +619,5 @@ template(name='report')
 						tr
 							each item in val
 								td= item
+	with datas
+		.purple.btn#export Ekspor
