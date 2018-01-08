@@ -131,7 +131,7 @@ if Meteor.isServer
 					rujukan: if j.rujukan then look('rujukan', j.rujukan).label else ''
 					klinik: look('klinik', j.klinik).label
 					diagnosa: j.diagnosa or ''
-					layanan: _.flatMap ['tindakan', 'labor', 'radio'], (k) ->
+					tindakan: _.flatMap ['tindakan', 'labor', 'radio'], (k) ->
 						saring = _.filter j[k], (l) -> l
 						_.map saring, (l) -> '/' + _.startCase look2('tarif', l.nama).nama
 					harga: 'Rp ' + j.total.semua
@@ -141,9 +141,9 @@ if Meteor.isServer
 				if jenis is 'pendaftaran'
 					pick = _.pick obj, ['no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']
 				else if jenis is 'pembayaran'
-					pick = _.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'layanan', 'harga', 'petugas']
+					pick = _.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'tindakan', 'harga', 'petugas']
 				else if jenis is 'rawat_jalan'
-					pick = _.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'kelamin', 'umur', 'cara_bayar', 'diagnosa', 'layanan', 'petugas', 'keluar', 'rujukan']
+					pick = _.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'kelamin', 'umur', 'cara_bayar', 'diagnosa', 'tindakan', 'petugas', 'keluar', 'rujukan']
 				pick
 			headers: _.map _.keys(docs[0]), (i) -> _.startCase i
 			rows: _.map docs, (i) -> _.values i

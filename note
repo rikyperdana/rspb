@@ -1,14 +1,11 @@
-pendaftaran 1 admin 12 petugas menus['pendaftaran', 'rawat']
-pembayaran 1 admin 7 petugas menus['pembayaran']
-jalan 1 admin(poli) 2x12 petugas(poli) menus['rawat', 'apotik']
+8 Jan 2018
+1. Rujukan fisio, labor, radio bisa skip pendaftaran 30rb
+2. Item user, dokter, tarif boleh hidden kalau non-aktif
 
-inap 4 admin(ruangan) 4x7 petugas(ruangan) menus['rawat', 'apotik']
-igd 1 admin 10 petugas menus['rawat', 'apotik']
-labor 1 admin 10 petugas menus['labor']
-radiologi 1 admin 10 petugas menus['radio']
-apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
-rekam_medik 1 admin menus['rekam', 'pendaftaran']
-admisi 1 admin 3 petugas menus['admisi']
+7 Jan 2018
+oke 1. Laporan pendaftaran, pembayaran, rawat jalan
+oke 2. Ekspor csv untuk masing2 laporan admin
+oke 3. Ekspor data untuk manajemen
 
 21 Des 2017
 oke 1. Simplify selects codes
@@ -93,3 +90,15 @@ Skenario Pasien Lama
 1. Ke pendaftaran, langsung pilih poli
 2. Membayar uang pendaftaran (30rb)
 3. Mengantri di poli
+
+pendaftaran 1 admin 12 petugas menus['pendaftaran', 'rawat']
+pembayaran 1 admin 7 petugas menus['pembayaran']
+jalan 1 admin(poli) 2x12 petugas(poli) menus['rawat', 'apotik']
+
+inap 4 admin(ruangan) 4x7 petugas(ruangan) menus['rawat', 'apotik']
+igd 1 admin 10 petugas menus['rawat', 'apotik']
+labor 1 admin 10 petugas menus['labor']
+radiologi 1 admin 10 petugas menus['radio']
+apotek+farmasi 1 admin 2x10 petugas menus['apotik', 'farmasi']
+rekam_medik 1 admin menus['rekam', 'pendaftaran']
+admisi 1 admin 3 petugas menus['admisi']

@@ -109,7 +109,7 @@ if Meteor.isClient
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
 				arr = ['bayar', 'jalan', 'labor', 'radio', 'obat']
-				if _.includes(arr, currentRoute()) then options.fields.rawat = 1
+				options.fields.rawat = 1 if _.includes arr, currentRoute()
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.findOne()
 			else if search()
@@ -249,11 +249,11 @@ if Meteor.isClient
 
 	Template.import.events
 		'change :file': (event, template) ->
-			if currentRoute() is 'regis'
-				Papa.parse event.target.files[0],
-					header: true
-					step: (result) ->
-						data = result.data[0]
+			Papa.parse event.target.files[0],
+				header: true
+				step: (result) ->
+					data = result.data[0]
+					if currentRoute() is 'regis'
 						selector = no_mr: parseInt data.no_mr
 						modifier = regis:
 							nama_lengkap: _.startCase data.nama_lengkap
@@ -266,11 +266,7 @@ if Meteor.isClient
 							tgl_lahir: new Date data.tgl_lahir
 							tmpt_kelahiran: _.startCase data.tmpt_kelahiran
 						Meteor.call 'import', 'pasien', selector, modifier
-			else if currentRoute() is 'manajemen'
-				Papa.parse event.target.files[0],
-					header: true
-					step: (result) ->
-						data = result.data[0]
+					else if currentRoute() is 'manajemen'
 						if data.tipe
 							selector = nama: data.nama
 							modifier =
@@ -288,11 +284,7 @@ if Meteor.isClient
 						else if data.password
 							Meteor.call 'newUser', data
 							Meteor.call 'addRole', data.username, [data.role], data.group
-			else if currentRoute() is 'obat'
-				Papa.parse event.target.files[0],
-					header: true
-					step: (result) ->
-						data = result.data[0]
+					else if currentRoute() is 'obat'
 						console.log data
 
 	Template.gudang.helpers
