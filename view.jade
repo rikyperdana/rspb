@@ -541,7 +541,7 @@ template(name='manajemen'): .container
 				th Poli
 		tbody
 			each dokters
-				tr
+				tr#rowDokter
 					td= nama
 					td {{look 'tipe_dokter' tipe 'label'}}
 					td {{look 'klinik' poli 'label'}}

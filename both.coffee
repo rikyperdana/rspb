@@ -148,6 +148,13 @@ schema.tarif =
 	harga: type: Number
 	grup: type: String, optional: true
 
+_.map ['dokter', 'tarif'], (i) ->
+	obj = active:
+		type: Boolean
+		autoform: type: 'hidden'
+		autoValue: -> true
+	_.assign schema[i], obj
+
 _.map ['pasien', 'gudang', 'dokter', 'tarif'], (i) ->
 	coll[i] = new Meteor.Collection i
 	coll[i].allow

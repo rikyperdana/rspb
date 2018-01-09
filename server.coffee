@@ -10,17 +10,14 @@ if Meteor.isServer
 		Meteor.users.find {}
 
 	Meteor.methods
-		import: (name, selector, modifier) ->
-			coll[name].upsert selector, $set: modifier
-
-		import2: (name, selector, modifier) ->
+		import: (name, selector, modifier, arrName) ->
 			find = coll[name].findOne selector
 			unless find
 				coll[name].upsert selector, $set: modifier
-			else
+			else if arrName
 				sel = _id: find._id
-				mod = $push: batch: modifier.batch[0]
-				coll[name].update sel, mod
+				obj = {}; obj[arrName] = modifier[arrName][0]
+				coll[name].update sel, $push: obj
 
 		export: (jenis) ->
 			if jenis is 'regis'
@@ -112,7 +109,11 @@ if Meteor.isServer
 
 		rmBarang: (idbarang) ->
 			coll.gudang.remove idbarang: idbarang
-		
+
+		inactive: (name, id) ->
+			sel = _id: id; mod = $set: active: false
+			coll[name].update sel, mod
+
 		pindah: (no_mr) ->
 			find = coll.pasien.findOne 'no_mr': parseInt no_mr
 			if find.rawat[find.rawat.length-1].pindah
@@ -139,13 +140,13 @@ if Meteor.isServer
 					cara_bayar: look('cara_bayar', j.cara_bayar).label
 					rujukan: if j.rujukan then look('rujukan', j.rujukan).label else ''
 					klinik: look('klinik', j.klinik).label
-					diagnosa: j.diagnosa or ''
+					diagnosa: j.diagnosa or '-'
 					tindakan: _.flatMap ['tindakan', 'labor', 'radio'], (k) ->
 						saring = _.filter j[k], (l) -> l
 						_.map saring, (l) -> '/' + _.startCase look2('tarif', l.nama).nama
 					harga: 'Rp ' + j.total.semua
 					petugas: Meteor.users.findOne(_id: j.petugas).username
-					keluar: if j.keluar then look('keluar', j.keluar).label else ''
+					keluar: if j.keluar then look('keluar', j.keluar).label else '-'
 					baru_lama: 'L'
 				if jenis is 'pendaftaran'
 					pick = _.pick obj, ['no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']

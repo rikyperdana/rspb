@@ -272,21 +272,21 @@ if Meteor.isClient
 							modifier =
 								tipe: parseInt data.tipe
 								poli: parseInt data.poli
+								active: true
 							Meteor.call 'import', 'dokter', selector, modifier
 						else if data.harga
 							selector = nama: _.snakeCase data.nama
 							modifier =
 								harga: parseInt data.harga
 								jenis: _.snakeCase data.jenis
-							if data.grup
-								modifier.grup = _.startCase data.grup
+								active: true
+							data.grup and modifier.grup = _.startCase data.grup
 							Meteor.call 'import', 'tarif', selector, modifier
 						else if data.password
 							Meteor.call 'newUser', data
 							Meteor.call 'addRole', data.username, [data.role], data.group
 					else if currentRoute() is 'farmasi'
-						selector =
-							nama: data.nama
+						selector = nama: data.nama
 						modifier =
 							jenis: parseInt data.jenis
 							idbarang: randomId()
@@ -306,7 +306,7 @@ if Meteor.isClient
 								satuan: parseInt data.satuan
 								suplier: data.suplier
 							]
-						data.nama and Meteor.call 'import2', 'gudang', selector, modifier
+						data.nama and Meteor.call 'import', 'gudang', selector, modifier, 'batch'
 
 	Template.gudang.helpers
 		schemagudang: -> new SimpleSchema schema.gudang
@@ -356,11 +356,11 @@ if Meteor.isClient
 		schemadokter: -> new SimpleSchema schema.dokter
 		schematarif: -> new SimpleSchema schema.tarif
 		dokters: ->
-			selector = {}
+			selector = active: true
 			options = limit: limit(), skip: page() * limit()
 			coll.dokter.find(selector, options).fetch()
 		tarifs: ->
-			selector = {}
+			selector = active: true
 			options = limit: limit(), skip: page() * limit()
 			coll.tarif.find(selector, options).fetch()
 
@@ -398,6 +398,12 @@ if Meteor.isClient
 			Meteor.call 'export', select, (err, content) -> if content
 				blob = new Blob [content], type: 'text/plain;charset=utf-8'
 				saveAs blob, select+'.csv'
+		'dblclick #rowDokter': ->
+			dialog =
+				title: 'Hapus Dokter'
+				message: 'Yakin untuk menghapus dokter dari daftar?'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'inactive', 'dokter', this._id
 
 	Template.login.onRendered ->
 		$('.slider').slider()
