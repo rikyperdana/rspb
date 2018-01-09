@@ -541,7 +541,7 @@ template(name='manajemen'): .container
 				th Poli
 		tbody
 			each dokters
-				tr#rowDokter
+				tr#baris.dokter
 					td= nama
 					td {{look 'tipe_dokter' tipe 'label'}}
 					td {{look 'klinik' poli 'label'}}
@@ -564,7 +564,7 @@ template(name='manajemen'): .container
 				th Grup
 		tbody
 			each tarifs
-				tr
+				tr#baris.tarif
 					td= startCase(jenis)
 					td= startCase(nama)
 					td= rupiah(harga)

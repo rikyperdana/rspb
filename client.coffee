@@ -398,12 +398,14 @@ if Meteor.isClient
 			Meteor.call 'export', select, (err, content) -> if content
 				blob = new Blob [content], type: 'text/plain;charset=utf-8'
 				saveAs blob, select+'.csv'
-		'dblclick #rowDokter': ->
+		'dblclick #baris': (event) ->
+			jenis = event.currentTarget.className
 			dialog =
-				title: 'Hapus Dokter'
-				message: 'Yakin untuk menghapus dokter dari daftar?'
+				title: 'Hapus ' + _.startCase jenis
+				message: 'Yakin untuk menghapus '+jenis+' dari daftar?'
+			self = this
 			new Confirmation dialog, (ok) -> if ok
-				Meteor.call 'inactive', 'dokter', this._id
+				Meteor.call 'inactive', jenis, self._id
 
 	Template.login.onRendered ->
 		$('.slider').slider()
