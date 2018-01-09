@@ -435,7 +435,6 @@ template(name='gudang'): .container
 		table.bordered
 			thead
 				tr
-					th ID Barang
 					th Jenis Barang
 					th Nama Barang
 					if userRole 'admin'
@@ -443,8 +442,7 @@ template(name='gudang'): .container
 			tbody
 				each gudangs
 					tr#row
-						td= idbarang
-						td= jenis
+						td {{look 'barang' jenis 'label'}}
 						td= nama
 						if userRole 'admin'
 							td: a#rmBarang hapus

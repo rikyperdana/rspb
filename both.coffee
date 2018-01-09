@@ -25,8 +25,8 @@ schema.regis =
 	'regis.pendidikan': type: Number, optional: true, autoform: options: selects.pendidikan, type: 'select-radio-inline'
 	'regis.darah': type: Number, optional: true, autoform: options: selects.darah, type: 'select-radio-inline'
 	'regis.pekerjaan': type: Number, optional: true, autoform: options: selects.pekerjaan, type: 'select-radio-inline'
-	'regis.kabupaten': type: String, optional: true, autoform: options: selects.kabupaten
-	'regis.kecamatan': type: String, optional: true, autoform: options: selects.kecamatan, type: 'universe-select'
+	'regis.kabupaten': type: String, optional: true
+	'regis.kecamatan': type: String, optional: true
 	'regis.kelurahan': type: String, optional: true
 	'regis.alamat': type: String
 	'regis.kontak': type: String, optional: true
@@ -104,9 +104,9 @@ schema.rawat =
 	'rawat.$.keluar': type: Number, optional: true, autoform: options: selects.keluar
 	'rawat.$.petugas': type: String, autoform: type: 'hidden'
 
-schema.jalan = Object.assign {}, schema.rawat
-schema.inap = Object.assign {}, schema.rawat
-schema.igd = Object.assign {}, schema.rawat
+schema.jalan = _.assign schema.rawat, {}
+schema.inap = _.assign schema.rawat, {}
+schema.igd = _.assign schema.rawat, {}
 
 schema.gudang =
 	idbarang:
@@ -122,6 +122,8 @@ schema.gudang =
 		autoform: type: 'hidden'
 		autoValue: -> randomId()
 	'batch.$.nobatch': type: String
+	'batch.$.merek': type: String
+	'batch.$.satuan': type: Number, autoform: options: selects.satuan
 	'batch.$.masuk': type: Date, autoform: type: 'pickadate'
 	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate'
 	'batch.$.digudang': type: Number
@@ -129,11 +131,11 @@ schema.gudang =
 	'batch.$.beli': type: Number, decimal: true
 	'batch.$.jual': type: Number, decimal: true
 	'batch.$.suplier': type: String
-	'batch.$.anggaran': type: String
+	'batch.$.anggaran': type: Number, autoform: options: selects.anggaran
 	'batch.$.pengadaan': type: Number
 
-schema.farmasi = Object.assign {}, schema.gudang
-schema.logistik = Object.assign {}, schema.gudang
+schema.farmasi = _.assign schema.gudang, {}
+schema.logistik = _.assign schema.gudang, {}
 
 schema.dokter =
 	nama: type: String

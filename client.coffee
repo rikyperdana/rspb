@@ -284,8 +284,29 @@ if Meteor.isClient
 						else if data.password
 							Meteor.call 'newUser', data
 							Meteor.call 'addRole', data.username, [data.role], data.group
-					else if currentRoute() is 'obat'
-						console.log data
+					else if currentRoute() is 'farmasi'
+						selector =
+							nama: data.nama
+						modifier =
+							jenis: parseInt data.jenis
+							idbarang: randomId()
+							batch: [
+								idbatch: randomId()
+								anggaran: data.anggaran
+								beli: parseInt data.beli
+								diapotik: parseInt data.diapotik
+								digudang: parseInt data.digudang
+								jenis: parseInt data.jenis
+								jual: parseInt data.jual
+								kadaluarsa: new Date data.kadaluarsa
+								masuk: new Date data.masuk
+								merek: data.merek or ''
+								nobatch: data.nobatch
+								pengadaan: parseInt data.pengadaan
+								satuan: parseInt data.satuan
+								suplier: data.suplier
+							]
+						data.nama and Meteor.call 'import2', 'gudang', selector, modifier
 
 	Template.gudang.helpers
 		schemagudang: -> new SimpleSchema schema.gudang

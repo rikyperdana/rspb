@@ -13,6 +13,15 @@ if Meteor.isServer
 		import: (name, selector, modifier) ->
 			coll[name].upsert selector, $set: modifier
 
+		import2: (name, selector, modifier) ->
+			find = coll[name].findOne selector
+			unless find
+				coll[name].upsert selector, $set: modifier
+			else
+				sel = _id: find._id
+				mod = $push: batch: modifier.batch[0]
+				coll[name].update sel, mod
+
 		export: (jenis) ->
 			if jenis is 'regis'
 				arr = _.map coll.pasien.find().fetch(), (i) ->

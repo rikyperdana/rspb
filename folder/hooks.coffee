@@ -3,7 +3,7 @@ if Meteor.isClient
 	# SimpleSchema.debug = true
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
-	randomId = -> Math.random().toString(36).slice(2)
+	@randomId = -> Math.random().toString(36).slice(2)
 	
 	@modForm = (doc, idbayar) -> if currentRoute() is 'jalan'
 		doc.tanggal = new Date()
