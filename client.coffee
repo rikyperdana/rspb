@@ -225,9 +225,11 @@ if Meteor.isClient
 							message: message
 						rekap = Session.get('rekap') or []
 						flat = _.flatten _.toPairs res
-						Session.set 'rekap', [rekap..., [nodes..., flat]]
+						Session.set 'rekap', [rekap..., [nodes..., flat...]]
 		'dblclick #rekap': ->
-			console.log Session.get 'rekap'
+			headers = ['Pasien', 'ID Bayar', 'Jenis', 'ID Request', 'No Batch', 'Jumlah']
+			makePdf.rekap [headers, Session.get('rekap')...]
+			Session.set 'rekap', []
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this

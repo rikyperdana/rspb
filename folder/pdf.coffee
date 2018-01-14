@@ -90,3 +90,8 @@ if Meteor.isClient
 					text: '(' + words + ')', italics: true
 				]
 			pdf.download doc.no_mr + '_payRegCard.pdf'
+		rekap: (rows) ->
+			strings = _.map rows, (i) -> _.map i, (j) -> _.toString j
+			pdf = pdfMake.createPdf content: [table: body: strings]
+			pdf.download 'rekap.pdf'
+			
