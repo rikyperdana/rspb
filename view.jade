@@ -236,6 +236,10 @@ template(name='pasien'): .container
 														jenis = 'obat'
 														idjenis= obat.idobat
 													) Serah
+			br
+			br
+			.purple.btn#rekap Rekap
+
 	if currentPar 'no_mr'
 		with pasiens
 			if routeIs 'regis'
@@ -451,9 +455,6 @@ template(name='gudang'): .container
 		h5 Rincian Barang
 		with gudangs
 			table
-				tr
-					th ID Barang
-					td= idbarang
 				tr
 					th Nama
 					td= nama

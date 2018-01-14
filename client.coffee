@@ -1,14 +1,5 @@
 if Meteor.isClient
 
-	Router.onBeforeAction ->
-		unless Meteor.userId() then this.render 'login' else this.next()
-	Router.onAfterAction ->
-		own = ->
-			flat = _.uniq _.flatMap _.keys(Meteor.user().roles), (i) ->
-				_.find(rights, (j) -> j.group is i).list
-			_.includes flat, Router.current().route.getName()
-		Router.go '/' unless own()
-
 	AutoForm.setDefaultTemplate 'materialize'
 	currentRoute = -> Router.current().route.getName()
 	currentPar = (param) -> Router.current().params[param]
@@ -16,6 +7,16 @@ if Meteor.isClient
 	formDoc = -> Session.get 'formDoc'
 	@limit = -> Session.get 'limit'
 	@page = -> Session.get 'page'
+	roles = -> Meteor.user().roles
+
+	Router.onBeforeAction ->
+		unless Meteor.userId() then this.render 'login' else this.next()
+	Router.onAfterAction ->
+		own = ->
+			flat = _.uniq _.flatMap _.keys(roles()), (i) ->
+				_.find(rights, (j) -> j.group is i).list
+			_.includes flat, Router.current().route.getName()
+		Router.go '/' unless own()
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
@@ -42,9 +43,9 @@ if Meteor.isClient
 	Template.registerHelper 'routeIs', (name) ->
 		currentRoute() is name
 	Template.registerHelper 'userGroup', (name) ->
-		Meteor.user().roles[name]
+		roles()[name]
 	Template.registerHelper 'userRole', (name) ->
-		Meteor.user().roles[currentRoute()][0] is name
+		roles()[currentRoute()][0] is name
 	Template.registerHelper 'pagins', (name) ->
 		limit = Session.get 'limit'
 		length = coll[name].find().fetch().length
@@ -66,8 +67,7 @@ if Meteor.isClient
 
 	Template.menu.helpers
 		menus: ->			
-			keys = _.keys Meteor.user().roles
-			_.flatMap keys, (i) ->
+			_.flatMap _.keys(roles()), (i) ->
 				find = _.find rights, (j) -> j.group is i
 				_.map find.list, (j) -> _.find modules, (k) -> k.name is j
 		navTitle: ->
@@ -98,11 +98,11 @@ if Meteor.isClient
 				['anamesa', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			find = _.find selects.klinik, (j) ->
-				j.label is _.startCase Meteor.user().roles.jalan[0]
+				j.label is _.startCase roles().jalan[0]
 			i.klinik is find.value
-		userPoli: -> Meteor.user().roles.jalan
+		userPoli: -> roles().jalan
 		insurance: (val) -> 'Rp ' + numeral(val+30000).format('0,0')
-		selPol: -> _.map Meteor.user().roles.jalan, (i) ->
+		selPol: -> _.map roles().jalan, (i) ->
 			_.find selects.klinik, (j) -> i is _.snakeCase j.label
 		pasiens: ->
 			if currentPar 'no_mr'
@@ -119,18 +119,18 @@ if Meteor.isClient
 				options = fields: no_mr: 1, regis: 1
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.find().fetch()
-			else if Meteor.user().roles.jalan
+			else if roles().jalan
 				now = new Date(); past = new Date now.getDate()-2
-				roles = _.map Meteor.user().roles.jalan, (i) ->
+				kliniks = _.map roles().jalan, (i) ->
 					find = _.find selects.klinik, (j) -> i is _.snakeCase j.label
 					find.value
 				selector = rawat: $elemMatch:
-					klinik: $in: roles
+					klinik: $in: kliniks
 					tanggal: $gt: past
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready()
 					filter = _.filter coll.pasien.find().fetch(), (i) ->
-						a = -> _.includes roles, i.rawat[i.rawat.length-1].klinik
+						a = -> _.includes kliniks, i.rawat[i.rawat.length-1].klinik
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						selPol = Session.get 'selPol'
 						c = -> i.rawat[i.rawat.length-1].klinik is selPol
@@ -199,32 +199,35 @@ if Meteor.isClient
 					Meteor.call 'billCard', no_mr, false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
 		'dblclick #bayar': (event) ->
-			no_mr = event.target.attributes.pasien.nodeValue
-			idbayar = event.target.attributes.idbayar.nodeValue
+			nodes = _.map ['no_mr', 'idbayar'], (i) ->
+				event.target.attributes[i].nodeValue
 			dialog =
 				title: 'Konfirmasi Pembayaran'
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, (ok) -> if ok
-				Meteor.call 'bayar', no_mr, idbayar
-				pasien = coll.pasien.findOne no_mr: parseInt no_mr
-				doc = _.find pasien.rawat, (i) -> i.idbayar is idbayar
+				Meteor.call 'bayar', nodes...
+				pasien = coll.pasien.findOne no_mr: parseInt nodes[0]
+				doc = _.find pasien.rawat, (i) -> i.idbayar is nodes[1]
 				makePdf.payRawat doc
 		'dblclick #request': (event) ->
-			no_mr = event.target.attributes.pasien.nodeValue
-			idbayar = event.target.attributes.idbayar.nodeValue
-			jenis = event.target.attributes.jenis.nodeValue
-			idjenis = event.target.attributes.idjenis.nodeValue
+			nodes = _.map ['pasien', 'idbayar', 'jenis', 'idjenis'], (i) ->
+				event.target.attributes[i].nodeValue
 			MaterializeModal.prompt
 				message: 'Isikan data requestnya'
 				callback: (err, res) -> if res.submit
-					Meteor.call 'request', no_mr, idbayar, jenis, idjenis, res.value, (err, res) ->
-						if res
-							message = ''
-							for key, val of res
-								message += '</p>'+key+': '+val+'</p>'
-							MaterializeModal.message
-								title: 'Penyerahan Obat'
-								message: message
+					params = ['request', nodes..., res.value]
+					Meteor.call params..., (err, res) -> if res
+						message = ''
+						for key, val of res
+							message += '</p>'+key+': '+val+'</p>'
+						MaterializeModal.message
+							title: 'Penyerahan Obat'
+							message: message
+						rekap = Session.get('rekap') or []
+						flat = _.flatten _.toPairs res
+						Session.set 'rekap', [rekap..., [nodes..., flat]]
+		'dblclick #rekap': ->
+			console.log Session.get 'rekap'
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this
@@ -332,7 +335,7 @@ if Meteor.isClient
 		'dblclick #row': -> Router.go '/' + currentRoute() + '/' + this.idbarang
 		'dblclick #transfer': ->
 			data = this
-			if Meteor.user().roles.farmasi
+			if roles().farmasi
 				MaterializeModal.prompt
 					message: 'Transfer Gudang > Apotek'
 					callback: (err, res) -> if res.submit
@@ -419,8 +422,7 @@ if Meteor.isClient
 				if err
 					Materialize.toast 'Salah username / password', 3000
 				else
-					userGroups = _.keys Meteor.user().roles
-					Router.go '/' + userGroups[0]
+					Router.go '/' + _.keys(roles())[0]
 
 	Template.pagination.events
 		'click #next': -> Session.set 'page', 1 + page()
