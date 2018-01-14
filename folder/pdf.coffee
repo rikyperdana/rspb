@@ -49,10 +49,7 @@ if Meteor.isClient
 			for i in ['tindakan', 'labor', 'radio']
 				if doc[i] then for j in doc[i]
 					find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
-					rows.push [
-						_.startCase find.nama
-						_.toString j.harga
-					]
+					rows.push [_.startCase(find.nama), _.toString(j.harga)]
 			table = table: widths: [400, 100], body: rows
 			pdf = pdfMake.createPdf
 				content: [
@@ -76,11 +73,8 @@ if Meteor.isClient
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
 				content: [
-					text: 'PEMERINTAH PROVINSI RIAU', alignment: 'center'
+					text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'
 				,
-					text: 'RUMAH SAKIT UMUM DAERAH PETALA BUMI', alignment: 'center'
-				,
-					text: 'JL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'
 					'\nKARCIS'
 					'TANGGAL : ' + moment().format('DD MM YYYY')
 					'NO. MR : ' + _.toString doc.no_mr

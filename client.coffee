@@ -168,9 +168,8 @@ if Meteor.isClient
 		'dblclick #row': ->
 			Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
-			Session.set 'showForm', false
-			Session.set 'formDoc', null
-			Session.set 'preview', null
+			_.map ['showForm', 'formDoc', 'preview', 'search'], (i) ->
+				Session.set i, false
 			Router.go currentRoute()
 		'click #card': ->
 			dialog =
@@ -186,20 +185,20 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				makePdf.consent()
 		'dblclick #bill': (event) ->
-			no_mr = event.target.attributes.pasien.nodeValue
-			idbayar = -> event.target.attributes.idbayar.nodeValue
+			nodes = _.map ['pasien', 'idbayar'], (i) ->
+				event.target.attributes[i].nodeValue
 			dialog =
 				title: 'Pembayaran Pendaftaran'
 				message: 'Apakah yakin pasien sudah membayar?'
 			new Confirmation dialog, (ok) -> if ok
-				if event.target.attributes.idbayar
-					Meteor.call 'billRegis', no_mr, idbayar(), true
+				if nodes[1]
+					Meteor.call 'billRegis', nodes..., true
 					makePdf.payRegCard 30000, 'Tiga Puluh Ribu Rupiah'
 				else
-					Meteor.call 'billCard', no_mr, false
+					Meteor.call 'billCard', nodes[0], false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
 		'dblclick #bayar': (event) ->
-			nodes = _.map ['no_mr', 'idbayar'], (i) ->
+			nodes = _.map ['pasien', 'idbayar'], (i) ->
 				event.target.attributes[i].nodeValue
 			dialog =
 				title: 'Konfirmasi Pembayaran'
