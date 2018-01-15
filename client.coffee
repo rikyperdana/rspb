@@ -12,11 +12,9 @@ if Meteor.isClient
 	Router.onBeforeAction ->
 		unless Meteor.userId() then this.render 'login' else this.next()
 	Router.onAfterAction ->
-		own = ->
-			flat = _.uniq _.flatMap _.keys(roles()), (i) ->
+		Router.go '/' unless currentRoute() in
+			_.uniq _.flatMap _.keys(roles()), (i) ->
 				_.find(rights, (j) -> j.group is i).list
-			_.includes flat, Router.current().route.getName()
-		Router.go '/' unless own()
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
@@ -107,7 +105,7 @@ if Meteor.isClient
 				selector = no_mr: parseInt currentPar 'no_mr'
 				options = fields: no_mr: 1, regis: 1
 				arr = ['bayar', 'jalan', 'labor', 'radio', 'obat']
-				options.fields.rawat = 1 if _.includes arr, currentRoute()
+				options.fields.rawat = 1 if currentRoute() in arr
 				sub = Meteor.subscribe 'coll', 'pasien', selector, options
 				if sub.ready() then coll.pasien.findOne()
 			else if search()
@@ -128,7 +126,7 @@ if Meteor.isClient
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready()
 					filter = _.filter coll.pasien.find().fetch(), (i) ->
-						a = -> _.includes kliniks, i.rawat[i.rawat.length-1].klinik
+						a = -> i.rawat[i.rawat.length-1].klinik in kliniks
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						selPol = Session.get 'selPol'
 						c = -> i.rawat[i.rawat.length-1].klinik is selPol
@@ -138,7 +136,7 @@ if Meteor.isClient
 				selector = rawat: $elemMatch: $or: ['total.semua': 0, 'status_bayar': $ne: true]
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready() then coll.pasien.find().fetch()
-			else if _.includes(['labor', 'radio', 'obat'], currentRoute())
+			else if currentRoute() in ['labor', 'radio', 'obat']
 				elem = 'status_bayar': true
 				elem[currentRoute()] = $exists: true, $elemMatch: hasil: $exists: false
 				selSub = rawat: $elemMatch: elem
