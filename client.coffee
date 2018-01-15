@@ -49,9 +49,7 @@ if Meteor.isClient
 	Template.registerHelper 'pagins', (name) ->
 		limit = Session.get 'limit'
 		length = coll[name].find().fetch().length
-		modulo = length % limit
-		range = length - modulo
-		end = range / limit
+		end = (length - (length % limit)) / limit
 		[1..end]
 
 	Template.body.events
@@ -137,11 +135,7 @@ if Meteor.isClient
 						if selPol then b() and c() else a() and b()
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else if currentRoute() is 'bayar'
-				selector = rawat: $elemMatch: $or: [
-					'total.semua': 0
-				,
-					'status_bayar': $ne: true
-				]
+				selector = rawat: $elemMatch: $or: ['total.semua': 0, 'status_bayar': $ne: true]
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready() then coll.pasien.find().fetch()
 			else if _.includes(['labor', 'radio', 'obat'], currentRoute())
@@ -169,7 +163,7 @@ if Meteor.isClient
 			Router.go '/' + currentRoute() + '/' + this.no_mr
 		'click #close': ->
 			_.map ['showForm', 'formDoc', 'preview', 'search'], (i) ->
-				Session.set i, false
+				Session.set i, null
 			Router.go currentRoute()
 		'click #card': ->
 			dialog =
@@ -182,8 +176,7 @@ if Meteor.isClient
 			dialog =
 				title: 'Cetak General Consent'
 				message: 'Yakin untuk cetak persetujuan pasien?'
-			new Confirmation dialog, (ok) -> if ok
-				makePdf.consent()
+			new Confirmation dialog, (ok) -> makePdf.consent() if ok
 		'dblclick #bill': (event) ->
 			nodes = _.map ['pasien', 'idbayar'], (i) ->
 				event.target.attributes[i].nodeValue
@@ -228,7 +221,7 @@ if Meteor.isClient
 		'dblclick #rekap': ->
 			headers = ['Pasien', 'ID Bayar', 'Jenis', 'ID Request', 'No Batch', 'Jumlah']
 			makePdf.rekap [headers, Session.get('rekap')...]
-			Session.set 'rekap', []
+			Session.set 'rekap', null
 		'click .modal-trigger': (event) ->
 			if this.idbayar
 				Session.set 'formDoc', this
@@ -325,10 +318,10 @@ if Meteor.isClient
 				byBatch = idbatch: search()
 				selector = $or: [byName, byBatch]
 				sub = Meteor.subscribe 'coll', 'gudang', selector, {}
-				if sub.ready() then coll.gudang.find().fetch()
+				sub.ready() and coll.gudang.find().fetch()
 			else
 				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
-				if sub.ready() then coll.gudang.find().fetch()
+				sub.ready() and coll.gudang.find().fetch()
 
 	Template.gudang.events
 		'click #showForm': ->
@@ -443,7 +436,7 @@ if Meteor.isClient
 				end = Session.get 'endDate'
 				if start and end
 					Meteor.call 'report', template.data.jenis, start, end, (err, res) ->
-						if res then Session.set 'laporan', res
+						res and Session.set 'laporan', res
 		'click #export': (event, template) ->
 			content = exportcsv.exportToCSV Session.get('laporan').csv, true, ';'
 			blob = new Blob [content], type: 'text/plain;charset=utf-8'

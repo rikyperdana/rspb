@@ -70,12 +70,12 @@ if Meteor.isServer
 							sortedIn = _.sortBy filtered, (l) -> new Date(l.masuk).getTime()
 							sortedEd = _.sortBy sortedIn, (l) -> new Date(l.kadaluarsa).getTime()
 							sortedEd[0].diapotik -= 1
-							unless give[sortedEd[0].nobatch] then give[sortedEd[0].nobatch] = 0
-							give[sortedEd[0].nobatch] += 1
+							key = findStock.nama + sortedEd[0].nobatch
+							give[key] = give[key] or 0; give[key] += 1
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
-			if jenis is 'obat' then give
+			give if jenis is 'obat'
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.idbatch': idbatch
