@@ -70,8 +70,8 @@ if Meteor.isServer
 							sortedIn = _.sortBy filtered, (l) -> new Date(l.masuk).getTime()
 							sortedEd = _.sortBy sortedIn, (l) -> new Date(l.kadaluarsa).getTime()
 							sortedEd[0].diapotik -= 1
-							key = findStock.nama + sortedEd[0].nobatch
-							give[key] = give[key] or 0; give[key] += 1
+							key = findStock.nama +';'+ sortedEd[0].nobatch
+							give[key] or= 0; give[key] += 1
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
 						coll.gudang.update selector, modifier
@@ -116,13 +116,14 @@ if Meteor.isServer
 
 		pindah: (no_mr) ->
 			find = coll.pasien.findOne 'no_mr': parseInt no_mr
-			if find.rawat[find.rawat.length-1].pindah
+			[..., last] = find.rawat
+			if last.pindah
 				selector = _id: find._id
 				modifier = $push: rawat:
-					idbayar: Math.random().toString(36).slice(2)
+					idbayar: randomId()
 					tanggal: new Date()
-					cara_bayar: find.rawat[find.rawat.length-1].cara_bayar
-					klinik: find.rawat[find.rawat.length-1].pindah
+					cara_bayar: last.cara_bayar
+					klinik: last.pindah
 					billRegis: true
 					total: semua: 0
 				coll.pasien.update selector, modifier

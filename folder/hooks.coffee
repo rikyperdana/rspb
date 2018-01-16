@@ -34,8 +34,8 @@ if Meteor.isClient
 		doc
 
 	closeForm = ->
-		Session.set 'showForm', null
-		Session.set 'formDoc', null
+		_.map ['showForm', 'formDoc'], (i) ->
+			Session.get i, null
 
 	AutoForm.addHooks 'formPasien',
 		before:
