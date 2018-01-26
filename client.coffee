@@ -90,8 +90,11 @@ if Meteor.isClient
 		formDoc: -> formDoc()
 		preview: -> Session.get 'preview'
 		omitFields: ->
+			arr = ['anamesa', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
 			unless formDoc() and formDoc().billRegis
-				['anamesa', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
+				arr
+			else unless _.split(Meteor.user().username, '.')[0] is 'dr'
+				arr[2..arr.length]
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			find = _.find selects.klinik, (j) ->
 				j.label is _.startCase roles().jalan[0]
@@ -148,9 +151,12 @@ if Meteor.isClient
 			Session.set 'showForm', not Session.get 'showForm'
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
-				if currentRoute() is 'jalan' then _.map ['cara_bayar', 'klinik', 'rujukan'], (i) ->
-					if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
-					$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
+				if currentRoute() is 'jalan'
+					_.map ['cara_bayar', 'klinik', 'rujukan'], (i) ->
+						$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
+						if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
+					_.map ['anamesa', 'diagnosa'], (i) ->
+						$('input[name="'+i+'"]').val formDoc()[i]
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
 				if currentRoute() is 'regis' then _.map list, (i) ->
 					$('div[data-schema-key="regis.'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
