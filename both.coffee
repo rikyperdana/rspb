@@ -157,33 +157,25 @@ _.map ['dokter', 'tarif'], (i) ->
 
 _.map ['pasien', 'gudang', 'dokter', 'tarif'], (i) ->
 	coll[i] = new Meteor.Collection i
-	coll[i].allow
-		insert: -> true
-		update: -> true
-		remove: -> true
+	arr = ['insert', 'update', 'remove']
+	coll[i].allow _.zipObject arr, _.map arr, (i) -> -> true
 
-makePasien = (modul) ->
-	Router.route '/'+modul+'/:no_mr?',
-		name: modul
+_.map modules[0..9], (i) ->
+	Router.route '/'+i.name+'/:no_mr?',
+		name: i.name
 		action: -> this.render 'pasien'
 		waitOn: ->
-			_.map ['dokter', 'tarif', 'gudang'], (i) ->
-				Meteor.subscribe 'coll', i, {}, {}
+			_.map ['dokter', 'tarif', 'gudang'], (j) ->
+				Meteor.subscribe 'coll', j, {}, {}
 
-makePasien i.name for i in modules[0..9]
-
-makeGudang = (modul) ->
-	Router.route '/'+modul+'/:idbarang?',
-		name: modul
+_.map modules[10..11], (i) ->
+	Router.route '/'+i.name+'/:idbarang?',
+		name: i.name
 		action: -> this.render 'gudang'
 
-makeGudang i.name for i in modules[10..11]
-
-makeOther = (name) ->
-	Router.route '/' + name,
-		action: -> this.render name
-
-makeOther i for i in ['panduan']
+_.map ['panduan'], (i) ->
+	Router.route '/' + i,
+		action: -> this.render i
 
 Router.route '/manajemen',
 	action: -> this.render 'manajemen'

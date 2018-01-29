@@ -150,12 +150,11 @@ if Meteor.isServer
 					keluar: if j.keluar then look('keluar', j.keluar).label else '-'
 					baru_lama: 'L'
 				if jenis is 'pendaftaran'
-					pick = _.pick obj, ['no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']
+					_.pick obj, ['no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']
 				else if jenis is 'pembayaran'
-					pick = _.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'tindakan', 'harga', 'petugas']
+					_.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'tindakan', 'harga', 'petugas']
 				else if jenis is 'rawat_jalan'
-					pick = _.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'kelamin', 'umur', 'cara_bayar', 'diagnosa', 'tindakan', 'petugas', 'keluar', 'rujukan']
-				pick
+					_.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'kelamin', 'umur', 'cara_bayar', 'diagnosa', 'tindakan', 'petugas', 'keluar', 'rujukan']
 			headers: _.map _.keys(docs[0]), (i) -> _.startCase i
 			rows: _.map docs, (i) -> _.values i
 			csv: docs
