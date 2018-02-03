@@ -1,16 +1,9 @@
-@_ = lodash
-
 Router.configure
 	layoutTemplate: 'layout'
 	loadingTemplate: 'loading'
 
 Router.route '/',
 	action: -> this.render 'home'
-
-@coll = {}
-@schema = {}
-
-randomId = -> Math.random().toString(36).slice(2)
 
 schema.regis =
 	no_mr: type: Number

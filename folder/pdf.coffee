@@ -1,6 +1,5 @@
 if Meteor.isClient
 
-	look = (list, val) -> _.find selects[list], (i) -> i.value is val
 	@makePdf =
 		card: ->
 			doc = coll.pasien.findOne()

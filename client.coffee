@@ -1,14 +1,5 @@
 if Meteor.isClient
 
-	AutoForm.setDefaultTemplate 'materialize'
-	currentRoute = -> Router.current().route.getName()
-	currentPar = (param) -> Router.current().params[param]
-	search = -> Session.get 'search'
-	formDoc = -> Session.get 'formDoc'
-	@limit = -> Session.get 'limit'
-	@page = -> Session.get 'page'
-	roles = -> Meteor.user().roles
-
 	Router.onBeforeAction ->
 		unless Meteor.userId() then this.render 'login' else this.next()
 	Router.onAfterAction ->
@@ -18,9 +9,7 @@ if Meteor.isClient
 
 	Template.registerHelper 'coll', -> coll
 	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
-	Template.registerHelper 'zeros', (num) ->
-		size = _.size _.toString num
-		if size < 7 then '0'.repeat(6-size) + _.toString num
+	Template.registerHelper 'zeros', (num) -> zeros num
 	Template.registerHelper 'showForm', -> Session.get 'showForm'
 	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
 	Template.registerHelper 'rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')
@@ -33,11 +22,9 @@ if Meteor.isClient
 	Template.registerHelper 'isTrue', (a, b) -> a is b
 	Template.registerHelper 'isFalse', (a, b) -> a isnt b
 	Template.registerHelper 'look', (option, value, field) ->
-		find = _.find selects[option], (i) -> i.value is value
-		find[field]
+		look(option, value)[field]
 	Template.registerHelper 'look2', (option, value, field) ->
-		find = _.find coll[option].find().fetch(), (i) -> i._id is value
-		_.startCase find[field]
+		look2(option, value)[field]
 	Template.registerHelper 'routeIs', (name) ->
 		currentRoute() is name
 	Template.registerHelper 'userGroup', (name) ->

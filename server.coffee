@@ -131,8 +131,6 @@ if Meteor.isServer
 		report: (jenis, start, end) ->
 			filter = (arr) -> _.filter arr, (i) ->
 				new Date(start) < new Date(i.tanggal) < new Date(end)
-			look = (list, val) -> _.find selects[list], (i) -> i.value is val
-			look2 = (list, id) -> _.find coll[list].find().fetch(), (i) -> i._id is id
 			docs = _.flatMap coll.pasien.find().fetch(), (i) -> _.map filter(i.rawat), (j) ->
 				obj =
 					no_mr: i.no_mr
