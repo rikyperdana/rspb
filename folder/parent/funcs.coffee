@@ -13,8 +13,6 @@ if Meteor.isClient
 	AutoForm.setDefaultTemplate 'materialize'
 	@currentRoute = -> Router.current().route.getName()
 	@currentPar = (param) -> Router.current().params[param]
-	@currentRoute = -> Router.current().route.getName()
-	@currentPar = (param) -> Router.current().params[param]
 	@search = -> Session.get 'search'
 	@formDoc = -> Session.get 'formDoc'
 	@limit = -> Session.get 'limit'

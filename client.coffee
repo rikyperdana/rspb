@@ -7,35 +7,34 @@ if Meteor.isClient
 			_.uniq _.flatMap _.keys(roles()), (i) ->
 				_.find(rights, (j) -> j.group is i).list
 
-	Template.registerHelper 'coll', -> coll
-	Template.registerHelper 'schema', -> new SimpleSchema schema[currentRoute()]
-	Template.registerHelper 'zeros', (num) -> zeros num
-	Template.registerHelper 'showForm', -> Session.get 'showForm'
-	Template.registerHelper 'hari', (date) -> moment(date).format('D MMM YYYY')
-	Template.registerHelper 'rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')
-	Template.registerHelper 'currentPar', (param) -> currentPar param
-	Template.registerHelper 'stringify', (obj) -> JSON.stringify obj
-	Template.registerHelper 'startCase', (val) -> _.startCase val
-	Template.registerHelper 'modules', -> modules
-	Template.registerHelper 'reverse', (arr) -> _.reverse arr
-	Template.registerHelper 'sortBy', (arr, sel, sort) -> _.sortBy arr, (i) -> -i.tanggal.getTime()
-	Template.registerHelper 'isTrue', (a, b) -> a is b
-	Template.registerHelper 'isFalse', (a, b) -> a isnt b
-	Template.registerHelper 'look', (option, value, field) ->
-		look(option, value)[field]
-	Template.registerHelper 'look2', (option, value, field) ->
-		look2(option, value)[field]
-	Template.registerHelper 'routeIs', (name) ->
-		currentRoute() is name
-	Template.registerHelper 'userGroup', (name) ->
-		roles()[name]
-	Template.registerHelper 'userRole', (name) ->
-		roles()[currentRoute()][0] is name
-	Template.registerHelper 'pagins', (name) ->
-		limit = Session.get 'limit'
-		length = coll[name].find().fetch().length
-		end = (length - (length % limit)) / limit
-		[1..end]
+	globalHelpers = [
+		['coll', -> coll]
+		['schema', -> new SimpleSchema schema[currentRoute()]]
+		['zeros', (num) -> zeros num]
+		['showForm', -> Session.get 'showForm']
+		['hari', (date) -> moment(date).format('D MMM YYYY')]
+		['rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')]
+		['currentPar', (param) -> currentPar param]
+		['stringify', (obj) -> JSON.stringify obj]
+		['startCase', (val) -> _.startCase val]
+		['modules', -> modules]
+		['reverse', (arr) -> _.reverse arr]
+		['sortBy', (arr, sel, sort) -> _.sortBy arr, (i) -> -i.tanggal.getTime()]
+		['isTrue', (a, b) -> a is b]
+		['isFalse', (a, b) -> a isnt b]
+		['look', (option, value, field) -> look(option, value)[field]]
+		['look2', (option, value, field) -> look2(option, value)[field]]
+		['routeIs', (name) -> currentRoute() is name]
+		['userGroup', (name) -> roles()[name]]
+		['userRole', (name) -> roles()[currentRoute()][0] is name]
+		['pagins', (name) ->
+			limit = Session.get 'limit'
+			length = coll[name].find().fetch().length
+			end = (length - (length % limit)) / limit
+			[1..end]
+		]
+	]
+	_.map globalHelpers, (i) -> Template.registerHelper i...
 
 	Template.body.events
 		'keypress #search': (event) ->
@@ -55,8 +54,9 @@ if Meteor.isClient
 				_.map find.list, (j) -> _.find modules, (k) -> k.name is j
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute()
-			if find then find.full else _.startCase currentRoute()
+			find?.full or _.startCase currentRoute()
 		today: -> moment().format('LLL')
+
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
 		'click #refresh': -> document.location.reload()
