@@ -36,9 +36,18 @@ schema.regis =
 		autoValue: -> new Date
 	'regis.billCard': type: Boolean, optional: true, autoform: type: 'hidden'
 
+schema.fisik =
+	tekanan_darah: type: String, optional: true
+	nadi: type: Number, optional: true
+	suhu: type: Number, decimal: true, optional: true
+	pernapasan: type: Number, optional: true
+	berat: type: Number, optional: true
+	tinggi: type: Number, optional: true
+	lila: type: Number, optional: true
+
 schema.tindakan =
 	idtindakan: type: String, optional: true, autoform: type: 'hidden'
-	nama: type: String, autoform: options: selects.tindakan
+	nama: type: String, autoform: options: selects.tindakan, type: 'universe-select'
 	dokter: type: String, autoform: options: selects.dokter
 	harga: type: Number, optional: true, autoform: type: 'hidden'
 
@@ -76,12 +85,15 @@ schema.rawat =
 	'rawat.$.jenis': type: String, optional: true, autoform: type: 'hidden'
 	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: 'select-radio-inline'
 	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: 'select-radio-inline'
+	'rawat.$.karcis': type: Number, optional: true, autoform: options: selects.billRegis, type: 'select-radio-inline'
 	'rawat.$.billRegis': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.nobill': type: Number, autoform: type: 'hidden'
 	'rawat.$.status_bayar': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.rujukan': type: Number, optional: true, autoform: options: selects.rujukan, type: 'select-radio-inline'
-	'rawat.$.anamesa': type: String, optional: true
+	'rawat.$.anamesa_perawat': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
+	'rawat.$.anamesa_dokter': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
 	'rawat.$.diagnosa': type: String, optional: true
+	'rawat.$.fisik': optional: true, type: new SimpleSchema schema.fisik
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
 	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
 	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true

@@ -6,12 +6,12 @@ if Meteor.isClient
 			pdf = pdfMake.createPdf
 				content: [
 					'Nama: ' + doc.regis.nama_lengkap
-					'No. MR: ' + doc.no_mr
+					'No. MR: ' + zeros doc.no_mr
 				]
 				pageSize: 'B8'
 				pageMargins: [110, 50, 0, 0]
 				pageOrientation: 'landscape'
-			pdf.download doc.no_mr + '_card.pdf'
+			pdf.download zeros(doc.no_mr) + '_card.pdf'
 		consent: ->
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
@@ -41,21 +41,19 @@ if Meteor.isClient
 					'TS: Tidak Setuju'
 					{text: 'Pekanbaru,                        .\n\n\n__________________', alignment: 'right'}
 				]
-			pdf.download doc.no_mr + '_consent.pdf'
+			pdf.download zeros(doc.no_mr) + '_consent.pdf'
 		payRawat: (doc) ->
 			pasien = coll.pasien.findOne()
-			rows = [['Uraian', 'Harga']]
-			for i in ['tindakan', 'labor', 'radio']
-				if doc[i] then for j in doc[i]
-					find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
-					rows.push [_.startCase(find.nama), _.toString(j.harga)]
-			table = table: widths: [400, 100], body: rows
+			rows = _.map ['tindakan', 'labor', 'radio'], (i) -> doc[i] and _.map doc[i], (j) ->
+				find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
+				[_.startCase(find.nama), _.toString(j.harga)]
+			table = table: widths: [400, 100], body: [['Uraian', 'Harga'], rows...]
 			pdf = pdfMake.createPdf
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
 					'\nRINCIAN BIAYA RAWAT JALAN'
 					'IDENTITAS PASIEN'
-					'NO. MR' + pasien.no_mr
+					'NO. MR' + zeros pasien.no_mr
 					'NAMA PASIEN' + pasien.regis.nama_lengkap
 					'JENIS KELAMIN' + look('kelamin', pasien.regis.kelamin).label
 					'TANGGAL LAHIR' + moment(pasien.regis.tgl_lahir).format('D MM YYYY')
@@ -67,7 +65,7 @@ if Meteor.isClient
 					'\nPEKANBARU, ' + moment().format('DD MM YYYY')
 					'PETUGAS'
 				]
-			pdf.download pasien.no_mr + '_payRawat.pdf'
+			pdf.download zeros(pasien.no_mr) + '_payRawat.pdf'
 		payRegCard: (amount, words) ->
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
@@ -76,13 +74,13 @@ if Meteor.isClient
 				,
 					'\nKARCIS'
 					'TANGGAL : ' + moment().format('DD MM YYYY')
-					'NO. MR : ' + _.toString doc.no_mr
+					'NO. MR : ' + _.toString zeros doc.no_mr
 					'NAMA PASIEN : ' + doc.regis.nama_lengkap
 					'\nTARIF : Rp ' + _.toString amount
 				,
 					text: '(' + words + ')', italics: true
 				]
-			pdf.download doc.no_mr + '_payRegCard.pdf'
+			pdf.download zeros(doc.no_mr) + '_payRegCard.pdf'
 		rekap: (rows) ->
 			strings = _.map rows, (i) -> _.map i, (j) -> _.toString j
 			pdf = pdfMake.createPdf content: [table: body: strings]

@@ -161,7 +161,7 @@ if Meteor.isClient
 				title: 'Cetak Kartu'
 				message: 'Yakin untuk cetak kartu ini?'
 			new Confirmation dialog, (ok) -> if ok
-				Meteor.call 'billCard', currentPar('no_mr'), true
+				# Meteor.call 'billCard', currentPar('no_mr'), true
 				makePdf.card()
 		'click #consent': ->
 			dialog =

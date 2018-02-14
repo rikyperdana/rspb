@@ -1,6 +1,6 @@
 @selects =
 	rawat: ['Rawat Jalan', 'Rawat Inap', 'IGD']
-	pekerjaan: ['Pegawa Negeri', 'Karyawan Swasta', 'Wirausaha', 'Petani', 'Tidak Bekerja']
+	pekerjaan: ['PNS', 'BUMN/BUMD', 'TNI/Polri', 'Dokter', 'Karyawan Swasta', 'Wirausaha', 'Honorer', 'Pensiun', 'Petani', 'Buruh', 'Tidak Bekerja', 'Dan Lain-lain']
 	kelamin: ['Laki-laki', 'Perempuan']
 	agama: ['Islam', 'Katolik', 'Protestan', 'Buddha', 'Hindu', 'Kong Hu Chu']
 	pendidikan: ['SD', 'SMP', 'SMA', 'Diploma', 'S1', 'S2', 'S3', 'Tidak Sekolah']
@@ -17,6 +17,8 @@
 	anggaran: ['BLUD']
 
 _.map (_.keys selects), (i) -> selects[i] = _.map selects[i], (j, x) -> label: j, value: x+1
+
+selects.karcis = _.map [15000, 20000, 25000, 30000, 40000], (i) -> value: i, label: 'Rp ' + i
 
 selects.tindakan = -> if Meteor.isClient
 	sub = Meteor.subscribe 'coll', 'tarif', {}, {}
