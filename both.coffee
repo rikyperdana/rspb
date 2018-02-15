@@ -91,9 +91,9 @@ schema.rawat =
 	'rawat.$.status_bayar': type: Boolean, optional: true, autoform: type: 'hidden'
 	'rawat.$.rujukan': type: Number, optional: true, autoform: options: selects.rujukan, type: 'select-radio-inline'
 	'rawat.$.anamesa_perawat': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
+	'rawat.$.fisik': optional: true, type: [new SimpleSchema schema.fisik]
 	'rawat.$.anamesa_dokter': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
 	'rawat.$.diagnosa': type: String, optional: true
-	'rawat.$.fisik': optional: true, type: new SimpleSchema schema.fisik
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
 	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
 	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true

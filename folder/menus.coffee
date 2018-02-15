@@ -34,3 +34,7 @@ if Meteor.isClient
 		group: 'farmasi'
 		list: ['farmasi']
 	]
+
+	_.map rights, (i) ->
+		i.list = [i.list..., 'panduan']
+		i

@@ -11,7 +11,6 @@ template(name='menu')
 			if currentUser
 				li: a= startCase(currentUser.username)
 				li: a(href='/panduan') Panduan
-				li: a#refresh Refresh
 				li: a#logout Logout
 			else			
 				li: a(href='/login') Login
@@ -35,7 +34,8 @@ template(name='pasien'): .container
 	.row
 		.col.m6
 			unless currentPar 'no_mr'
-				.input-field: input#search(value= search placeholder= 'Cari Nama Pasien / No.MR')
+				unless showForm
+					.input-field: input#search(value= search placeholder= 'Cari Nama Pasien / No.MR')
 		.col.m6
 			with selPol
 				form#selPol
@@ -315,9 +315,9 @@ template(name='pasien'): .container
 						td {{look 'klinik' klinik 'label'}}
 					br
 					br
-				if anamesa
+				if anamesa_perawat
 					h5 Anamesa Pasien
-					p= anamesa
+					p= anamesa_perawat
 				if diagnosa
 					h5 Diagnosa Pasien
 					p= diagnosa

@@ -3,6 +3,8 @@ if Meteor.isClient
 	Router.onBeforeAction ->
 		unless Meteor.userId() then this.render 'login' else this.next()
 	Router.onAfterAction ->
+		_.map (_.tail _.keys Session.keys), (i) ->
+			Session.set i, null
 		Router.go '/' unless currentRoute() in
 			_.uniq _.flatMap _.keys(roles()), (i) ->
 				_.find(rights, (j) -> j.group is i).list
@@ -59,7 +61,6 @@ if Meteor.isClient
 
 	Template.menu.events
 		'click #logout': -> Meteor.logout()
-		'click #refresh': -> document.location.reload()
 
 	Template.pasien.helpers
 		route: -> currentRoute()
@@ -77,7 +78,7 @@ if Meteor.isClient
 		formDoc: -> formDoc()
 		preview: -> Session.get 'preview'
 		omitFields: ->
-			arr = ['anamesa', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
+			arr = ['fisik', 'anamesa_perawat', 'anamesa_dokter', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
 			unless formDoc() and formDoc().billRegis
 				arr
 			else unless _.split(Meteor.user().username, '.')[0] is 'dr'
@@ -142,12 +143,12 @@ if Meteor.isClient
 					_.map ['cara_bayar', 'klinik', 'rujukan'], (i) ->
 						$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
 						if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
-					_.map ['anamesa', 'diagnosa'], (i) ->
-						$('input[name="'+i+'"]').val formDoc()[i]
+					_.map ['anamesa_perawat'], (i) ->
+						$('textarea[name="'+i+'"]').val formDoc()[i]
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
 				if currentRoute() is 'regis' then _.map list, (i) ->
 					$('div[data-schema-key="regis.'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
-			setTimeout later, 1000
+			setTimeout later, 3000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 			Session.set 'begin', moment()
 		'dblclick #row': ->
