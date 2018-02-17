@@ -17,29 +17,34 @@ if Meteor.isClient
 			pdf = pdfMake.createPdf
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. Dr. Soetomo No. 65, Telp. (0761) 23024', alignment: 'center'}
-					'\nDATA UMUM PASIEN'
-					'\nNAMA LENGKAP : ' + doc.regis.nama_lengkap
-					'TEMPAT & TANGGAL LAHIR : ' + doc.regis.tmpt_lahir + ', tanggal ' + moment(doc.regis.tgl_lahir).format('D/MMMM/YYYY')
-					'GOLONGAN DARAH : ' + look('darah', doc.regis.darah).label
-					'JENIS KELAMIN : ' + look('kelamin', doc.regis.kelamin).label
-					'AGAMA : ' + look('agama', doc.regis.agama).label
-					'PENDIDIKAN : ' + look('pendidikan', doc.regis.pendidikan).label
-					'PEKERJAAN : ' + look('pekerjaan', doc.regis.pekerjaan).label
-					'NAMA AYAH : ' + doc.regis.ayah
-					'NAMA IBU : ' + doc.regis.ibu
-					'NAMA SUAMI/ISTRI : ' + doc.regis.pasangan
-					'ALAMAT : ' + doc.regis.alamat
-					'NO. TELP / HP : ' + doc.regis.kontak
-					'\nPERSETUJUAN UMUM (GENERAL CONSENT)'
-					'\nSaya akan mentaati peraturan yang berlaku di RSUD Petala Bumi'
-					'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan untuk melakukan pemeriksaan / pengobatan / tindakan yang diperlakukan upaya kesembuhan saya / pasien tersebut diatas'
-					'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan yang ikut merawat saya untuk memberikan keterangan medis saya kepada yang bertanggung jawab atas biaya perawatan saya.'
-					'Saya memberi kuasa kepada RSUD Petala Bumi untuk menginformasikan identitas sosial saya kepada keluarga / rekan / masyarakat'
-					'Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk pendidikan / penelitian demi kemajuan ilmu kesehatan'
+					{text: '\nDATA UMUM PASIEN', alignment: 'center'}
+					{columns: [
+						['NAMA LENGKAP', 'TEMPAT & TANGGAL LAHIR', 'GOLONGAN DARAH', 'JENIS KELAMIN', 'AGAMA', 'PENDIDIKAN', 'PEKERJAAN', 'NAMA AYAH', 'NAMA IBU', 'NAMA SUAMI / ISTRI', 'ALAMAT', 'NO. TELP / HP']
+						[
+							': ' + doc.regis.nama_lengkap
+							': ' + doc.regis.tmpt_lahir + ', ' + moment(doc.regis.tgl_lahir).format('D/MM/YYYY')
+							(_.map ['darah', 'kelamin', 'agama', 'pendidikan', 'pekerjaan'], (i) ->
+								': ' + look(i, doc.regis[i]).label)...
+							(_.map ['ayah', 'ibu', 'pasangan', 'alamat', 'kontak'], (i) ->
+								': ' + doc.regis[i])...
+						]
+					]}
+					{text: '\nPERSETUJUAN UMUM (GENERAL CONSENT)', alignment: 'center'}
+					{table: body: [
+						['Cek', {text: 'Keterangan', alignment: 'center'}]
+						[' ', 'Saya akan mentaati peraturan yang berlaku di RSUD Petala Bumi']
+						[' ', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan untuk melakukan pemeriksaan / pengobatan / tindakan yang diperlakukan upaya kesembuhan saya / pasien tersebut diatas']
+						[' ', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan yang ikut merawat saya untuk memberikan keterangan medis saya kepada yang bertanggung jawab atas biaya perawatan saya.']
+						[' ', 'Saya memberi kuasa kepada RSUD Petala Bumi untuk menginformasikan identitas sosial saya kepada keluarga / rekan / masyarakat']
+						[' ', 'Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk pendidikan / penelitian demi kemajuan ilmu kesehatan']
+					]}
 					'\nPetunjuk :'
 					'S: Setuju'
 					'TS: Tidak Setuju'
-					{text: 'Pekanbaru,                        .\n\n\n__________________', alignment: 'right'}
+					{alignment: 'justify', columns: [
+						{text: '\n\n\n\n__________________\n'+(_.startCase Meteor.user().username), alignment: 'center'}
+						{text: 'Pekanbaru, '+moment().format('DD/MM/YYYY')+'\n\n\n\n__________________', alignment: 'center'}
+					]}
 				]
 			pdf.download zeros(doc.no_mr) + '_consent.pdf'
 		payRawat: (doc) ->

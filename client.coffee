@@ -141,14 +141,15 @@ if Meteor.isClient
 				if currentRoute() is 'jalan'
 					_.map ['cara_bayar', 'klinik', 'karcis', 'rujukan'], (i) ->
 						$('div[data-schema-key="'+i+'"]').prepend tag 'p', _.startCase i
-						if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').attr
-							checked: true, disabled: 'disabled'
+						if formDoc()
+							$('input[name="'+i+'"][value="'+formDoc()[i]+'"]').attr checked: true
+							$('input[name="'+i+'"]').attr disabled: 'disabled'
 					_.map ['anamesa_perawat'], (i) ->
 						$('textarea[name="'+i+'"]').val formDoc()[i]
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
 				if currentRoute() is 'regis' then _.map list, (i) ->
 					$('div[data-schema-key="regis.'+i+'"]').prepend tag 'p', _.startCase i
-			setTimeout later, 3000
+			Meteor.setTimeout later, 1000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 			Session.set 'begin', moment()
 		'dblclick #row': ->
