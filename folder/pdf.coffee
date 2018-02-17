@@ -5,7 +5,7 @@ if Meteor.isClient
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
 				content: [
-					'Nama: ' + doc.regis.nama_lengkap
+					'Nama  : ' + doc.regis.nama_lengkap
 					'No. MR: ' + zeros doc.no_mr
 				]
 				pageSize: 'B8'
@@ -43,51 +43,59 @@ if Meteor.isClient
 					'TS: Tidak Setuju'
 					{alignment: 'justify', columns: [
 						{text: '\n\n\n\n__________________\n'+(_.startCase Meteor.user().username), alignment: 'center'}
-						{text: 'Pekanbaru, '+moment().format('DD/MM/YYYY')+'\n\n\n\n__________________', alignment: 'center'}
+						{text: 'Pekanbaru, '+moment().format('DD/MM/YYYY')+'\n\n\n\n__________________\n'+(_.startCase doc.regis.nama_lengkap), alignment: 'center'}
 					]}
 				]
 			pdf.download zeros(doc.no_mr) + '_consent.pdf'
 		payRawat: (doc) ->
 			pasien = coll.pasien.findOne()
-			rows = _.map ['tindakan', 'labor', 'radio'], (i) -> doc[i] and _.map doc[i], (j) ->
-				find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
-				[_.startCase(find.nama), _.toString(j.harga)]
-			table = table: widths: [400, 100], body: [['Uraian', 'Harga'], rows...]
+			rows = [['Uraian', 'Harga']]
+			for i in ['tindakan', 'labor', 'radio']
+				if doc[i] then for j in doc[i]
+					find = _.find coll.tarif.find().fetch(), (k) -> k._id is j.nama
+					rows.push [_.startCase(find.nama), _.toString(j.harga)]
+			table = table: widths: ['*', 'auto'], body: rows
 			pdf = pdfMake.createPdf
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
-					'\nRINCIAN BIAYA RAWAT JALAN'
-					'IDENTITAS PASIEN'
-					'NO. MR' + zeros pasien.no_mr
-					'NAMA PASIEN' + pasien.regis.nama_lengkap
-					'JENIS KELAMIN' + look('kelamin', pasien.regis.kelamin).label
-					'TANGGAL LAHIR' + moment(pasien.regis.tgl_lahir).format('D MM YYYY')
-					'UMUR' + _.toString moment().diff(pasien.regis.tgl_lahir, 'years')
-					'KLINIK'
-					'\n\nRINCIAN PEMBAYARAN'
+					{text: '\nRINCIAN BIAYA RAWAT JALAN\n', alignment: 'center'}
+					{columns: [
+						['NO. MR', 'NAMA PASIEN', 'JENIS KELAMIN', 'TANGGAL LAHIR', 'UMUR', 'KLINIK']
+						[
+							': ' + zeros pasien.no_mr
+							': ' + _.startCase pasien.regis.nama_lengkap
+							': ' + look('kelamin', pasien.regis.kelamin).label
+							': ' + moment().format('D/MM/YYYY')
+							': ' + moment().diff(pasien.regis.tgl_lahir, 'years') + ' tahun'
+							': ' + look('klinik', doc.klinik).label
+						]
+					]}
+					{text: '\n\nRINCIAN PEMBAYARAN', alignment: 'center'}
 					table
-					'TOTAL BIAYA' + 'Rp ' + _.toString numeral(doc.total.semua).format('0,0')
-					'\nPEKANBARU, ' + moment().format('DD MM YYYY')
-					'PETUGAS'
+					'\nTOTAL BIAYA' + 'Rp ' + _.toString numeral(doc.total.semua).format('0,0')
+					{text: '\nPEKANBARU, ' + moment().format('D/MM/YYYY') +
+					'\n\n\n\n\n' + (_.startCase Meteor.user().username), alignment: 'right'}
 				]
 			pdf.download zeros(pasien.no_mr) + '_payRawat.pdf'
 		payRegCard: (amount, words) ->
 			doc = coll.pasien.findOne()
 			pdf = pdfMake.createPdf
 				content: [
-					text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'
-				,
-					'\nKARCIS'
-					'TANGGAL : ' + moment().format('DD MM YYYY')
-					'NO. MR : ' + _.toString zeros doc.no_mr
-					'NAMA PASIEN : ' + doc.regis.nama_lengkap
-					'\nTARIF : Rp ' + _.toString amount
-				,
-					text: '(' + words + ')', italics: true
+					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
+					{text: '\n\nKARCIS', alignment: 'center'}
+					{columns: [
+						['TANGGAL', 'NO. MR', 'NAMA PASIEN', 'TARIF', '\n\nPETUGAS']
+						[
+							': ' + moment().format('DD/MM/YYYY')
+							': ' + _.toString zeros doc.no_mr
+							': ' + _.startCase doc.regis.nama_lengkap
+							': ' + 'Rp ' + _.toString amount
+							'\n\n: ' + _.startCase Meteor.user().username
+						]
+					]}
 				]
 			pdf.download zeros(doc.no_mr) + '_payRegCard.pdf'
 		rekap: (rows) ->
 			strings = _.map rows, (i) -> _.map i, (j) -> _.toString j
 			pdf = pdfMake.createPdf content: [table: body: strings]
 			pdf.download 'rekap.pdf'
-			

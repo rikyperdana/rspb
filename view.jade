@@ -119,13 +119,14 @@ template(name='pasien'): .container
 									td= zeros(pasien.no_mr)
 									td= pasien.regis.nama_lengkap
 									td= hari(item.tanggal)
-									td= item.karcis
+									td= rupiah(item.karcis)
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
 									td Konsultasi
 									td
 										a#bill(
 											pasien= pasien.no_mr
 											idbayar= item.idbayar
+											karcis= item.karcis
 										) Bayar
 							if isTrue item.cara_bayar 1
 								unless item.status_bayar

@@ -18,8 +18,7 @@ if Meteor.isClient
 			i.subtotal = i.harga * i.jumlah
 			doc.total.obat += i.subtotal
 		doc.total.semua = _.reduce _.values(doc.total), (acc, val) -> acc + val
-		doc.billRegis = true if doc.anamesa_perawat
-		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
+		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1 or doc.anamesa_perawat
 		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
 		if doc.obat and 0 is doc.total.semua
 			doc.billRegis = true
@@ -30,10 +29,6 @@ if Meteor.isClient
 		doc.nobill = parseInt _.toString(Date.now()).substr 7, 13
 		doc
 
-	closeForm = ->
-		_.map ['showForm', 'formDoc'], (i) ->
-			Session.set i, null
-
 	AutoForm.addHooks 'formPasien',
 		before:
 			'update-pushArray': (doc) ->
@@ -41,9 +36,9 @@ if Meteor.isClient
 				if formDoc then Meteor.call 'rmRawat', currentPar('no_mr'), formDoc.idbayar
 				this.result modForm doc
 		after:
-			insert: -> closeForm()
+			insert: -> sessNull()
 			'update-pushArray': (err, res) ->
-				closeForm()
+				sessNull()
 				if res then Meteor.call 'pindah', currentPar 'no_mr'
 		formToDoc: (doc) ->
 			Session.set 'preview', modForm doc

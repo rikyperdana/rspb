@@ -123,7 +123,7 @@ if Meteor.isClient
 						if selPol then b() and c() else a() and b()
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else if currentRoute() is 'bayar'
-				selector = rawat: $elemMatch: $or: ['total.semua': 0, 'status_bayar': $ne: true]
+				selector = rawat: $elemMatch: $or: ['status_bayar': $ne: true]
 				sub = Meteor.subscribe 'coll', 'pasien', selector, {}
 				if sub.ready() then coll.pasien.find().fetch()
 			else if currentRoute() in ['labor', 'radio', 'obat']
@@ -168,15 +168,15 @@ if Meteor.isClient
 				message: 'Yakin untuk cetak persetujuan pasien?'
 			new Confirmation dialog, (ok) -> makePdf.consent() if ok
 		'dblclick #bill': (event) ->
-			nodes = _.map ['pasien', 'idbayar'], (i) ->
+			nodes = _.map ['pasien', 'idbayar', 'karcis'], (i) ->
 				event.target.attributes[i].nodeValue
 			dialog =
 				title: 'Pembayaran Pendaftaran'
 				message: 'Apakah yakin pasien sudah membayar?'
 			new Confirmation dialog, (ok) -> if ok
 				if nodes[1]
-					Meteor.call 'billRegis', nodes..., true
-					makePdf.payRegCard 30000, 'Tiga Puluh Ribu Rupiah'
+					Meteor.call 'billRegis', nodes[0..1]..., true
+					makePdf.payRegCard nodes[2], '...'
 				else
 					Meteor.call 'billCard', nodes[0], false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
@@ -366,11 +366,11 @@ if Meteor.isClient
 				else
 					Materialize.toast 'Password tidak mirip', 3000
 			else
-				[role, group, poli] = _.map ['role', 'group', 'poli'], (i) ->
-					$('input[name="'+i+'"]:checked', event.target)[0].id
+				role = $('input[name="role"]:checked', event.target)[0].id
+				group = $('input[name="group"]:checked', event.target)[0].id
+				poli = $('input[name="poli"]:checked', event.target)[0]
 				theRole = unless poli then role else _.snakeCase poli.id
 				Meteor.call 'addRole', onUser._id, [theRole], group
-				
 		'dblclick #row': -> Session.set 'onUser', this
 		'dblclick #reset': ->
 			self = this
@@ -379,7 +379,7 @@ if Meteor.isClient
 				message: 'Anda yakin untuk menghapus semua perannya?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmRole', self._id
-		'click #close': -> console.log 'tutup'
+		'click #close': -> sessNull()
 		'click #export': ->
 			select = $('select#export').val()
 			Meteor.call 'export', select, (err, content) -> if content
