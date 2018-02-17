@@ -3,8 +3,7 @@ if Meteor.isClient
 	Router.onBeforeAction ->
 		unless Meteor.userId() then this.render 'login' else this.next()
 	Router.onAfterAction ->
-		_.map (_.tail _.keys Session.keys), (i) ->
-			Session.set i, null
+		sessNull()
 		Router.go '/' unless currentRoute() in
 			_.uniq _.flatMap _.keys(roles()), (i) ->
 				_.find(rights, (j) -> j.group is i).list
@@ -140,23 +139,21 @@ if Meteor.isClient
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
 				if currentRoute() is 'jalan'
-					_.map ['cara_bayar', 'klinik', 'rujukan'], (i) ->
-						$('div[data-schema-key="'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
-						if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').prop 'checked', true
+					_.map ['cara_bayar', 'klinik', 'karcis', 'rujukan'], (i) ->
+						$('div[data-schema-key="'+i+'"]').prepend tag 'p', _.startCase i
+						if formDoc() then $('input[name="'+i+'"][value="'+formDoc()[i]+'"]').attr
+							checked: true, disabled: 'disabled'
 					_.map ['anamesa_perawat'], (i) ->
 						$('textarea[name="'+i+'"]').val formDoc()[i]
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
 				if currentRoute() is 'regis' then _.map list, (i) ->
-					$('div[data-schema-key="regis.'+i+'"]').prepend('<p>'+_.startCase(i)+'</p>')
+					$('div[data-schema-key="regis.'+i+'"]').prepend tag 'p', _.startCase i
 			setTimeout later, 3000
 			Meteor.subscribe 'coll', 'gudang', {}, {}
 			Session.set 'begin', moment()
 		'dblclick #row': ->
 			Router.go '/' + currentRoute() + '/' + this.no_mr
-		'click #close': ->
-			_.map ['showForm', 'formDoc', 'preview', 'search'], (i) ->
-				Session.set i, null
-			Router.go currentRoute()
+		'click #close': -> sessNull(); Router.go currentRoute()
 		'click #card': ->
 			dialog =
 				title: 'Cetak Kartu'
@@ -368,11 +365,11 @@ if Meteor.isClient
 				else
 					Materialize.toast 'Password tidak mirip', 3000
 			else
-				role = $('input[name="role"]:checked', event.target)[0].id
-				group = $('input[name="group"]:checked', event.target)[0].id
-				poli = $('input[name="poli"]:checked', event.target)[0]
+				[role, group, poli] = _.map ['role', 'group', 'poli'], (i) ->
+					$('input[name="'+i+'"]:checked', event.target)[0].id
 				theRole = unless poli then role else _.snakeCase poli.id
 				Meteor.call 'addRole', onUser._id, [theRole], group
+				
 		'dblclick #row': -> Session.set 'onUser', this
 		'dblclick #reset': ->
 			self = this

@@ -18,3 +18,6 @@ if Meteor.isClient
 	@limit = -> Session.get 'limit'
 	@page = -> Session.get 'page'
 	@roles = -> Meteor.user().roles
+	@tag = (tag, val) -> '<'+tag+'>'+val+'</'+tag+'>'
+	@sessNull = -> _.map (_.tail _.keys Session.keys), (i) ->
+		Session.set i, null

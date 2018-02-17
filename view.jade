@@ -119,7 +119,7 @@ template(name='pasien'): .container
 									td= zeros(pasien.no_mr)
 									td= pasien.regis.nama_lengkap
 									td= hari(item.tanggal)
-									td Rp 30,000
+									td= item.karcis
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
 									td Konsultasi
 									td
@@ -316,8 +316,11 @@ template(name='pasien'): .container
 					br
 					br
 				if anamesa_perawat
-					h5 Anamesa Pasien
+					h5 Anamesa Perawat
 					p= anamesa_perawat
+				if anamesa_dokter
+					h5 Anamesa Dokter
+					p= anamesa_dokter
 				if diagnosa
 					h5 Diagnosa Pasien
 					p= diagnosa
