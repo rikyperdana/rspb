@@ -13,7 +13,7 @@ if Meteor.isClient
 		['schema', -> new SimpleSchema schema[currentRoute()]]
 		['zeros', (num) -> zeros num]
 		['showForm', -> Session.get 'showForm']
-		['hari', (date) -> moment(date).format('D MMM YYYY')]
+		['hari', (date) -> if date then moment(date).format('D MMM YYYY')]
 		['rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')]
 		['currentPar', (param) -> currentPar param]
 		['stringify', (obj) -> JSON.stringify obj]
@@ -245,13 +245,13 @@ if Meteor.isClient
 						modifier = regis:
 							nama_lengkap: _.startCase data.nama_lengkap
 							alamat: _.startCase data.alamat
-							agama: parseInt data.agama
-							ayah: _.startCase data.ayah
-							nikah: parseInt data.nikah
-							pekerjaan: parseInt data.pekerjaan
-							pendidikan: parseInt data.pendidikan
-							tgl_lahir: new Date data.tgl_lahir
-							tmpt_kelahiran: _.startCase data.tmpt_kelahiran
+							agama: parseInt data.agama if data.agama
+							ayah: _.startCase data.ayah if data.ayah
+							nikah: parseInt data.nikah if data.nikah
+							pekerjaan: parseInt data.pekerjaan if data.pekerjaan
+							pendidikan: parseInt data.pendidikan if data.pendidikan
+							tgl_lahir: new Date date.tgl_lahir if Date.parse data.tgl_lahir
+							tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran
 						Meteor.call 'import', 'pasien', selector, modifier
 					else if currentRoute() is 'manajemen'
 						if data.tipe

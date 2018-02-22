@@ -22,11 +22,11 @@ if Meteor.isClient
 						['NAMA LENGKAP', 'TEMPAT & TANGGAL LAHIR', 'GOLONGAN DARAH', 'JENIS KELAMIN', 'AGAMA', 'PENDIDIKAN', 'PEKERJAAN', 'NAMA AYAH', 'NAMA IBU', 'NAMA SUAMI / ISTRI', 'ALAMAT', 'NO. TELP / HP']
 						[
 							': ' + doc.regis.nama_lengkap
-							': ' + doc.regis.tmpt_lahir + ', ' + moment(doc.regis.tgl_lahir).format('D/MM/YYYY')
+							': ' + (doc.regis.tmpt_lahir or '-') + ', ' + moment(doc.regis.tgl_lahir).format('D/MM/YYYY')
 							(_.map ['darah', 'kelamin', 'agama', 'pendidikan', 'pekerjaan'], (i) ->
-								': ' + look(i, doc.regis[i]).label)...
+								': ' + (look(i, doc.regis[i])?.label or '-'))...
 							(_.map ['ayah', 'ibu', 'pasangan', 'alamat', 'kontak'], (i) ->
-								': ' + doc.regis[i])...
+								': ' + (doc.regis[i] or '-'))...
 						]
 					]}
 					{text: '\nPERSETUJUAN UMUM (GENERAL CONSENT)', alignment: 'center'}
@@ -64,10 +64,10 @@ if Meteor.isClient
 						[
 							': ' + zeros pasien.no_mr
 							': ' + _.startCase pasien.regis.nama_lengkap
-							': ' + look('kelamin', pasien.regis.kelamin).label
+							': ' + (look('kelamin', pasien.regis.kelamin)?.label or '-')
 							': ' + moment().format('D/MM/YYYY')
 							': ' + moment().diff(pasien.regis.tgl_lahir, 'years') + ' tahun'
-							': ' + look('klinik', doc.klinik).label
+							': ' + (look('klinik', doc.klinik)?.label or '-')
 						]
 					]}
 					{text: '\n\nRINCIAN PEMBAYARAN', alignment: 'center'}
