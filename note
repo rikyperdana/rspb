@@ -1,3 +1,22 @@
+23 Feb 2018
+oke 1. Pada General Consent tambahkan no_mr dan kolom s/ts
+oke 2. Pada registrasi pasien tambahkan field alias (Tn, Ny, Nn, An, By)
+tidak 3. Tambahkan nama orang tua bila nama hanya 1 kata
+oke 4. Pada expor csv pendaftaran tambahkan kolom diagnosa setelah kolom klinik
+oke 5. Kolom baru/lama, lama jika array.length is 0, baru jika array.length > 0
+oke 6. Pada expor csv pendaftaran tambahkan tanggal kunjungan
+oke 7. Hilangkan tombol impor data pada admin selain pendaftaran
+8. Pada expor csv pembayaran kolom keterangan berisi jenis bayar dan kolom klinik berisi ruangan
+sudah 9. Pada expor csv pembayaran tambahkan kolom tanggal bayar
+oke 10. Pada preview rawat jalan tambahkan info array fisik
+oke 11. Anamesa perawat ketika dibuka dokter bersifat disabled
+oke 12. Dokter boleh turut serta menambah pemeriksaan fisik
+oke 13. Diagnosa textboxkan juga
+oke 14. Tambahkan textbox planning setelah diagnosa
+oke 15. Ekspor data gudang farmasi
+16. Pewarnaan warning kadaluarsa untuk obat (merah=1m, kuning=6m, hijau=1y)
+oke 17. Pada daftar barang gudang tambahkan kolom akumulasi diapotik dan digudang
+
 11 Feb 2018
 oke 1. Beri checkbox di general consent
 oke 2. Bersihkan bug di pembayaran pendaftaran

@@ -19,24 +19,27 @@ if Meteor.isClient
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. Dr. Soetomo No. 65, Telp. (0761) 23024', alignment: 'center'}
 					{text: '\nDATA UMUM PASIEN', alignment: 'center'}
 					{columns: [
-						['NAMA LENGKAP', 'TEMPAT & TANGGAL LAHIR', 'GOLONGAN DARAH', 'JENIS KELAMIN', 'AGAMA', 'PENDIDIKAN', 'PEKERJAAN', 'NAMA AYAH', 'NAMA IBU', 'NAMA SUAMI / ISTRI', 'ALAMAT', 'NO. TELP / HP']
-						[
-							': ' + doc.regis.nama_lengkap
-							': ' + (doc.regis.tmpt_lahir or '-') + ', ' + moment(doc.regis.tgl_lahir).format('D/MM/YYYY')
+						['NO. MR', 'NAMA LENGKAP', 'TEMPAT & TANGGAL LAHIR', 'GOLONGAN DARAH', 'JENIS KELAMIN', 'AGAMA', 'PENDIDIKAN', 'PEKERJAAN', 'NAMA AYAH', 'NAMA IBU', 'NAMA SUAMI / ISTRI', 'ALAMAT', 'NO. TELP / HP']
+						_.map [
+							zeros doc.no_mr
+							doc.regis.nama_lengkap
+							(doc.regis.tmpt_lahir or '-') + ', ' + moment(doc.regis.tgl_lahir).format('D/MM/YYYY')
 							(_.map ['darah', 'kelamin', 'agama', 'pendidikan', 'pekerjaan'], (i) ->
-								': ' + (look(i, doc.regis[i])?.label or '-'))...
+								(look(i, doc.regis[i])?.label or '-'))...
 							(_.map ['ayah', 'ibu', 'pasangan', 'alamat', 'kontak'], (i) ->
-								': ' + (doc.regis[i] or '-'))...
-						]
+								(doc.regis[i] or '-'))...
+						], (i) -> ': ' + i
 					]}
 					{text: '\nPERSETUJUAN UMUM (GENERAL CONSENT)', alignment: 'center'}
 					{table: body: [
-						['Cek', {text: 'Keterangan', alignment: 'center'}]
-						[' ', 'Saya akan mentaati peraturan yang berlaku di RSUD Petala Bumi']
-						[' ', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan untuk melakukan pemeriksaan / pengobatan / tindakan yang diperlakukan upaya kesembuhan saya / pasien tersebut diatas']
-						[' ', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan yang ikut merawat saya untuk memberikan keterangan medis saya kepada yang bertanggung jawab atas biaya perawatan saya.']
-						[' ', 'Saya memberi kuasa kepada RSUD Petala Bumi untuk menginformasikan identitas sosial saya kepada keluarga / rekan / masyarakat']
-						[' ', 'Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk pendidikan / penelitian demi kemajuan ilmu kesehatan']
+						['S', 'TS', {text: 'Keterangan', alignment: 'center'}]
+						(_.map [
+							['Saya akan mentaati peraturan yang berlaku di RSUD Petala Bumi']
+							['Saya memberi kuasa kepada dokter dan semua tenaga kesehatan untuk melakukan pemeriksaan / pengobatan / tindakan yang diperlakukan upaya kesembuhan saya / pasien tersebut diatas']
+							['Saya memberi kuasa kepada dokter dan semua tenaga kesehatan yang ikut merawat saya untuk memberikan keterangan medis saya kepada yang bertanggung jawab atas biaya perawatan saya.']
+							['Saya memberi kuasa kepada RSUD Petala Bumi untuk menginformasikan identitas sosial saya kepada keluarga / rekan / masyarakat']
+							['Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk pendidikan / penelitian demi kemajuan ilmu kesehatan']
+						], (i) -> [' ', ' ', i...])...
 					]}
 					'\nPetunjuk :'
 					'S: Setuju'
@@ -61,14 +64,14 @@ if Meteor.isClient
 					{text: '\nRINCIAN BIAYA RAWAT JALAN\n', alignment: 'center'}
 					{columns: [
 						['NO. MR', 'NAMA PASIEN', 'JENIS KELAMIN', 'TANGGAL LAHIR', 'UMUR', 'KLINIK']
-						[
-							': ' + zeros pasien.no_mr
-							': ' + _.startCase pasien.regis.nama_lengkap
-							': ' + (look('kelamin', pasien.regis.kelamin)?.label or '-')
-							': ' + moment().format('D/MM/YYYY')
-							': ' + moment().diff(pasien.regis.tgl_lahir, 'years') + ' tahun'
-							': ' + (look('klinik', doc.klinik)?.label or '-')
-						]
+						_.map [
+							zeros pasien.no_mr
+							_.startCase pasien.regis.nama_lengkap
+							(look('kelamin', pasien.regis.kelamin)?.label or '-')
+							moment().format('D/MM/YYYY')
+							moment().diff(pasien.regis.tgl_lahir, 'years') + ' tahun'
+							(look('klinik', doc.klinik)?.label or '-')
+						], (i) -> ': ' + i
 					]}
 					{text: '\n\nRINCIAN PEMBAYARAN', alignment: 'center'}
 					table
@@ -85,13 +88,13 @@ if Meteor.isClient
 					{text: '\n\nKARCIS', alignment: 'center'}
 					{columns: [
 						['TANGGAL', 'NO. MR', 'NAMA PASIEN', 'TARIF', '\n\nPETUGAS']
-						[
-							': ' + moment().format('DD/MM/YYYY')
-							': ' + _.toString zeros doc.no_mr
-							': ' + _.startCase doc.regis.nama_lengkap
-							': ' + 'Rp ' + _.toString amount
-							'\n\n: ' + _.startCase Meteor.user().username
-						]
+						_.map [
+							moment().format('DD/MM/YYYY')
+							_.toString zeros doc.no_mr
+							_.startCase doc.regis.nama_lengkap
+							'Rp ' + _.toString amount
+							'\n\n' + _.startCase Meteor.user().username
+						], (i) -> ': ' + i
 					]}
 				]
 			pdf.download zeros(doc.no_mr) + '_payRegCard.pdf'

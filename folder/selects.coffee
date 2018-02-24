@@ -15,6 +15,7 @@
 	barang: ['Generik', 'Non-Generik', 'Obat Narkotika', 'BHP']
 	satuan: ['Botol', 'Vial', 'Ampul', 'Pcs']
 	anggaran: ['BLUD']
+	alias: ['Tn.', 'Ny.', 'Nn.', 'An.', 'By.']
 
 _.map (_.keys selects), (i) -> selects[i] = _.map selects[i], (j, x) -> label: j, value: x+1
 

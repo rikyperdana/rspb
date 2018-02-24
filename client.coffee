@@ -13,7 +13,7 @@ if Meteor.isClient
 		['schema', -> new SimpleSchema schema[currentRoute()]]
 		['zeros', (num) -> zeros num]
 		['showForm', -> Session.get 'showForm']
-		['hari', (date) -> if date then moment(date).format('D MMM YYYY')]
+		['hari', (date) -> date and moment(date).format('D MMM YYYY')]
 		['rupiah', (val) -> 'Rp ' + numeral(val).format('0,0')]
 		['currentPar', (param) -> currentPar param]
 		['stringify', (obj) -> JSON.stringify obj]
@@ -50,7 +50,7 @@ if Meteor.isClient
 
 	Template.menu.helpers
 		menus: ->			
-			_.flatMap _.keys(roles()), (i) ->
+			_.initial _.flatMap _.keys(roles()), (i) ->
 				find = _.find rights, (j) -> j.group is i
 				_.map find.list, (j) -> _.find modules, (k) -> k.name is j
 		navTitle: ->
@@ -77,7 +77,7 @@ if Meteor.isClient
 		formDoc: -> formDoc()
 		preview: -> Session.get 'preview'
 		omitFields: ->
-			arr = ['fisik', 'anamesa_perawat', 'anamesa_dokter', 'diagnosa', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
+			arr = ['anamesa_perawat', 'fisik', 'anamesa_dokter', 'diagnosa', 'planning', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
 			unless formDoc() and formDoc().billRegis
 				arr
 			else unless _.split(Meteor.user().username, '.')[0] is 'dr'
@@ -136,6 +136,7 @@ if Meteor.isClient
 	Template.pasien.events
 		'click #showForm': ->
 			Session.set 'showForm', not Session.get 'showForm'
+			if groupIs 'regis' then Session.set 'formDoc', null
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
 				if currentRoute() is 'jalan'
@@ -146,6 +147,8 @@ if Meteor.isClient
 							$('input[name="'+i+'"]').attr disabled: 'disabled'
 					_.map ['anamesa_perawat'], (i) ->
 						$('textarea[name="'+i+'"]').val formDoc()[i]
+						if (_.includes Meteor.user().username, 'dr')
+							$('textarea[name="'+i+'"]').attr disabled: 'disabled'
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
 				if currentRoute() is 'regis' then _.map list, (i) ->
 					$('div[data-schema-key="regis.'+i+'"]').prepend tag 'p', _.startCase i
@@ -295,10 +298,18 @@ if Meteor.isClient
 							]
 						data.nama and Meteor.call 'import', 'gudang', selector, modifier, 'batch'
 
+	Template.gudang.onRendered ->
+		$('select#export').material_select()
+
 	Template.gudang.helpers
 		schemagudang: -> new SimpleSchema schema.gudang
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
 		gudangs: ->
+			aggr = (i) -> _.map i, (j) ->
+				j.akumulasi =
+					digudang: _.reduce j.batch, ((sum, n) -> sum + n.digudang), 0
+					diapotik: _.reduce j.batch, ((sum, n) -> sum + n.diapotik), 0
+				j
 			if currentPar 'idbarang'
 				selector = idbarang: currentPar 'idbarang'
 				sub = Meteor.subscribe 'coll', 'gudang', selector, {}
@@ -308,10 +319,10 @@ if Meteor.isClient
 				byBatch = idbatch: search()
 				selector = $or: [byName, byBatch]
 				sub = Meteor.subscribe 'coll', 'gudang', selector, {}
-				sub.ready() and coll.gudang.find().fetch()
+				sub.ready() and aggr coll.gudang.find().fetch()
 			else
 				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
-				sub.ready() and coll.gudang.find().fetch()
+				sub.ready() and aggr coll.gudang.find().fetch()
 
 	Template.gudang.events
 		'click #showForm': ->
@@ -331,6 +342,11 @@ if Meteor.isClient
 				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
+		'click #export': ->
+			select = $('select#export').val()
+			Meteor.call 'export', select, (err, content) -> if content
+				blob = new Blob [content], type: 'text/plain;charset=utf-8'
+				saveAs blob, select+'.csv'
 
 	Template.manajemen.onRendered ->
 		$('select#export').material_select()

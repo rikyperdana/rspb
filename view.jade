@@ -82,8 +82,8 @@ template(name='pasien'): .container
 		if pasiens
 			+pagination(name= 'pasien')
 		if userRole 'admin'
-			+import
 			if routeIs 'regis'
+				+import
 				+report(jenis='pendaftaran')
 			else if routeIs 'jalan'
 				+report(jenis='rawat_jalan')
@@ -326,6 +326,29 @@ template(name='pasien'): .container
 					h5 Diagnosa Pasien
 					p= diagnosa
 				br
+				if fisik
+					h5 Daftar Cek Fisik
+					table
+						thead
+							tr
+								th Tekanan Darah
+								th Nadi
+								th Suhu
+								th Pernapasan
+								th Berat
+								th Tinggi
+								th LILA
+						tbody
+							each fisik
+								tr
+									td= tekanan_darah
+									td= nadi
+									td= suhu
+									td= pernapasan
+									td= berat
+									td= tinggi
+									td= lila
+				br
 				br
 				if tindakan
 					h5 Daftar Tindakan
@@ -445,6 +468,8 @@ template(name='gudang'): .container
 				tr
 					th Jenis Barang
 					th Nama Barang
+					th Di Gudang
+					th Di Apotik
 					if userRole 'admin'
 						th Hapus
 			tbody
@@ -452,6 +477,8 @@ template(name='gudang'): .container
 					tr#row
 						td {{look 'barang' jenis 'label'}}
 						td= nama
+						td= akumulasi.digudang
+						td= akumulasi.diapotik
 						if userRole 'admin'
 							td: a#rmBarang hapus
 
@@ -486,6 +513,12 @@ template(name='gudang'): .container
 							td= diapotik
 							td= suplier
 	+import
+	.row
+		.col.m2: .purple.btn#export Ekspor
+		.col.m10: .input-field: select#export
+			option(value='') Pilih jenis ekspor
+			option(value='farmasi') Farmasi
+			option(value='logistik') Logistik
 
 template(name='manajemen'): .container
 	h5

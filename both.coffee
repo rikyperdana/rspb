@@ -8,6 +8,7 @@ Router.route '/',
 schema.regis =
 	no_mr: type: Number
 	regis: type: Object
+	'regis.alias': type: Number, optional: true, autoform: options: selects.alias, type: 'select-radio-inline'
 	'regis.nama_lengkap': type: String
 	'regis.tgl_lahir': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	'regis.tmpt_lahir': type: String, optional: true
@@ -93,7 +94,8 @@ schema.rawat =
 	'rawat.$.anamesa_perawat': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
 	'rawat.$.fisik': optional: true, type: [new SimpleSchema schema.fisik]
 	'rawat.$.anamesa_dokter': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
-	'rawat.$.diagnosa': type: String, optional: true
+	'rawat.$.diagnosa': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
+	'rawat.$.planning': type: String, optional: true, autoform: afFieldInput: type: 'textarea', rows: 6
 	'rawat.$.tindakan': type: [new SimpleSchema schema.tindakan], optional: true
 	'rawat.$.labor': type: [new SimpleSchema schema.labor], optional: true
 	'rawat.$.radio': type: [new SimpleSchema schema.radio], optional: true

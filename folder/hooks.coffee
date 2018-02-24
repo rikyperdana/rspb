@@ -18,7 +18,8 @@ if Meteor.isClient
 			i.subtotal = i.harga * i.jumlah
 			doc.total.obat += i.subtotal
 		doc.total.semua = _.reduce _.values(doc.total), (acc, val) -> acc + val
-		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1 or doc.anamesa_perawat
+		doc.billRegis = true if doc.anamesa_perawat
+		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
 		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
 		if doc.obat and 0 is doc.total.semua
 			doc.billRegis = true

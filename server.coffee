@@ -35,6 +35,14 @@ if Meteor.isServer
 						idbayar: j.idbayar
 						cara_bayar: find 'cara_bayar', j.cara_bayar
 						klinik: find 'klinik', j.klinik
+			else if jenis is 'farmasi'
+				arr = _.flatMap coll.gudang.find().fetch(), (i) ->
+					_.map i.batch, (j) ->
+						head = ['jenis', 'nama']
+						head = _.zipObject head, _.map head, (k) -> i[k]
+						body = ['nobatch', 'merek', 'satuan', 'masuk', 'kadaluarsa', 'digudang', 'diapotik', 'beli', 'jual', 'suplier', 'anggaran', 'pengadaan']
+						body = _.zipObject body, _.map body, (k) -> j[k]
+						_.assign head, body
 			exportcsv.exportToCSV arr, true, ';'
 
 		billCard: (no_mr, state) ->
@@ -135,6 +143,7 @@ if Meteor.isServer
 				obj =
 					no_mr: i.no_mr
 					nama_lengkap: _.startCase i.regis.nama_lengkap
+					tanggal: j.tanggal
 					no_bill: j.nobill
 					cara_bayar: look('cara_bayar', j.cara_bayar).label
 					rujukan: if j.rujukan then look('rujukan', j.rujukan).label else ''
@@ -146,11 +155,11 @@ if Meteor.isServer
 					harga: 'Rp ' + j.total.semua
 					petugas: Meteor.users.findOne(_id: j.petugas).username
 					keluar: if j.keluar then look('keluar', j.keluar).label else '-'
-					baru_lama: 'L'
+					baru_lama: if i.rawat.length > 0 then 'Lama' else 'Baru'
 				if jenis is 'pendaftaran'
-					_.pick obj, ['no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']
+					_.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']
 				else if jenis is 'pembayaran'
-					_.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'tindakan', 'harga', 'petugas']
+					_.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'diagnosa', 'tindakan', 'harga', 'petugas']
 				else if jenis is 'rawat_jalan'
 					_.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'kelamin', 'umur', 'cara_bayar', 'diagnosa', 'tindakan', 'petugas', 'keluar', 'rujukan']
 			headers: _.map _.keys(docs[0]), (i) -> _.startCase i
