@@ -26,8 +26,8 @@ if Meteor.isClient
 		['look', (option, value, field) -> look(option, value)[field]]
 		['look2', (option, value, field) -> look2(option, value)[field]]
 		['routeIs', (name) -> currentRoute() is name]
-		['userGroup', (name) -> roles()[name]]
-		['userRole', (name) -> roles()[currentRoute()][0] is name]
+		['userGroup', (name) -> userGroup name]
+		['userRole', (name) -> userRole name]
 		['pagins', (name) ->
 			limit = Session.get 'limit'
 			length = coll[name].find().fetch().length
@@ -136,7 +136,7 @@ if Meteor.isClient
 	Template.pasien.events
 		'click #showForm': ->
 			Session.set 'showForm', not Session.get 'showForm'
-			if groupIs 'regis' then Session.set 'formDoc', null
+			if userGroup 'regis' then Session.set 'formDoc', null
 			later = ->
 				$('.autoform-remove-item').trigger 'click'
 				if currentRoute() is 'jalan'
@@ -304,6 +304,13 @@ if Meteor.isClient
 	Template.gudang.helpers
 		schemagudang: -> new SimpleSchema schema.gudang
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
+		warning: (date) ->
+			diff = ((new Date).getFullYear() - date.getFullYear())*12 - ((new Date).getMonth() - date.getMonth())
+			switch
+				when diff < 2 then 'red'
+				when diff < 7 then 'orange'
+				when diff < 13 then 'yellow'
+				else 'green'
 		gudangs: ->
 			aggr = (i) -> _.map i, (j) ->
 				j.akumulasi =

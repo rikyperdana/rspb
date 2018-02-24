@@ -449,7 +449,9 @@ template(name='gudang'): .container
 	h5 Daftar Barang Gudang
 	.row
 		.col.m8
-			.input-field: input#search(value= search placeholder='Nama Obat / Batch')
+			unless showForm
+				unless currentPar 'idbarang'
+					.input-field: input#search(value= search placeholder='Nama Obat / Batch')
 		.col.m4
 			if userGroup 'farmasi'
 				.right.btn#showForm Tambah
@@ -506,7 +508,7 @@ template(name='gudang'): .container
 						tr#transfer
 							td= nobatch
 							td= hari(masuk)
-							td= hari(kadaluarsa)
+							td(class="{{warning kadaluarsa}}-text")= hari(kadaluarsa)
 							td= beli
 							td= jual
 							td= digudang

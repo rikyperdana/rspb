@@ -18,8 +18,8 @@ if Meteor.isClient
 	@limit = -> Session.get 'limit'
 	@page = -> Session.get 'page'
 	@roles = -> Meteor.user().roles
+	@userGroup = (name) -> roles()[name]
+	@userRole = (name) -> roles()[currentRoute()][0] is name
 	@tag = (tag, val) -> '<'+tag+'>'+val+'</'+tag+'>'
 	@sessNull = -> _.map (_.tail _.keys Session.keys), (i) ->
 		Session.set i, null
-	@groupIs = (name) -> _.includes (_.keys Meteor.user().roles), name
-	@roleIs = (name) -> _.includes (_.flatMap Meteor.user().roles), name
