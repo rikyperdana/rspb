@@ -62,6 +62,18 @@ if Meteor.isClient
 		'click #logout': -> Meteor.logout()
 
 	Template.pasien.helpers
+		heads: ->
+			pasien: ['No MR', 'Nama', 'Orang Tua', 'Alamat', 'Jenis Kelamin', 'Tgl Lahir']
+			bayar: ['No MR', 'Nama', 'Tanggal', 'Total Biaya', 'Cara Bayar', 'Klinik', 'Aksi']
+			labor: ['No MR', 'Pasien', 'Grup', 'Order', 'Aksi']
+			radio: ['No MR', 'Pasien', 'Order', 'Aksi']
+			obat: ['No MR', 'Pasien', 'Nama Obat', 'Kali', 'Dosis', 'Bentuk', 'Jumlah', 'Serah']
+			rawat: ['Tanggal', 'Klinik', 'Cara Bayar', 'Bayar Pendaftaran', 'Bayar Tindakan', 'Cek']
+			fisik: ['Tekanan Darah', 'Nadi', 'Suhu', 'Pernapasan', 'Berat', 'Tinggi', 'LILA']
+			previewDokter: ['Tindakan', 'Dokter', 'Harga']
+			previewLabor: ['Grup', 'Order', 'Hasil']
+			previewRadio: ['Order', 'Arsip']
+			previewObat: ['Nama', 'Dosis', 'Bentuk', 'Kali', 'Jumlah']
 		route: -> currentRoute()
 		formType: ->
 			if currentRoute() is 'regis'
@@ -298,10 +310,20 @@ if Meteor.isClient
 							]
 						data.nama and Meteor.call 'import', 'gudang', selector, modifier, 'batch'
 
-	Template.gudang.onRendered ->
+	Template.export.onRendered ->
 		$('select#export').material_select()
 
+	Template.export.events
+		'click #export': ->
+			select = $('select#export').val()
+			Meteor.call 'export', select, (err, content) -> if content
+				blob = new Blob [content], type: 'text/plain;charset=utf-8'
+				saveAs blob, select+'.csv'
+
 	Template.gudang.helpers
+		heads: ->
+			barang: ['Jenis Barang', 'Nama Barang', 'Di Gudang', 'Di Apotik']
+			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
 		schemagudang: -> new SimpleSchema schema.gudang
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
 		warning: (date) ->
@@ -313,9 +335,8 @@ if Meteor.isClient
 				else 'green'
 		gudangs: ->
 			aggr = (i) -> _.map i, (j) ->
-				j.akumulasi =
-					digudang: _.reduce j.batch, ((sum, n) -> sum + n.digudang), 0
-					diapotik: _.reduce j.batch, ((sum, n) -> sum + n.diapotik), 0
+				reduced = (name) -> _.reduce j.batch, ((sum, n) -> sum + n[name]), 0
+				j.akumulasi = digudang: reduced('digudang'), diapotik: reduced('diapotik')
 				j
 			if currentPar 'idbarang'
 				selector = idbarang: currentPar 'idbarang'
@@ -349,14 +370,6 @@ if Meteor.isClient
 				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
-		'click #export': ->
-			select = $('select#export').val()
-			Meteor.call 'export', select, (err, content) -> if content
-				blob = new Blob [content], type: 'text/plain;charset=utf-8'
-				saveAs blob, select+'.csv'
-
-	Template.manajemen.onRendered ->
-		$('select#export').material_select()
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()
@@ -403,11 +416,6 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmRole', self._id
 		'click #close': -> sessNull()
-		'click #export': ->
-			select = $('select#export').val()
-			Meteor.call 'export', select, (err, content) -> if content
-				blob = new Blob [content], type: 'text/plain;charset=utf-8'
-				saveAs blob, select+'.csv'
 		'dblclick #baris': (event) ->
 			jenis = event.currentTarget.className
 			dialog =

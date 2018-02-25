@@ -60,14 +60,9 @@ template(name='pasien'): .container
 		)
 	unless currentPar 'no_mr'
 		table.bordered
-			thead
-				tr
-					th No MR
-					th Nama
-					th Orang Tua
-					th Alamat
-					th Jenis Kelamin
-					th Tgl Lahir
+			thead: tr
+				each val in heads.pasien
+					th= val
 			tbody
 				each pasiens
 					tr#row
@@ -90,15 +85,9 @@ template(name='pasien'): .container
 		if routeIs 'bayar'
 			h5 Daftar Bayar
 			table.bordered
-				thead
-					tr
-						th No MR
-						th Nama
-						th Tanggal
-						th Total Biaya
-						th Cara Bayar
-						th Klinik
-						th Aksi
+				thead: tr
+					each val in heads.bayar
+						th= val
 				tbody
 					each pasien in pasiens
 						if pasien.regis.billCard
@@ -149,13 +138,9 @@ template(name='pasien'): .container
 		if routeIs 'labor'
 			h5 Daftar Request Labor
 			table.bordered
-				thead
-					tr
-						th No. MR
-						th Pasien
-						th Grup
-						th Order
-						th Aksi
+				thead: tr
+					each val in heads.labor
+						th= val
 				tbody
 					each pasien in pasiens
 						each item in pasien.rawat
@@ -178,12 +163,9 @@ template(name='pasien'): .container
 		if routeIs 'radio'
 			h5 Daftar Request Radiologi
 			table.bordered
-				thead
-					tr
-						th No. MR
-						th Pasien
-						th Order
-						th Aksi
+				thead: tr
+					each val in heads.radio
+						th= val
 				tbody
 					each pasien in pasiens
 						each item in pasien.rawat
@@ -205,16 +187,9 @@ template(name='pasien'): .container
 		if routeIs 'obat'
 			h5 Daftar Request Obat
 			table.bordered
-				thead
-					tr
-						th No. MR
-						th Pasien
-						th Nama Obat
-						th Kali
-						th Dosis
-						th Bentuk
-						th Jumlah
-						th Serah
+				thead: tr
+					each val in heads.obat
+						th= val
 				tbody
 					each pasien in pasiens
 						each item in pasien.rawat
@@ -275,16 +250,11 @@ template(name='pasien'): .container
 			.right.orange.btn#close Tutup
 			if rawat
 				table.bordered
-					thead
-						tr
-							th Tanggal
-							th Klinik
-							th Cara Bayar
-							th Bayar Pendaftaran
-							th Bayar Tindakan
-							th Cek
-							if userRole 'admin'
-								th Hapus
+					thead: tr
+						each val in heads.rawat
+							th= val
+						if userRole 'admin'
+							th Hapus
 					tbody
 						each sortBy rawat 'tanggal' 'asc'
 							tr
@@ -329,15 +299,9 @@ template(name='pasien'): .container
 				if fisik
 					h5 Daftar Cek Fisik
 					table
-						thead
-							tr
-								th Tekanan Darah
-								th Nadi
-								th Suhu
-								th Pernapasan
-								th Berat
-								th Tinggi
-								th LILA
+						thead: tr
+							each val in heads.fisik
+								th= val
 						tbody
 							each fisik
 								tr
@@ -353,11 +317,9 @@ template(name='pasien'): .container
 				if tindakan
 					h5 Daftar Tindakan
 					table
-						thead
-							tr
-								th Tindakan
-								th Dokter
-								th Harga
+						thead: tr
+							each val in heads.previewDokter
+								th= val
 						tbody
 							each tindakan
 								tr
@@ -369,11 +331,9 @@ template(name='pasien'): .container
 				if labor
 					h5 Daftar Laboratorium
 					table
-						thead
-							tr
-								th Grup
-								th Order
-								th Hasil
+						thead: tr
+							each val in heads.previewLabor
+								th= val
 						tbody
 							each labor
 								tr
@@ -385,13 +345,9 @@ template(name='pasien'): .container
 				if obat
 					h5 Daftar Obat
 					table
-						thead
-							tr
-								th Nama
-								th Dosis
-								th Bentuk
-								th Kali
-								th Jumlah
+						thead: tr
+							each val in heads.previewObat
+								th= val
 						tbody
 							each obat
 								tr
@@ -405,10 +361,9 @@ template(name='pasien'): .container
 				if radio
 					h5 Daftar Radiologi
 					table
-						thead
-							tr
-								th Order
-								th Arsip
+						thead: tr
+							each val in heads.previewRadio
+								th= val
 						tbody
 							each radio
 								tr
@@ -466,14 +421,11 @@ template(name='gudang'): .container
 		)
 	unless currentPar 'idbarang'
 		table.bordered
-			thead
-				tr
-					th Jenis Barang
-					th Nama Barang
-					th Di Gudang
-					th Di Apotik
-					if userRole 'admin'
-						th Hapus
+			thead: tr
+				each val in heads.barang
+					th= val
+				if userRole 'admin'
+					th Hapus
 			tbody
 				each gudangs
 					tr#row
@@ -493,16 +445,9 @@ template(name='gudang'): .container
 					td= nama
 			br
 			table
-				thead
-					tr
-						th No. Batch
-						th Masuk
-						th Kadaluarsa
-						th Beli
-						th Jual
-						th Di Gudang
-						th Di Apotik
-						th Suplier
+				thead: tr
+					each val in heads.batch
+						th= val
 				tbody
 					each batch
 						tr#transfer
@@ -515,12 +460,7 @@ template(name='gudang'): .container
 							td= diapotik
 							td= suplier
 	+import
-	.row
-		.col.m2: .purple.btn#export Ekspor
-		.col.m10: .input-field: select#export
-			option(value='') Pilih jenis ekspor
-			option(value='farmasi') Farmasi
-			option(value='logistik') Logistik
+	+export
 
 template(name='manajemen'): .container
 	h5
@@ -611,13 +551,7 @@ template(name='manajemen'): .container
 					td= grup
 	+pagination(name= 'tarif')
 	+import
-	.row
-		.col.m2: .purple.btn#export Ekspor
-		.col.m10: .input-field: select#export
-			option(value='') Pilih jenis ekspor
-			option(value='regis') Identitas Pasien
-			option(value='jalan') Rawat Jalan
-			option(value='obat') Daftar Obat
+	+export
 
 template(name='login')
 	.fullscreen.slider: ul.slides: li
@@ -659,3 +593,10 @@ template(name='report')
 								td= item
 	with datas
 		.purple.btn#export Ekspor
+
+template(name='export'): .row
+	.col.m2: .purple.btn#export Ekspor
+	.col.m10: .input-field: select#export
+		option(value='') Pilih jenis ekspor
+		option(value='farmasi') Farmasi
+		option(value='logistik') Logistik
