@@ -165,3 +165,6 @@ if Meteor.isServer
 			headers: _.map _.keys(docs[0]), (i) -> _.startCase i
 			rows: _.map docs, (i) -> _.values i
 			csv: docs
+
+		patientExist: (no_mr) ->
+			true if coll.pasien.findOne no_mr: parseInt no_mr

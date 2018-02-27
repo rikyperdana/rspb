@@ -50,8 +50,8 @@ if Meteor.isClient
 					]}
 				]
 			pdf.download zeros(doc.no_mr) + '_consent.pdf'
-		payRawat: (doc) ->
-			pasien = coll.pasien.findOne()
+		payRawat: (no_mr, doc) ->
+			pasien = coll.pasien.findOne no_mr: parseInt no_mr
 			rows = [['Uraian', 'Harga']]
 			for i in ['tindakan', 'labor', 'radio']
 				if doc[i] then for j in doc[i]
@@ -80,8 +80,8 @@ if Meteor.isClient
 					'\n\n\n\n\n' + (_.startCase Meteor.user().username), alignment: 'right'}
 				]
 			pdf.download zeros(pasien.no_mr) + '_payRawat.pdf'
-		payRegCard: (amount, words) ->
-			doc = coll.pasien.findOne()
+		payRegCard: (no_mr, amount, words) ->
+			doc = coll.pasien.findOne no_mr: parseInt no_mr
 			pdf = pdfMake.createPdf
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
@@ -90,9 +90,9 @@ if Meteor.isClient
 						['TANGGAL', 'NO. MR', 'NAMA PASIEN', 'TARIF', '\n\nPETUGAS']
 						_.map [
 							moment().format('DD/MM/YYYY')
-							_.toString zeros doc.no_mr
+							zeros doc.no_mr
 							_.startCase doc.regis.nama_lengkap
-							'Rp ' + _.toString amount
+							'Rp ' + amount
 							'\n\n' + _.startCase Meteor.user().username
 						], (i) -> ': ' + i
 					]}

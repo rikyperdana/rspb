@@ -159,8 +159,6 @@ if Meteor.isClient
 							$('input[name="'+i+'"]').attr disabled: 'disabled'
 					_.map ['anamesa_perawat'], (i) ->
 						$('textarea[name="'+i+'"]').val formDoc()[i]
-						if (_.includes Meteor.user().username, 'dr')
-							$('textarea[name="'+i+'"]').attr disabled: 'disabled'
 				list = ['cara_bayar', 'kelamin', 'agama', 'nikah', 'pendidikan', 'darah', 'pekerjaan']
 				if currentRoute() is 'regis' then _.map list, (i) ->
 					$('div[data-schema-key="regis.'+i+'"]').prepend tag 'p', _.startCase i
@@ -191,7 +189,7 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				if nodes[1]
 					Meteor.call 'billRegis', nodes[0..1]..., true
-					makePdf.payRegCard nodes[2], '...'
+					makePdf.payRegCard nodes[0], nodes[2], '...'
 				else
 					Meteor.call 'billCard', nodes[0], false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
@@ -205,7 +203,7 @@ if Meteor.isClient
 				Meteor.call 'bayar', nodes...
 				pasien = coll.pasien.findOne no_mr: parseInt nodes[0]
 				doc = _.find pasien.rawat, (i) -> i.idbayar is nodes[1]
-				makePdf.payRawat doc
+				makePdf.payRawat nodes[0], doc
 		'dblclick #request': (event) ->
 			nodes = _.map ['pasien', 'idbayar', 'jenis', 'idjenis'], (i) ->
 				event.target.attributes[i].nodeValue
