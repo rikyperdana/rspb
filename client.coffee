@@ -216,7 +216,7 @@ if Meteor.isClient
 					Meteor.call params..., (err, res) -> if res
 						message = ''
 						for key, val of res
-							message += '</p>'+key+': '+val+'</p>'
+							message += tag 'p', key + ': ' + val
 						MaterializeModal.message
 							title: 'Penyerahan Obat'
 							message: message

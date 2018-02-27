@@ -6,7 +6,7 @@ Router.route '/',
 	action: -> this.render 'home'
 
 schema.regis =
-	no_mr: type: Number
+	no_mr: type: Number, max: 999999
 	regis: type: Object
 	'regis.alias': type: Number, optional: true, autoform: options: selects.alias, type: 'select-radio-inline'
 	'regis.nama_lengkap': type: String

@@ -270,9 +270,8 @@ template(name='pasien'): .container
 								else
 									td Belum
 								td: a.modal-trigger(href='#preview') cek
-								if userGroup 'regis'
-									if userRole 'admin'
-										td: a#rmRawat hapus
+								if userRole 'admin'
+									td: a#rmRawat hapus
 	with preview
 		.modal#preview
 			.modal-content

@@ -5,7 +5,7 @@
 @randomId = -> Math.random().toString(36).slice(2)
 @zeros = (num) ->
 	size = _.size _.toString num
-	if size < 7 then '0'.repeat(6-size) + _.toString num
+	'0'.repeat(6-size) + _.toString num
 
 if Meteor.isClient
 
