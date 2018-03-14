@@ -69,3 +69,50 @@ template(name='panduan'): .container
 			li Field Aturan Dosis adalah angka ukuran dosis yang harus dikonsumsi konsumen untuk setiap kali mengkonsumsi obat tersebut
 			li Field Aturan Bentuk adalah pilihan bentuk dari obat yang akan dikonsumsi oleh pasien tersebut
 			li Field Jumlah adalah jumlah satuan dari obat yang akan diserahkan kepada konsumen untuk dikonsumsi
+	else if userGroup 'farmasi'
+		p Petugas dan Admin Farmasi dapat mengakses daftar obat yang tersedia pada gudang farmasi
+		p Pengguna dapat menginputkan data nama obat baru, mengubah nama obat, dan menambahkan stok pada nama obat yang sudah tersedia
+		p Tutorial input nama obat baru yang belum tersedia pada sistem :
+		ol
+			li Pengguna klik pada tombol Tambah di kanan atas
+			li Pada field Jenis pilih jenis obat, dan pada field Nama isikan nama obat tersebut
+			li Pada grup Batch, isikan informasi yang diminta sistem
+			li: ol
+				li No_Batch adalah nomor batch yang tertera pada obat / kotak obat
+				li Merek adalah merek dari obat tersebut
+				li Satuan adalah pecahan terkecil dari obat tersebut
+				li Masuk adalah tanggal masuknya obat tersebut ke gudang farmasi ini
+				li Kadaluarsa adalah tanggal berakhirnya batas masa layak pakai obat tersebut
+				li Digudang adalah jumlah stok atas batch tersebut yang masuk ke gudang farmasi
+				li Diapotik diisikan apabila sebelum batch ini diinput sudah diserahkan ke apotik sebagian
+				li Beli adalah harga beli rumah sakit dari supplier
+				li Jual adalah harga jual rumah sakit kepada pasien (Rp 0 untuk peraturan lama)
+				li Suplier adalah nama perusahaan yang menyuplai obat ini kepada rumah sakit
+				li Anggaran adalah pilihan jenis anggaran yang digunakan untuk membeli batch ini
+				li Pengadaan adalah tahun dari anggaran pengadaan obat tersebut
+			li Bila pada saat penginputan data obat baru ini terdapat lebih dari 2 atau lebih batch yang berbeda, maka petugas dapat klik tombol Add di sebelah kata Batch diatas
+			li Bila salah satu batch yang sedang diinputkan ingin dibatalkan, maka klik tombol Remove pada bagian bawah rincian Batch
+			li Bila ingin membatalkan keseluruhan data input, maka dapat klik tombol Close atau refresh browser
+			li Setelah petugas yakin bahwa data yang diinput adalah benar, maka silahkan klik Submit, dan form akan tetap terbuka untuk diinputkan obat baru lainnya
+		p Jika input data sudah berhasil diterima sistem, petugas dapat melihatnya pada daftar obat dan dari pencarian
+		p Namun bila terjadi kesalahan setelah data tersebut diterima oleh sistem dan ingin dihapus, maka silahkan request kepada Admin untuk melakukannya
+		p Tutorial input obat yang namanya sudah tersedia pada sistem :
+		ol
+			li Petugas isikan pada kolom pencarian nama atau nobatch dari obat yang diinginkan
+			li Jika petugas menemukan obat yang diinginkan, klik dua kali pada nama obat yang tampil
+			li Petugas klik tombol Tambah yang berada pada sisi kanan atas
+			li Petugas isikan data batch sebagaimana panduan sebelumnya
+			li Setelah dicek data adalah benar, klik Submit
+			li Form akan tetap terbuka jika petugas ingin menginputkan batch lainnya untuk nama obat tersebut
+		p Tutorial transfer obat antar gudang dan apotik
+		ol
+			li Petugas cari obat dengan menggunakan kolom pencarian
+			li Petugas double klik pada nama obat yang diinginkan
+			li Petugas double klik pada baris batch yang ingin ditransfer
+			li Petugas inputkan angka yang ingin ditransfer dari gudang ke apotik
+			li Jika ingin transfer balik dari apotik ke gudang, gunakan simbol minus sebelum angka. Contoh -10
+		p Tutorial hapus nama obat :
+		ol
+			li Login sebagai Admin Farmasi
+			li Lakukan pencarian nama obat
+			li Pada baris nama obat yang ingin dihapus, klik tombol hapus

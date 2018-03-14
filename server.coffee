@@ -155,9 +155,9 @@ if Meteor.isServer
 					harga: 'Rp ' + j.total.semua
 					petugas: Meteor.users.findOne(_id: j.petugas).username
 					keluar: if j.keluar then look('keluar', j.keluar).label else '-'
-					baru_lama: if i.rawat.length > 0 then 'Lama' else 'Baru'
+					baru_lama: if i.rawat.length > 1 then 'Lama' else 'Baru'
 				if jenis is 'pendaftaran'
-					_.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'baru_lama']
+					_.pick obj, ['tanggal', 'no_mr', 'nama_lengkap', 'cara_bayar', 'rujukan', 'klinik', 'diagnosa', 'baru_lama']
 				else if jenis is 'pembayaran'
 					_.pick obj, ['tanggal', 'no_bill', 'no_mr', 'nama_lengkap', 'klinik', 'diagnosa', 'tindakan', 'harga', 'petugas']
 				else if jenis is 'rawat_jalan'

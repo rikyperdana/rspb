@@ -13,8 +13,8 @@
 	rujukan: ['Datang Sendiri', 'RS Lain', 'Puskesmas', 'Faskes Lainnya']
 	keluar: ['Pulang', 'Rujuk']
 	barang: ['Generik', 'Non-Generik', 'Obat Narkotika', 'BHP']
-	satuan: ['Botol', 'Vial', 'Ampul', 'Pcs']
-	anggaran: ['BLUD']
+	satuan: ['Botol', 'Vial', 'Ampul', 'Pcs', 'Sachet', 'Tube', 'Supp', 'Tablet', 'Minidose', 'Pot', 'Turbuhaler', 'Kaplet']
+	anggaran: ['BLUD', 'APBD', 'Kemenkes', 'Dinkes']
 	alias: ['Tn.', 'Ny.', 'Nn.', 'An.', 'By.']
 
 _.map (_.keys selects), (i) -> selects[i] = _.map selects[i], (j, x) -> label: j, value: x+1

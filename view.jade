@@ -442,6 +442,12 @@ template(name='gudang'): .container
 				tr
 					th Nama
 					td= nama
+				tr
+					th Kandungan
+					td= kandungan
+				tr
+					th Satuan
+					td= satuan
 			br
 			table
 				thead: tr
@@ -458,8 +464,9 @@ template(name='gudang'): .container
 							td= digudang
 							td= diapotik
 							td= suplier
-	+import
-	+export
+	if userRole 'admin'
+		+import
+		+export
 
 template(name='manajemen'): .container
 	h5

@@ -122,6 +122,8 @@ schema.gudang =
 		autoValue: -> randomId()
 	jenis: type: Number, autoform: options: selects.barang
 	nama: type: String
+	kandungan: type: String
+	satuan: type: Number, autoform: options: selects.satuan
 	batch: type: Array
 	'batch.$': type: Object
 	'batch.$.idbatch':
@@ -130,8 +132,7 @@ schema.gudang =
 		autoValue: -> randomId()
 	'batch.$.nobatch': type: String
 	'batch.$.merek': type: String
-	'batch.$.satuan': type: Number, autoform: options: selects.satuan
-	'batch.$.masuk': type: Date, autoform: type: 'pickadate'
+	'batch.$.masuk': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate'
 	'batch.$.digudang': type: Number
 	'batch.$.diapotik': type: Number

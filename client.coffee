@@ -320,7 +320,7 @@ if Meteor.isClient
 
 	Template.gudang.helpers
 		heads: ->
-			barang: ['Jenis Barang', 'Nama Barang', 'Di Gudang', 'Di Apotik']
+			barang: ['Jenis Barang', 'Nama Barang', 'Stok Gudang', 'Stok Apotik']
 			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
 		schemagudang: -> new SimpleSchema schema.gudang
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
