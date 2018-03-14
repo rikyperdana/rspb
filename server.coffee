@@ -168,3 +168,9 @@ if Meteor.isServer
 
 		patientExist: (no_mr) ->
 			true if coll.pasien.findOne no_mr: parseInt no_mr
+
+		nearEds: ->
+			sel = 'batch': $elemMatch: 'returnable': true, 'digudang': $gt: 0
+			filter = _.filter coll.gudang.find(sel).fetch(), (i) ->
+				_.filter i.batch, (j) -> j if 6 > monthDiff date: j.kadaluarsa
+			_.flatMap filter, (i) -> i.batch

@@ -133,12 +133,13 @@ schema.gudang =
 	'batch.$.nobatch': type: String
 	'batch.$.merek': type: String
 	'batch.$.masuk': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
-	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate'
+	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	'batch.$.digudang': type: Number
 	'batch.$.diapotik': type: Number
 	'batch.$.beli': type: Number, decimal: true
 	'batch.$.jual': type: Number, decimal: true
 	'batch.$.suplier': type: String
+	'batch.$.returnable': type: Boolean
 	'batch.$.anggaran': type: Number, autoform: options: selects.anggaran
 	'batch.$.pengadaan': type: Number
 

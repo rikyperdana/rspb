@@ -434,7 +434,6 @@ template(name='gudang'): .container
 						td= akumulasi.diapotik
 						if userRole 'admin'
 							td: a#rmBarang hapus
-
 	if currentPar 'idbarang'
 		h5 Rincian Barang
 		with gudangs
@@ -464,6 +463,26 @@ template(name='gudang'): .container
 							td= digudang
 							td= diapotik
 							td= suplier
+	br
+	br
+	.btn#nearEds Near EDs
+	if nearEds
+		h5 Menjelang Kadaluarsa
+		table
+			thead: tr
+				each val in heads.batch
+					th= val
+			tbody
+				each nearEds
+					tr
+						td= nobatch
+						td= hari(masuk)
+						td= hari(kadaluarsa)
+						td= beli
+						td= jual
+						td= digudang
+						td= diapotik
+						td= suplier
 	if userRole 'admin'
 		+import
 		+export

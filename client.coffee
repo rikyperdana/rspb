@@ -28,12 +28,6 @@ if Meteor.isClient
 		['routeIs', (name) -> currentRoute() is name]
 		['userGroup', (name) -> userGroup name]
 		['userRole', (name) -> userRole name]
-		['pagins', (name) ->
-			limit = Session.get 'limit'
-			length = coll[name].find().fetch().length
-			end = (length - (length % limit)) / limit
-			[1..end]
-		]
 	]
 	_.map globalHelpers, (i) -> Template.registerHelper i...
 
@@ -325,7 +319,7 @@ if Meteor.isClient
 		schemagudang: -> new SimpleSchema schema.gudang
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
 		warning: (date) ->
-			diff = ((new Date).getFullYear() - date.getFullYear())*12 - ((new Date).getMonth() - date.getMonth())
+			diff = monthDiff date: date
 			switch
 				when diff < 2 then 'red'
 				when diff < 7 then 'orange'
@@ -349,6 +343,7 @@ if Meteor.isClient
 			else
 				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
 				sub.ready() and aggr coll.gudang.find().fetch()
+		nearEds: -> Session.get 'nearEds'
 
 	Template.gudang.events
 		'click #showForm': ->
@@ -368,6 +363,9 @@ if Meteor.isClient
 				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
+		'click #nearEds': ->
+			Meteor.call 'nearEds', (err, res) ->
+				if res then Session.set 'nearEds', res
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()
@@ -436,6 +434,13 @@ if Meteor.isClient
 					Materialize.toast 'Salah username / password', 3000
 				else
 					Router.go '/' + _.keys(roles())[0]
+
+	Template.pagination.helpers
+		pagins: (name) ->
+			limit = Session.get 'limit'
+			length = coll[name].find().fetch().length
+			end = (length - (length % limit)) / limit
+			[1..end]
 
 	Template.pagination.events
 		'click #next': -> Session.set 'page', 1 + page()
