@@ -452,6 +452,7 @@ template(name='gudang'): .container
 				thead: tr
 					each val in heads.batch
 						th= val
+					th Returnable
 					if userRole 'admin'
 						th Hapus
 				tbody
@@ -465,10 +466,15 @@ template(name='gudang'): .container
 							td= digudang
 							td= diapotik
 							td= suplier
+							td= returnable
 							td: a#rmBatch(href='#') hapus
 	br
 	br
-	.btn#nearEds Near EDs
+	.row
+		.col.m2: .btn#nearEds Near
+		.col.m2
+			input#returnable(type='checkbox')
+			label(for='returnable') Returnable
 	if nearEds
 		h5 Menjelang Kadaluarsa
 		table

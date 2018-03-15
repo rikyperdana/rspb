@@ -3,7 +3,11 @@
 @look = (list, val) -> _.find selects[list], (i) -> i.value is val
 @look2 = (list, id) -> _.find coll[list].find().fetch(), (i) -> i._id is id
 @randomId = -> Math.random().toString(36).slice(2)
-@monthDiff = (obj) -> ((new Date).getFullYear() - obj.date.getFullYear())*12 - ((new Date).getMonth() - obj.date.getMonth())
+# @monthDiff = (obj) -> ((new Date).getFullYear() - obj.date.getFullYear())*12 - ((new Date).getMonth() - obj.date.getMonth())
+@monthDiff = (date) ->
+	diff = (date.getTime() - (new Date()).getTime()) / 1000
+	diff /= (60 * 60 * 24 * 7 * 4)
+	Math.round diff
 @zeros = (num) ->
 	size = _.size _.toString num
 	'0'.repeat(6-size) + _.toString num

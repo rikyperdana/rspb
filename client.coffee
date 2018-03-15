@@ -318,13 +318,11 @@ if Meteor.isClient
 			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
 		schemagudang: -> new SimpleSchema schema.gudang
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
-		warning: (date) ->
-			diff = monthDiff date: date
-			switch
-				when diff < 2 then 'red'
-				when diff < 7 then 'orange'
-				when diff < 13 then 'yellow'
-				else 'green'
+		warning: (date) -> switch
+			when monthDiff(date) < 2 then 'red'
+			when monthDiff(date) < 7 then 'orange'
+			when monthDiff(date) < 13 then 'yellow'
+			else 'green'
 		gudangs: ->
 			aggr = (i) -> _.map i, (j) ->
 				reduced = (name) -> _.reduce j.batch, ((sum, n) -> sum + n[name]), 0
@@ -369,11 +367,13 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBatch', currentPar('idbarang'), self.idbatch
 		'click #nearEds': ->
-			Meteor.call 'nearEds', (err, res) ->
+			Session.set 'nearEds', null
+			returnable = $('#returnable').is ':checked'
+			Meteor.call 'nearEds', returnable, (err, res) ->
 				if res then Session.set 'nearEds', res
 		'dblclick #nearEd': ->
 			self = this
-			dialog = title: 'Yakin?', message: 'Pindahkan ke retur'
+			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'returBatch', self
 
