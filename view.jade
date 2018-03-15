@@ -495,8 +495,10 @@ template(name='gudang'): .container
 						td= diapotik
 						td= suplier
 	if userRole 'admin'
-		+import
-		+export
+		unless currentPar 'idbarang'
+			unless showForm
+				+import
+				+export
 
 template(name='manajemen'): .container
 	h5

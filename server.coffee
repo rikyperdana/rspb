@@ -176,15 +176,15 @@ if Meteor.isServer
 			true if coll.pasien.findOne no_mr: parseInt no_mr
 
 		nearEds: (returnable) ->
-			sel =
-				'digudang': $gt: 0
-				'diretur': $ne: true
-			sel.returnable = true if returnable
+			sel = 'digudang': {$gt: 0}, 'diretur': {$ne: true}
 			source = coll.gudang.find(batch: $elemMatch: sel).fetch()
 			assign = _.map source, (i) -> _.map i.batch, (j) -> _.assign j,
 				idbarang: i.idbarang, nama: i.nama
 			batch = _.flatMap source, (i) -> i.batch
-			diffed = _.filter batch, (i) -> 6 > monthDiff i.kadaluarsa
+			diffed = _.filter batch, (i) ->
+				a = -> 6 > monthDiff i.kadaluarsa
+				b = -> i.returnable
+				if returnable then a() and b() else a()
 
 		returBatch: (doc) ->
 			findStock = coll.gudang.findOne idbarang: doc.idbarang
