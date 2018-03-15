@@ -118,6 +118,12 @@ if Meteor.isServer
 		rmBarang: (idbarang) ->
 			coll.gudang.remove idbarang: idbarang
 
+		rmBatch: (idbarang, idbatch) ->
+			findStock = coll.gudang.findOne idbarang: idbarang
+			terbuang = _.without findStock.batch, _.find findStock.batch, (i) ->
+				i.idbatch is idbatch
+			coll.gudang.update {_id: findStock._id}, $set: batch: terbuang
+
 		inactive: (name, id) ->
 			sel = _id: id; mod = $set: active: false
 			coll[name].update sel, mod
@@ -170,7 +176,18 @@ if Meteor.isServer
 			true if coll.pasien.findOne no_mr: parseInt no_mr
 
 		nearEds: ->
-			sel = 'batch': $elemMatch: 'returnable': true, 'digudang': $gt: 0
+			sel = 'batch': $elemMatch:
+				'digudang': $gt: 0
+				'diretur': $ne: true
 			filter = _.filter coll.gudang.find(sel).fetch(), (i) ->
 				_.filter i.batch, (j) -> j if 6 > monthDiff date: j.kadaluarsa
-			_.flatMap filter, (i) -> i.batch
+			_.flatMapDeep filter, (i) -> _.map i.batch, (j) -> _.assign j,
+				idbarang: i.idbarang, nama: i.nama
+
+		returBatch: (doc) ->
+			findStock = coll.gudang.findOne idbarang: doc.idbarang
+			for i in findStock.batch
+				if i.idbatch is doc.idbatch
+					i.diretur = true
+			sel = _id: findStock._id; mod = batch: findStock.batch
+			coll.gudang.update sel, $set: mod

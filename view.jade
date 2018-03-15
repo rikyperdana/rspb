@@ -452,6 +452,8 @@ template(name='gudang'): .container
 				thead: tr
 					each val in heads.batch
 						th= val
+					if userRole 'admin'
+						th Hapus
 				tbody
 					each batch
 						tr#transfer
@@ -463,6 +465,7 @@ template(name='gudang'): .container
 							td= digudang
 							td= diapotik
 							td= suplier
+							td: a#rmBatch(href='#') hapus
 	br
 	br
 	.btn#nearEds Near EDs
@@ -470,11 +473,13 @@ template(name='gudang'): .container
 		h5 Menjelang Kadaluarsa
 		table
 			thead: tr
+				th Nama Obat
 				each val in heads.batch
 					th= val
 			tbody
 				each nearEds
-					tr
+					tr#nearEd
+						td= nama
 						td= nobatch
 						td= hari(masuk)
 						td= hari(kadaluarsa)

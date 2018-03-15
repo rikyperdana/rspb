@@ -363,9 +363,19 @@ if Meteor.isClient
 				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'rmBarang', self.idbarang
+		'click #rmBatch': ->
+			self = this
+			dialog = title: 'Yakin?', message: 'Hapus 1 batch ini'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'rmBatch', currentPar('idbarang'), self.idbatch
 		'click #nearEds': ->
 			Meteor.call 'nearEds', (err, res) ->
 				if res then Session.set 'nearEds', res
+		'dblclick #nearEd': ->
+			self = this
+			dialog = title: 'Yakin?', message: 'Pindahkan ke retur'
+			new Confirmation dialog, (ok) -> if ok
+				Meteor.call 'returBatch', self
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()

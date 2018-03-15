@@ -136,10 +136,11 @@ schema.gudang =
 	'batch.$.kadaluarsa': type: Date, autoform: type: 'pickadate', pickadateOptions: selectYears: 150, selectMonths: true
 	'batch.$.digudang': type: Number
 	'batch.$.diapotik': type: Number
+	'batch.$.diretur': type: Boolean, optional: true, autoform: type: 'hidden'
 	'batch.$.beli': type: Number, decimal: true
 	'batch.$.jual': type: Number, decimal: true
 	'batch.$.suplier': type: String
-	'batch.$.returnable': type: Boolean
+	'batch.$.returnable': type: Boolean, optional: true
 	'batch.$.anggaran': type: Number, autoform: options: selects.anggaran
 	'batch.$.pengadaan': type: Number
 
