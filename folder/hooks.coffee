@@ -56,5 +56,11 @@ if Meteor.isClient
 				doc.batch[0].idbatch = randomId()
 				this.result doc
 			'update-pushArray': (doc) ->
-				doc.idbatch = randomId()
-				this.result doc
+				this.result _.assign doc, idbatch: randomId()
+
+	AutoForm.addHooks 'formAmprah',
+		before: 'update-pushArray': (doc) ->
+			this.result _.assign doc,
+				peminta: Meteor.userId()
+				tanggal: new Date()
+				ruangan: (_.keys roles())[0]

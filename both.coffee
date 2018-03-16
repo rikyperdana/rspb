@@ -111,9 +111,9 @@ schema.rawat =
 	'rawat.$.keluar': type: Number, optional: true, autoform: options: selects.keluar
 	'rawat.$.petugas': type: String, autoform: type: 'hidden'
 
-schema.jalan = _.assign schema.rawat, {}
-schema.inap = _.assign schema.rawat, {}
-schema.igd = _.assign schema.rawat, {}
+schema.jalan = _.assign {}, schema.rawat, {}
+schema.inap = _.assign {}, schema.rawat, {}
+schema.igd = _.assign {}, schema.rawat, {}
 
 schema.gudang =
 	idbarang:
@@ -122,6 +122,8 @@ schema.gudang =
 		autoValue: -> randomId()
 	jenis: type: Number, autoform: options: selects.barang
 	nama: type: String
+
+schema.farmasi = _.assign {}, schema.gudang,
 	kandungan: type: String
 	satuan: type: Number, autoform: options: selects.satuan
 	batch: type: Array
@@ -144,8 +146,12 @@ schema.gudang =
 	'batch.$.anggaran': type: Number, autoform: options: selects.anggaran
 	'batch.$.pengadaan': type: Number
 
-schema.farmasi = _.assign schema.gudang, {}
-schema.logistik = _.assign schema.gudang, {}
+schema.amprah = _.assign {}, schema.gudang,
+	amprah: type: Array
+	'amprah.$': type: Object
+	'amprah.$.diminta': type: Number
+
+schema.logistik = _.assign {}, schema.gudang, {}
 
 schema.dokter =
 	nama: type: String

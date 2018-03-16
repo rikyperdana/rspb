@@ -316,7 +316,7 @@ if Meteor.isClient
 		heads: ->
 			barang: ['Jenis Barang', 'Nama Barang', 'Stok Gudang', 'Stok Apotik']
 			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
-		schemagudang: -> new SimpleSchema schema.gudang
+			amprah: ['Peminta', 'Meminta', 'Penyerah', 'Menyerahkan', 'Tanggal']
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
 		warning: (date) -> switch
 			when monthDiff(date) < 2 then 'red'
@@ -342,6 +342,8 @@ if Meteor.isClient
 				sub = Meteor.subscribe 'coll', 'gudang', {}, {}
 				sub.ready() and aggr coll.gudang.find().fetch()
 		nearEds: -> Session.get 'nearEds'
+		addAmprah: -> Session.get 'addAmprah'
+		schemaAmprah: -> new SimpleSchema schema.amprah
 
 	Template.gudang.events
 		'click #showForm': ->
@@ -376,6 +378,7 @@ if Meteor.isClient
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'returBatch', self
+		'click #addAmprah': -> Session.set 'addAmprah', not Session.get 'addAmprah'
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()

@@ -412,7 +412,7 @@ template(name='gudang'): .container
 	if showForm
 		+quickForm(
 			collection= coll.gudang
-			schema= schemagudang
+			schema= schema
 			type= formType
 			id = 'formGudang'
 			scope = 'batch'
@@ -448,6 +448,7 @@ template(name='gudang'): .container
 					th Satuan
 					td= satuan
 			br
+			h5 Batch
 			table
 				thead: tr
 					each val in heads.batch
@@ -468,13 +469,38 @@ template(name='gudang'): .container
 							td= suplier
 							td= returnable
 							td: a#rmBatch(href='#') hapus
+		h5 Amprah
+		.right.btn#addAmprah +Amprah
+		if addAmprah
+			+quickForm(
+				collection = coll.gudang
+				schema = schemaAmprah
+				type = 'update-pushArray'
+				id = 'formAmprah'
+				doc = gudangs
+				scope = 'amprah'
+			)
+		table
+			thead: tr
+				each val in heads.amprah
+					th= val
+			tbody
+				with gudangs
+					each amprah
+						tr
+							td= peminta
+							td= diminta
+							td= penyerah
+							td= diserah
+							td= hari(tanggal)
 	br
 	br
-	.row
-		.col.m2: .btn#nearEds Near
-		.col.m2
-			input#returnable(type='checkbox')
-			label(for='returnable') Returnable
+	unless currentPar 'idbarang'
+		.row
+			.col.m2: .btn#nearEds Near
+			.col.m2
+				input#returnable(type='checkbox')
+				label(for='returnable') Returnable
 	if nearEds
 		h5 Menjelang Kadaluarsa
 		table
