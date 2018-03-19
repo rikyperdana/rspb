@@ -28,6 +28,7 @@ if Meteor.isClient
 		['routeIs', (name) -> currentRoute() is name]
 		['userGroup', (name) -> userGroup name]
 		['userRole', (name) -> userRole name]
+		['userName', (id) -> _.startCase userName id]
 	]
 	_.map globalHelpers, (i) -> Template.registerHelper i...
 
@@ -316,7 +317,7 @@ if Meteor.isClient
 		heads: ->
 			barang: ['Jenis Barang', 'Nama Barang', 'Stok Gudang', 'Stok Apotik']
 			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
-			amprah: ['Peminta', 'Meminta', 'Penyerah', 'Menyerahkan', 'Tanggal']
+			amprah: ['Ruangan', 'Peminta', 'Meminta', 'Penyerah', 'Menyerahkan', 'Tanggal']
 		formType: -> if currentPar('idbarang') then 'update-pushArray' else 'insert'
 		warning: (date) -> switch
 			when monthDiff(date) < 2 then 'red'
@@ -378,7 +379,17 @@ if Meteor.isClient
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call 'returBatch', self
-		'click #addAmprah': -> Session.set 'addAmprah', not Session.get 'addAmprah'
+		'click #addAmprah': ->
+			unless userGroup 'farmasi'
+				Session.set 'addAmprah', not Session.get 'addAmprah'
+		'dblclick #amprah': ->
+			if userGroup 'farmasi'
+				unless this.diserah
+					self = this
+					MaterializeModal.prompt
+						message: 'Jumlah diserahkan'
+						callback: (err, res) -> if res.submit
+							Meteor.call 'amprah', currentPar('idbarang'), self.idamprah, parseInt res.value
 
 	Template.manajemen.helpers
 		users: -> Meteor.users.find().fetch()

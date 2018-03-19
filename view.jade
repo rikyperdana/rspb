@@ -487,10 +487,11 @@ template(name='gudang'): .container
 			tbody
 				with gudangs
 					each amprah
-						tr
-							td= peminta
+						tr#amprah
+							td= startCase(ruangan)
+							td= userName(peminta)
 							td= diminta
-							td= penyerah
+							td= userName(penyerah)
 							td= diserah
 							td= hari(tanggal)
 	br

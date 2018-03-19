@@ -6,8 +6,8 @@ if Meteor.isServer
 	Meteor.publish 'coll', (name, selector, options) ->
 		coll[name].find selector, options
 
-	Meteor.publish 'users', ->
-		Meteor.users.find {}
+	Meteor.publish 'users', (selector, options) ->
+		Meteor.users.find selector, options
 
 	Meteor.methods
 		import: (name, selector, modifier, arrName) ->
@@ -193,3 +193,11 @@ if Meteor.isServer
 					i.diretur = true
 			sel = _id: findStock._id; mod = batch: findStock.batch
 			coll.gudang.update sel, $set: mod
+
+		amprah: (idbarang, idamprah, diserah) ->
+			barang = coll.gudang.findOne idbarang: idbarang
+			for i in barang.amprah
+				if i.idamprah is idamprah
+					i.penyerah = this.userId
+					i.diserah = diserah
+			coll.gudang.update barang._id, barang

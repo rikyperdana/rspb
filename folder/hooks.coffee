@@ -61,6 +61,7 @@ if Meteor.isClient
 	AutoForm.addHooks 'formAmprah',
 		before: 'update-pushArray': (doc) ->
 			this.result _.assign doc,
+				idamprah: randomId()
 				peminta: Meteor.userId()
 				tanggal: new Date()
 				ruangan: (_.keys roles())[0]

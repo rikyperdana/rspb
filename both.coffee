@@ -188,6 +188,7 @@ _.map modules[10..11], (i) ->
 	Router.route '/'+i.name+'/:idbarang?',
 		name: i.name
 		action: -> this.render 'gudang'
+		waitOn: -> Meteor.subscribe 'users', {}, fields: username: 1
 
 _.map ['panduan'], (i) ->
 	Router.route '/' + i,
@@ -196,7 +197,7 @@ _.map ['panduan'], (i) ->
 Router.route '/manajemen',
 	action: -> this.render 'manajemen'
 	waitOn: -> [
-		Meteor.subscribe 'users'
+		Meteor.subscribe 'users', {}, {}
 		Meteor.subscribe 'coll', 'dokter', {}, {}
 		Meteor.subscribe 'coll', 'tarif', {}, {}
 	]
