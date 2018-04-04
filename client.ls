@@ -25,7 +25,7 @@ if Meteor.isClient
 		isFalse: (a, b) -> a isnt b
 		look: (option, value, field) -> look(option, value)[field]
 		look2: (option, value, field) -> look2(option, value)[field]
-		routeIs: (name) -> currentRoute() is name
+		routeIs: (name) -> currentRoute! is name
 		userGroup: (name) -> userGroup name
 		userRole: (name) -> userRole name
 		userName: (id) -> _.startCase userName id
@@ -50,7 +50,7 @@ if Meteor.isClient
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute!
 			find?full or _.startCase currentRoute!
-		today: -> moment().format \LLL
+		today: -> moment!format \LLL
 
 	Template.menu.events do
 		'click #logout': -> Meteor.logout!
@@ -105,7 +105,7 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, options
 				.ready! and coll.pasien.findOne!
 			else if search!
-				byName = 'regis.nama_lengkap': $options: \-i, $regex: '.*'+search()+'.*'
+				byName = 'regis.nama_lengkap': $options: \-i, $regex: '.*'+search!+'.*'
 				byNoMR = no_mr: parseInt search!
 				selector = $or: [byName, byNoMR]
 				options = fields: no_mr: 1, regis: 1
@@ -113,7 +113,7 @@ if Meteor.isClient
 				.ready! and coll.pasien.find!fetch!
 			else if roles!jalan
 				now = new Date!; past = new Date now.getDate!-2
-				kliniks = _.map roles().jalan, (i) ->
+				kliniks = _.map roles!jalan, (i) ->
 					find = _.find selects.klinik, (j) -> i is _.snakeCase j.label
 					find.value
 				selector = rawat: $elemMatch:
@@ -128,13 +128,13 @@ if Meteor.isClient
 						c = -> i.rawat[i.rawat.length-1].klinik is selPol
 						if selPol then b! and c! else a! and b!
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
-			else if currentRoute() is \bayar
+			else if currentRoute! is \bayar
 				selector = rawat: $elemMatch: $or: ['status_bayar': $ne: true]
 				Meteor.subscribe \coll, \pasien, selector, {}
 				.ready! and coll.pasien.find!fetch!
 			else if currentRoute! in <[ labor radio obat ]>
 				elem = 'status_bayar': true
-				elem[currentRoute()] = $exists: true, $elemMatch: hasil: $exists: false
+				elem[currentRoute!] = $exists: true, $elemMatch: hasil: $exists: false
 				selSub = rawat: $elemMatch: elem
 				Meteor.subscribe \coll, \pasien, selSub, {}
 				.ready! and coll.pasien.find!fetch!
@@ -149,7 +149,7 @@ if Meteor.isClient
 					_.map <[ cara_bayar klinik karcis rujukan ]>, (i) ->
 						$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
 						if formDoc!
-							$ 'input[name="'+i+'"][value="'+formDoc()[i]+'"]' .attr checked: true
+							$ 'input[name="'+i+'"][value="'+formDoc![i]+'"]' .attr checked: true
 							$ 'input[name="'+i+'"]' .attr disabled: \disabled
 					_.map [\anamesa_perawat], (i) ->
 						$ 'textarea[name="'+i+'"]' .val formDoc![i]
@@ -204,7 +204,7 @@ if Meteor.isClient
 					Meteor.call ...params, (err, res) -> if res
 						MaterializeModal.message do
 							title: 'Penyerahan Obat'
-							message: do ->
+							message:
 								_.map res, (val , key) -> tag \p, "#key: #val"
 								.join ''
 						rekap = Session.get \rekap or []
@@ -212,7 +212,7 @@ if Meteor.isClient
 						Session.set \rekap, [...rekap, [...nodes, ...flat]]
 		'dblclick #rekap': ->
 			headers = ['Pasien', 'ID Bayar', 'Jenis', 'ID Request', 'No Batch', 'Jumlah']
-			makePdf.rekap [headers, ...Session.get 'rekap']
+			makePdf.rekap [headers, ...Session.get \rekap]
 			Session.set \rekap, null
 		'click .modal-trigger': (event) ->
 			if @idbayar
@@ -326,7 +326,7 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \gudang, selector, {}
 				.ready! and coll.gudang.findOne!
 			else if search!
-				byName = nama: $options: '-i', $regex: '.*'+search()+'.*'
+				byName = nama: $options: '-i', $regex: '.*'+search!+'.*'
 				byBatch = idbatch: search!
 				selector = $or: [byName, byBatch]
 				Meteor.subscribe \coll, \gudang, selector, {}
@@ -392,11 +392,11 @@ if Meteor.isClient
 		dokters: ->
 			selector = active: true
 			options = limit: limit!, skip: page! * limit!
-			coll.dokter.find(selector, options).fetch!
+			coll.dokter.find selector, options .fetch!
 		tarifs: ->
 			selector = active: true
 			options = limit: limit!, skip: page! * limit!
-			coll.tarif.find(selector, options).fetch!
+			coll.tarif.find selector, options .fetch!
 
 	Template.manajemen.events do
 		'submit #userForm': (event) ->
@@ -434,3 +434,48 @@ if Meteor.isClient
 			self = this
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call \inactive, jenis, self._id
+
+	Template.login.onRendered ->
+		$ \.slider .slider!
+
+	Template.login.events do
+		'submit form': (event) ->
+			event.preventDefault!
+			username = event.target.children.username.value
+			password = event.target.children.password.value
+			Meteor.loginWithPassword username, password, (err) ->
+				if err
+					Materialize.toast 'Salah username / password', 3000
+				else
+					Router.go \/ + (_.keys roles!).0
+
+	Template.pagination.helpers do
+		pagins: (name) ->
+			limit = Session.get \limit
+			length = coll[name].find!fetch!length
+			end = (length - (length % limit)) / limit
+			[1 to end]
+
+	Template.pagination.events do
+		'click #next': -> Session.set \page, 1 + page!
+		'click #prev': -> Session.set \page, -1 + page!
+		'click #num': (event) ->
+			Session.set \page, parseInt event.target.innerText
+
+	Template.report.helpers do
+		datas: -> Session.get \laporan
+
+	Template.report.events do
+		'click .datepicker': (event, template) ->
+			type = event.target.attributes.date.nodeValue
+			$ '#'+type .pickadate onSet: (data) ->
+				Session.set type+'Date', data.select
+				start = Session.get \startDate
+				end = Session.get \endDate
+				if start and end
+					Meteor.call \report, template.data.jenis, start, end, (err, res) ->
+						res and Session.set \laporan, res
+		'click #export': (event, template) ->
+			content = exportcsv.exportToCSV Session.get(\laporan).csv, true, \;
+			blob = new Blob [content], type: 'text/plain;charset=utf-8'
+			saveAs blob, template.data.jenis+'.csv'
