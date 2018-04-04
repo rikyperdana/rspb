@@ -26,6 +26,7 @@ if Meteor.isClient
 	@userRole = (name) -> roles()[currentRoute()][0] is name
 	@tag = (tag, val) -> '<'+tag+'>'+val+'</'+tag+'>'
 	@userName = (id) -> Meteor.users.findOne(_id: id).username
+	@show = console.log
 	@sessNull = -> _.map (_.tail _.keys Session.keys), (i) ->
 		Session.set i, null
 	
