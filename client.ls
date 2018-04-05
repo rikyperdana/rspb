@@ -103,14 +103,14 @@ if Meteor.isClient
 				arr = <[ bayar jalan labor radio obat ]>
 				options.fields.rawat = 1 if currentRoute! in arr
 				Meteor.subscribe \coll, \pasien, selector, options
-				.ready! and coll.pasien.findOne!
+					.ready! and coll.pasien.findOne!
 			else if search!
 				byName = 'regis.nama_lengkap': $options: \-i, $regex: '.*'+search!+'.*'
 				byNoMR = no_mr: parseInt search!
 				selector = $or: [byName, byNoMR]
 				options = fields: no_mr: 1, regis: 1
 				Meteor.subscribe \coll, \pasien, selector, options
-				.ready! and coll.pasien.find!fetch!
+					.ready! and coll.pasien.find!fetch!
 			else if roles!jalan
 				now = new Date!; past = new Date now.getDate!-2
 				kliniks = _.map roles!jalan, (i) ->
@@ -131,13 +131,13 @@ if Meteor.isClient
 			else if currentRoute! is \bayar
 				selector = rawat: $elemMatch: $or: ['status_bayar': $ne: true]
 				Meteor.subscribe \coll, \pasien, selector, {}
-				.ready! and coll.pasien.find!fetch!
+					.ready! and coll.pasien.find!fetch!
 			else if currentRoute! in <[ labor radio obat ]>
 				elem = 'status_bayar': true
 				elem[currentRoute!] = $exists: true, $elemMatch: hasil: $exists: false
 				selSub = rawat: $elemMatch: elem
 				Meteor.subscribe \coll, \pasien, selSub, {}
-				.ready! and coll.pasien.find!fetch!
+					.ready! and coll.pasien.find!fetch!
 
 	Template.pasien.events do
 		'click #showForm': ->
@@ -324,16 +324,16 @@ if Meteor.isClient
 			if currentPar \idbarang
 				selector = idbarang: currentPar \idbarang
 				Meteor.subscribe \coll, \gudang, selector, {}
-				.ready! and coll.gudang.findOne!
+					.ready! and coll.gudang.findOne!
 			else if search!
 				byName = nama: $options: '-i', $regex: '.*'+search!+'.*'
 				byBatch = idbatch: search!
 				selector = $or: [byName, byBatch]
 				Meteor.subscribe \coll, \gudang, selector, {}
-				.ready! and aggr coll.gudang.find!fetch!
+					.ready! and aggr coll.gudang.find!fetch!
 			else
-				Meteor.subscribe 'coll', 'gudang', {}, {}
-				.ready! and aggr coll.gudang.find!fetch!
+				Meteor.subscribe \coll, \gudang, {}, {}
+					.ready! and aggr coll.gudang.find!fetch!
 		nearEds: -> Session.get \nearEds
 		addAmprah: -> Session.get \addAmprah
 		schemaAmprah: -> new SimpleSchema schema.amprah

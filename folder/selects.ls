@@ -19,31 +19,29 @@
 
 _.map (_.keys selects), (i) -> selects[i] = _.map selects[i], (j, x) -> label: j, value: x+1
 
-selects.karcis = _.map [15000, 20000, 25000, 30000, 40000], (i) -> value: i, label: 'Rp ' + i
+selects.karcis = _.map [15000 20000 25000 30000 40000], (i) -> value: i, label: 'Rp ' + i
 
 selects.tindakan = -> if Meteor.isClient
-	sub = Meteor.subscribe 'coll', 'tarif', {}, {}
-	selector = jenis: Meteor.user().roles.jalan[0]
-	if sub.ready() then _.map coll.tarif.find(selector).fetch(), (i) ->
-		value: i._id, label: _.startCase i.nama
+	selector = jenis: Meteor.user!roles.jalan.0
+	Meteor.subscribe \coll, \tarif, {}, {}
+		.ready! and _.map coll.tarif.find(selector).fetch!, (i) ->
+			value: i._id, label: _.startCase i.nama
 
 selects.dokter = -> if Meteor.isClient
-	sub = Meteor.subscribe 'coll', 'dokter', {}, {}
-	find = _.find selects.klinik, (i) ->
-		Meteor.user().roles.jalan[0] is _.snakeCase i.label
-	selector = poli: find.value
-	if sub.ready() then _.map coll.dokter.find(selector).fetch(), (i) ->
-		value: i._id, label: i.nama
+	selector = poli: (.value) _.find selects.klinik, (i) ->
+		Meteor.user!roles.jalan.0 is _.snakeCase i.label
+	Meteor.subscribe \coll, \dokter, {}, {}
+		.ready! and _.map coll.dokter.find(selector).fetch!, (i) ->
+			value: i._id, label: i.nama
 
 selects.obat = -> if Meteor.isClient
-	sub = Meteor.subscribe 'coll', 'gudang', {}, {}
 	filter = (arr) -> _.filter arr, (i) -> i.jenis is 1
-	if sub.ready() then _.map filter(coll.gudang.find().fetch()), (i) ->
-		value: i._id, label: i.nama
+	Meteor.subscribe \coll, \gudang, {}, {}
+		.ready! and _.map filter(coll.gudang.find!fetch!), (i) ->
+			value: i._id, label: i.nama
 
-_.map ['labor', 'radio'], (i) ->
+_.map <[ labor radio ]>, (i) ->
 	selects[i] = -> if Meteor.isClient
-		sub = Meteor.subscribe 'coll', 'tarif', {}, {}
-		selector = jenis: i
-		if sub.ready() then _.map coll.tarif.find(selector).fetch(), (j) ->
-			value: j._id, label: _.startCase j.nama
+		Meteor.subscribe \coll, \tarif, {}, {}
+			.ready! and _.map coll.tarif.find(jenis: i).fetch!, (j) ->
+				value: j._id, label: _.startCase j.nama
