@@ -5,16 +5,16 @@ if Meteor.isClient
 	Router.onAfterAction ->
 		sessNull!
 		Router.go \/ unless currentRoute! in
-			_.uniq _.flatMap (_.keys roles!), (i) ->
-				_.find(rights, (j) -> j.group is i).list
+			_.uniq _.flatMap roles!, (i, j) ->
+				(.list) _.find rights, (k) -> k.group is j
 
 	globalHelpers =
 		coll: -> coll
 		schema: -> new SimpleSchema schema[currentRoute!]
 		zeros: (num) -> zeros num
 		showForm: -> Session.get \showForm
-		hari: (date) -> date and moment(date).format 'D MMM YYYY'
-		rupiah: (val) -> 'Rp ' + numeral(val).format '0,0'
+		hari: (date) -> date and moment date .format 'D MMM YYYY'
+		rupiah: (val) -> 'Rp ' + numeral val .format '0,0'
 		currentPar: (param) -> currentPar param
 		stringify: (obj) -> JSON.stringify obj
 		startCase: (val) -> _.startCase val
@@ -23,8 +23,8 @@ if Meteor.isClient
 		sortBy: (arr, sel, sort) -> _.sortBy arr, -> -it.tanggal.getTime!
 		isTrue: (a, b) -> a is b
 		isFalse: (a, b) -> a isnt b
-		look: (option, value, field) -> look(option, value)[field]
-		look2: (option, value, field) -> look2(option, value)[field]
+		look: (option, value, field) -> look(option, value)?[field]
+		look2: (option, value, field) -> look2(option, value)?[field]
 		routeIs: (name) -> currentRoute! is name
 		userGroup: (name) -> userGroup name
 		userRole: (name) -> userRole name
@@ -93,7 +93,7 @@ if Meteor.isClient
 				j.label is _.startCase roles!jalan.0
 			i.klinik is find.value
 		userPoli: -> roles!jalan
-		insurance: (val) -> 'Rp ' + numeral(val+30000).format '0,0'
+		insurance: (val) -> 'Rp ' + numeral val+30000 .format '0,0'
 		selPol: -> _.map roles!jalan, (i) ->
 			_.find selects.klinik, (j) -> i is _.snakeCase j.label
 		pasiens: ->
@@ -112,15 +112,11 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, options
 					.ready! and coll.pasien.find!fetch!
 			else if roles!jalan
-				now = new Date!; past = new Date now.getDate!-2
-				kliniks = _.map roles!jalan, (i) ->
-					find = _.find selects.klinik, (j) -> i is _.snakeCase j.label
-					find.value
 				selector = rawat: $elemMatch:
-					klinik: $in: kliniks
-					tanggal: $gt: past
-				sub = Meteor.subscribe \coll, \pasien, selector, {}
-				if sub.ready!
+					klinik: $in: _.map roles!jalan, (i) ->
+						(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
+					tanggal: $gt: new Date (new Date!).getDate!-2
+				Meteor.subscribe \coll, \pasien, selector, {} .ready! and do ->
 					filter = _.filter coll.pasien.find!fetch!, (i) ->
 						a = -> i.rawat[i.rawat.length-1].klinik in kliniks
 						b = -> not i.rawat[i.rawat.length-1].total.semua
@@ -244,14 +240,14 @@ if Meteor.isClient
 					selector = no_mr: parseInt data.no_mr
 					modifier = regis:
 						nama_lengkap: _.startCase data.nama_lengkap
-						alamat: _.startCase data.alamat
-						agama: parseInt data.agama if data.agama
-						ayah: _.startCase data.ayah if data.ayah
-						nikah: parseInt data.nikah if data.nikah
-						pekerjaan: parseInt data.pekerjaan if data.pekerjaan
-						pendidikan: parseInt data.pendidikan if data.pendidikan
-						tgl_lahir: new Date date.tgl_lahir if Date.parse data.tgl_lahir
-						tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran
+						alamat: _.startCase data.alamat?
+						agama: parseInt data.agama if data.agama?
+						ayah: _.startCase data.ayah if data.ayah?
+						nikah: parseInt data.nikah if data.nikah?
+						pekerjaan: parseInt data.pekerjaan if data.pekerjaan?
+						pendidikan: parseInt data.pendidikan if data.pendidikan?
+						tgl_lahir: new Date date.tgl_lahir if Date.parse data.tgl_lahir?
+						tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran?
 					Meteor.call \import, \pasien, selector, modifier
 				else if currentRoute! is \manajemen
 					if data.tipe
@@ -403,14 +399,14 @@ if Meteor.isClient
 			event.preventDefault!
 			onUser = Session.get \onUser
 			unless onUser
+				doc =
+					username: event.target.children.username.value
+					password: event.target.children.password.value
 				repeat = event.target.children.repeat.value
 				if doc.password is repeat
-					Meteor.call \newUser,
-						username: event.target.children.username.value
-						password: event.target.children.password.value
+					Meteor.call \newUser, doc
 					$ \input .val ''
-				else
-					Materialize.toast 'Password tidak mirip', 3000
+				else Materialize.toast 'Password tidak mirip', 3000
 			else
 				role = $ 'input[name="role"]:checked', event.target .0.id
 				group = $ 'input[name="group"]:checked', event.target .0.id

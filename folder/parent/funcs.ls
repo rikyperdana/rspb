@@ -1,13 +1,13 @@
 @_ = lodash
 @coll = {}; @schema = {}
 @look = (list, val) -> _.find selects[list], (i) -> i.value is val
-@look2 = (list, id) -> _.find coll[list].find().fetch(), (i) -> i._id is id
+@look2 = (list, id) -> _.find coll[list]find!fetch!, (i) -> i._id is id
 @randomId = -> Math.random!toString 36 .slice 2
 @zeros = (num) ->
 	size = _.size _.toString num
 	'0' * (6 - size) + num
 @monthDiff = (date) ->
-	diff = date.getTime() - (new Date()).getTime()
+	diff = date.getTime() - (new Date!).getTime!
 	diff /= 1000ms * 60sec * 60min * 24hour * 7day * 4week
 	Math.round diff
 
@@ -21,7 +21,7 @@ if Meteor.isClient
 	@formDoc = -> Session.get \formDoc
 	@limit = -> Session.get \limit
 	@page = -> Session.get \page
-	@roles = -> Meteor.user!roles
+	@roles = -> Meteor.user!?roles
 	@userGroup = (name) -> roles![name]
 	@userRole = (name) -> roles![currentRoute!].0 is name
 	@tag = (tag, val) -> "<#tag>#val</#tag>"

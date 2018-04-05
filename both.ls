@@ -180,7 +180,7 @@ _.map modules[0 to 9], (i) ->
 		name: i.name
 		action: -> @render \pasien
 		waitOn: ->
-			_.map <[ dokter tarif gudang ]>, (i) ->
+			_.map <[ dokter tarif gudang ]>, (j) ->
 				Meteor.subscribe \coll, j, {}, {}
 
 _.map modules[10 to 11], (i) ->

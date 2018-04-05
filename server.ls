@@ -16,7 +16,7 @@ if Meteor.isServer
 				coll[name]upsert selector, $set: modifier
 			else if arrName
 				sel = _id: find._id
-				obj = "#arrName": modifier[arrName].0
+				obj = "#arrName": modifier[arrName]0
 				coll[name]update sel, $push: obj
 
 		export: (jenis) ->
@@ -69,7 +69,7 @@ if Meteor.isServer
 			modifier = rawat: findPasien.rawat
 			coll.pasien.update selector, $set: modifier
 			give = {}
-			if jenis is 'obat' then for i in findPasien.rawat
+			if jenis is \obat then for i in findPasien.rawat
 				if i.idbayar is idbayar then if i.obat then for j in i.obat
 					if j.idobat is idjenis
 						findStock = coll.gudang.findOne _id: j.nama
@@ -128,7 +128,7 @@ if Meteor.isServer
 			coll[name]update sel, mod
 
 		pindah: (no_mr) ->
-			find = coll.pasien.findOne 'no_mr': parseInt no_mr
+			find = coll.pasien.findOne no_mr: parseInt no_mr
 			[..., last] = find.rawat
 			if last.pindah
 				selector = _id: find._id
