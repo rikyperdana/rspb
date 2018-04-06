@@ -44,9 +44,9 @@ if Meteor.isClient
 
 	Template.menu.helpers do
 		menus: ->			
-			_.initial _.flatMap (_.keys roles!), (i) ->
-				find = _.find rights, (j) -> j.group is i
-				_.map find.list, (j) -> _.find modules, (k) -> k.name is j
+			_.initial _.flatMap roles!, (i, j) ->
+				find = _.find rights, (k) -> k.group is j
+				_.map find.list, (k) -> _.find modules, (l) -> l.name is k
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute!
 			find?full or _.startCase currentRoute!
@@ -83,15 +83,13 @@ if Meteor.isClient
 		formDoc: -> formDoc!
 		preview: -> Session.get \preview
 		omitFields: ->
-			arr = ['anamesa_perawat', 'fisik', 'anamesa_dokter', 'diagnosa', 'planning', 'tindakan', 'labor', 'radio', 'obat', 'spm', 'keluar', 'pindah']
-			unless formDoc!billRegis
-				arr
-			else unless _.split(Meteor.user!username, \.).0 is \dr
+			arr = <[ anamesa_perawat fisik anamesa_dokter diagnosa planning tindakan labor radio obat spm keluar pindah ]>
+			unless formDoc!?billRegis then arr
+			else unless \dr is _.first _.split Meteor.user!username, \.
 				arr[2 to arr.length]
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
-			find = _.find selects.klinik, (j) ->
+			i.klinik is (.value) _.find selects.klinik, (j) ->
 				j.label is _.startCase roles!jalan.0
-			i.klinik is find.value
 		userPoli: -> roles!jalan
 		insurance: (val) -> 'Rp ' + numeral val+30000 .format '0,0'
 		selPol: -> _.map roles!jalan, (i) ->
@@ -112,13 +110,14 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, options
 					.ready! and coll.pasien.find!fetch!
 			else if roles!jalan
+				kliniks = _.map roles!jalan, (i) ->
+					(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
 				selector = rawat: $elemMatch:
-					klinik: $in: _.map roles!jalan, (i) ->
-						(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
+					klinik: $in: kliniks
 					tanggal: $gt: new Date (new Date!).getDate!-2
 				Meteor.subscribe \coll, \pasien, selector, {} .ready! and do ->
 					filter = _.filter coll.pasien.find!fetch!, (i) ->
-						a = -> i.rawat[i.rawat.length-1].klinik in kliniks
+						a = -> i.rawat[i.rawat.length-1]klinik in kliniks
 						b = -> not i.rawat[i.rawat.length-1].total.semua
 						selPol = Session.get \selPol
 						c = -> i.rawat[i.rawat.length-1].klinik is selPol
@@ -137,8 +136,6 @@ if Meteor.isClient
 
 	Template.pasien.events do
 		'click #showForm': ->
-			Session.set \showForm, not Session.get \showForm
-			if userGroup \regis then Session.set \formDoc, null
 			later = ->
 				$ \.autoform-remove-item .trigger \click
 				if currentRoute! is \jalan
@@ -152,9 +149,12 @@ if Meteor.isClient
 				list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
 				if currentRoute! is \regis then _.map list, (i) ->
 					$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
-			Meteor.setTimeout later, 1000
-			Meteor.subscribe \coll, \gudang, {}, {}
-			Session.set \begin, moment!
+			unless userGroup \jalan and not Session.get \formDoc
+				Session.set \showForm, not Session.get \showForm
+				if userGroup \regis then Session.set \formDoc, null
+				Meteor.subscribe \coll, \gudang, {}, {}
+				Session.set \begin, new Date!
+				Meteor.setTimeout later, 1000
 		'dblclick #row': ->
 			Router.go \/ + currentRoute! + \/ + @no_mr
 		'click #close': -> sessNull!; Router.go currentRoute!
@@ -168,7 +168,7 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> makePdf.consent! if ok
 		'dblclick #bill': (event) ->
 			nodes = _.map <[ pasien idbayar karcis ]>, (i) ->
-				event.target.attributes[i].nodeValue
+				event.target.attributes[i]nodeValue
 			dialog =
 				title: 'Pembayaran Pendaftaran'
 				message: 'Apakah yakin pasien sudah membayar?'
@@ -181,7 +181,7 @@ if Meteor.isClient
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
 		'dblclick #bayar': (event) ->
 			nodes = _.map <[ pasien idbayar ]>, (i) ->
-				event.target.attributes[i].nodeValue
+				event.target.attributes[i]nodeValue
 			dialog =
 				title: 'Konfirmasi Pembayaran'
 				message: 'Apakah yakin tagihan ini sudah dibayar?'

@@ -27,7 +27,7 @@ if Meteor.isClient
 		begin = Session.get \begin; stop = moment!
 		doc.spm = stop.diff begin, \minutes
 		doc.petugas = Meteor.userId!
-		doc.nobill = parseInt _.toString Date.now! .substr 7, 13
+		doc.nobill = parseInt _.toString(Date.now!).substr 7, 13
 		doc
 
 	AutoForm.addHooks \formPasien,

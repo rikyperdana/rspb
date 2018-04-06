@@ -23,7 +23,7 @@ if Meteor.isClient
 	@page = -> Session.get \page
 	@roles = -> Meteor.user!?roles
 	@userGroup = (name) -> roles![name]
-	@userRole = (name) -> roles![currentRoute!].0 is name
+	@userRole = (name) -> roles!?[currentRoute!]?0 is name
 	@tag = (tag, val) -> "<#tag>#val</#tag>"
 	@userName = (id) -> Meteor.users.findOne _id: id .username
 	@show = console.log
