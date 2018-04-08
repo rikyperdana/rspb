@@ -202,6 +202,6 @@ if Meteor.isServer
 			coll.gudang.update barang._id, barang
 
 		latestAmprah: ->
-			_.map coll.gudang.find!fetch!, (i) ->
+			_.map coll.gudang.find!fetch!, (i) -> if i.amprah
 				_.assign i, amprah: _.filter i.amprah, (j) ->
 					not j.penyerah

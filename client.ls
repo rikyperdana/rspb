@@ -64,10 +64,10 @@ if Meteor.isClient
 			obat: ['No MR', 'Pasien', 'Nama Obat', 'Kali', 'Dosis', 'Bentuk', 'Jumlah', 'Serah']
 			rawat: ['Tanggal', 'Klinik', 'Cara Bayar', 'Bayar Pendaftaran', 'Bayar Tindakan', 'Cek']
 			fisik: ['Tekanan Darah', 'Nadi', 'Suhu', 'Pernapasan', 'Berat', 'Tinggi', 'LILA']
-			previewDokter: ['Tindakan', 'Dokter', 'Harga']
-			previewLabor: ['Grup', 'Order', 'Hasil']
-			previewRadio: ['Order', 'Arsip']
-			previewObat: ['Nama', 'Dosis', 'Bentuk', 'Kali', 'Jumlah']
+			previewDokter: <[ Tindakan Dokter Harga ]>
+			previewLabor: <[ Grup Order Hasil ]>
+			previewRadio: <[ Order Arsip ]>
+			previewObat: <[ Nama Dosis Bentuk Kali Jumlah ]>
 		route: -> currentRoute!
 		formType: ->
 			if currentRoute! is \regis
@@ -305,7 +305,8 @@ if Meteor.isClient
 		heads: ->
 			barang: ['Jenis Barang', 'Nama Barang', 'Stok Gudang', 'Stok Apotik']
 			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
-			amprah: ['Ruangan', 'Peminta', 'Meminta', 'Penyerah', 'Menyerahkan', 'Tanggal']
+			amprah: <[ Ruangan Peminta Meminta Penyerah Menyerahkan Tanggal ]>
+			latestAmprah: <[ Nama Ruangan Peminta Diminta Tanggal ]>
 		formType: -> if currentPar \idbarang then \update-pushArray else \insert
 		warning: (date) -> switch
 			when monthDiff(date) < 2 then \red

@@ -465,11 +465,8 @@ template(name='gudang'): .container
 			h5 Daftar Amprah
 			table
 				thead: tr
-					th Nama
-					th Ruangan
-					th Peminta
-					th Diminta
-					th Tanggal
+					each val in heads.latestAmprah
+						th= val
 				tbody
 					each val in latestAmprah
 						each val.amprah
