@@ -434,6 +434,51 @@ template(name='gudang'): .container
 						td= akumulasi.diapotik
 						if userRole 'admin'
 							td: a#rmBarang hapus
+		br
+		br
+		.row
+			.col.m2: .btn#nearEds Near-ED
+			.col.m2
+				input#returnable(type='checkbox')
+				label(for='returnable') Returnable
+			.col.m2: .btn#latestAmprah Amprahan
+		if nearEds
+			h5 Menjelang Kadaluarsa
+			table
+				thead: tr
+					th Nama Obat
+					each val in heads.batch
+						th= val
+				tbody
+					each nearEds
+						tr#nearEd
+							td= nama
+							td= nobatch
+							td= hari(masuk)
+							td= hari(kadaluarsa)
+							td= beli
+							td= jual
+							td= digudang
+							td= diapotik
+							td= suplier
+		if latestAmprah
+			h5 Daftar Amprah
+			table
+				thead: tr
+					th Nama
+					th Ruangan
+					th Peminta
+					th Diminta
+					th Tanggal
+				tbody
+					each val in latestAmprah
+						each val.amprah
+							tr
+								td: a(href="/farmasi/{{val.idbarang}}")= val.nama
+								td= startCase(ruangan)
+								td= userName(peminta)
+								td= diminta
+								td= hari(tanggal)
 	if currentPar 'idbarang'
 		h5 Rincian Barang
 		with gudangs
@@ -495,32 +540,6 @@ template(name='gudang'): .container
 							td= diserah
 							td= hari(tanggal)
 	br
-	br
-	unless currentPar 'idbarang'
-		.row
-			.col.m2: .btn#nearEds Near
-			.col.m2
-				input#returnable(type='checkbox')
-				label(for='returnable') Returnable
-	if nearEds
-		h5 Menjelang Kadaluarsa
-		table
-			thead: tr
-				th Nama Obat
-				each val in heads.batch
-					th= val
-			tbody
-				each nearEds
-					tr#nearEd
-						td= nama
-						td= nobatch
-						td= hari(masuk)
-						td= hari(kadaluarsa)
-						td= beli
-						td= jual
-						td= digudang
-						td= diapotik
-						td= suplier
 	if userRole 'admin'
 		unless currentPar 'idbarang'
 			unless showForm

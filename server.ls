@@ -200,3 +200,8 @@ if Meteor.isServer
 					i.penyerah = @userId
 					i.diserah = diserah
 			coll.gudang.update barang._id, barang
+
+		latestAmprah: ->
+			_.map coll.gudang.find!fetch!, (i) ->
+				_.assign i, amprah: _.filter i.amprah, (j) ->
+					not j.penyerah

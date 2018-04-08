@@ -333,6 +333,7 @@ if Meteor.isClient
 		nearEds: -> Session.get \nearEds
 		addAmprah: -> Session.get \addAmprah
 		schemaAmprah: -> new SimpleSchema schema.amprah
+		latestAmprah: -> Session.get \latestAmprah
 
 	Template.gudang.events do
 		'click #showForm': ->
@@ -361,7 +362,10 @@ if Meteor.isClient
 			Session.set \nearEds, null
 			returnable = $ \#returnable .is \:checked
 			Meteor.call 'nearEds', returnable, (err, res) ->
-				res and Session.set \nearEds, res
+				Session.set \nearEds, res if res
+		'click #latestAmprah': ->
+			Meteor.call \latestAmprah, (err, res) ->
+				Session.set \latestAmprah, res if res
 		'dblclick #nearEd': ->
 			self = this
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
