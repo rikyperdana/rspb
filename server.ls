@@ -25,15 +25,12 @@ if Meteor.isServer
 					no_mr: i.no_mr
 					nama_lengkap: i.regis.nama_lengkap
 			else if jenis is \jalan
-				find = (type, value) ->
-					_.find selects[type], (i) -> i.value is value
-					.label
 				arr = _.flatMap coll.pasien.find!fetch!, (i) ->
 					if i.rawat then _.map i.rawat, (j) ->
 						no_mr: i.no_mr
 						nama_lengkap: i.regis.nama_lengkap
 						idbayar: j.idbayar
-						cara_bayar: find \cara_bayar, j.cara_bayar
+						cara_bayar: look \cara_bayar, j.cara_bayar .label
 						klinik: find \klinik, j.klinik
 			else if jenis is \farmasi
 				arr = _.flatMap coll.gudang.find!fetch!, (i) ->

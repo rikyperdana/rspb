@@ -136,25 +136,24 @@ if Meteor.isClient
 
 	Template.pasien.events do
 		'click #showForm': ->
-			later = ->
-				$ \.autoform-remove-item .trigger \click
-				if currentRoute! is \jalan
-					_.map <[ cara_bayar klinik karcis rujukan ]>, (i) ->
-						$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
-						if formDoc!
-							$ 'input[name="'+i+'"][value="'+formDoc![i]+'"]' .attr checked: true
-							$ 'input[name="'+i+'"]' .attr disabled: \disabled
-					_.map [\anamesa_perawat], (i) ->
-						$ 'textarea[name="'+i+'"]' .val formDoc![i]
-				list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
-				if currentRoute! is \regis then _.map list, (i) ->
-					$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
 			unless userGroup \jalan and not Session.get \formDoc
 				Session.set \showForm, not Session.get \showForm
 				if userGroup \regis then Session.set \formDoc, null
 				Meteor.subscribe \coll, \gudang, {}, {}
 				Session.set \begin, new Date!
-				Meteor.setTimeout later, 1000
+				(Meteor.setTimeout _, 1000) later = ->
+					$ \.autoform-remove-item .trigger \click
+					if currentRoute! is \jalan
+						_.map <[ cara_bayar klinik karcis rujukan ]>, (i) ->
+							$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
+							if formDoc!
+								$ 'input[name="'+i+'"][value="'+formDoc![i]+'"]' .attr checked: true
+								$ 'input[name="'+i+'"]' .attr disabled: \disabled
+						_.map [\anamesa_perawat], (i) ->
+							$ 'textarea[name="'+i+'"]' .val formDoc![i]
+					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
+					if currentRoute! is \regis then _.map list, (i) ->
+						$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
 		'dblclick #row': ->
 			Router.go \/ + currentRoute! + \/ + @no_mr
 		'click #close': -> sessNull!; Router.go currentRoute!
@@ -200,9 +199,7 @@ if Meteor.isClient
 					Meteor.call ...params, (err, res) -> if res
 						MaterializeModal.message do
 							title: 'Penyerahan Obat'
-							message:
-								_.map res, (val , key) -> tag \p, "#key: #val"
-								.join ''
+							message: (.join '') _.map res, (val , key) -> tag \p, "#key: #val"
 						rekap = Session.get \rekap or []
 						flat = _.flatten _.toPairs res
 						Session.set \rekap, [...rekap, [...nodes, ...flat]]
