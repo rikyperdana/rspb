@@ -101,14 +101,14 @@ if Meteor.isClient
 				arr = <[ bayar jalan labor radio obat ]>
 				options.fields.rawat = 1 if currentRoute! in arr
 				Meteor.subscribe \coll, \pasien, selector, options
-					.ready! and coll.pasien.findOne!
+				.ready! and coll.pasien.findOne!
 			else if search!
 				byName = 'regis.nama_lengkap': $options: \-i, $regex: '.*'+search!+'.*'
 				byNoMR = no_mr: parseInt search!
 				selector = $or: [byName, byNoMR]
 				options = fields: no_mr: 1, regis: 1
 				Meteor.subscribe \coll, \pasien, selector, options
-					.ready! and coll.pasien.find!fetch!
+				.ready! and coll.pasien.find!fetch!
 			else if roles!jalan
 				kliniks = _.map roles!jalan, (i) ->
 					(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
@@ -126,13 +126,13 @@ if Meteor.isClient
 			else if currentRoute! is \bayar
 				selector = rawat: $elemMatch: $or: ['status_bayar': $ne: true]
 				Meteor.subscribe \coll, \pasien, selector, {}
-					.ready! and coll.pasien.find!fetch!
+				.ready! and coll.pasien.find!fetch!
 			else if currentRoute! in <[ labor radio obat ]>
 				elem = 'status_bayar': true
 				elem[currentRoute!] = $exists: true, $elemMatch: hasil: $exists: false
 				selSub = rawat: $elemMatch: elem
 				Meteor.subscribe \coll, \pasien, selSub, {}
-					.ready! and coll.pasien.find!fetch!
+				.ready! and coll.pasien.find!fetch!
 
 	Template.pasien.events do
 		'click #showForm': ->
@@ -237,14 +237,14 @@ if Meteor.isClient
 					selector = no_mr: parseInt data.no_mr
 					modifier = regis:
 						nama_lengkap: _.startCase data.nama_lengkap
-						alamat: _.startCase data.alamat?
-						agama: parseInt data.agama if data.agama?
-						ayah: _.startCase data.ayah if data.ayah?
-						nikah: parseInt data.nikah if data.nikah?
-						pekerjaan: parseInt data.pekerjaan if data.pekerjaan?
-						pendidikan: parseInt data.pendidikan if data.pendidikan?
-						tgl_lahir: new Date date.tgl_lahir if Date.parse data.tgl_lahir?
-						tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran?
+						alamat: _.startCase data.alamat if data.alamat
+						agama: parseInt data.agama if data.agama
+						ayah: _.startCase data.ayah if data.ayah
+						nikah: parseInt data.nikah if data.nikah
+						pekerjaan: parseInt data.pekerjaan if data.pekerjaan
+						pendidikan: parseInt data.pendidikan if data.pendidikan
+						tgl_lahir: new Date data.tgl_lahir if Date.parse data.tgl_lahir
+						tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran
 					Meteor.call \import, \pasien, selector, modifier
 				else if currentRoute! is \manajemen
 					if data.tipe
@@ -313,21 +313,22 @@ if Meteor.isClient
 		gudangs: ->
 			aggr = (i) -> _.map i, (j) ->
 				reduced = (name) -> _.reduce j.batch, ((sum, n) -> sum + n[name]), 0
-				j.akumulasi = digudang: reduced(\digudang), diapotik: reduced(\diapotik)
-				j
+				_.assign j,
+					digudang: reduced \digudang
+					diapotik: reduced \diapotik
 			if currentPar \idbarang
 				selector = idbarang: currentPar \idbarang
 				Meteor.subscribe \coll, \gudang, selector, {}
-					.ready! and coll.gudang.findOne!
+				.ready! and coll.gudang.findOne!
 			else if search!
 				byName = nama: $options: '-i', $regex: '.*'+search!+'.*'
 				byBatch = idbatch: search!
 				selector = $or: [byName, byBatch]
 				Meteor.subscribe \coll, \gudang, selector, {}
-					.ready! and aggr coll.gudang.find!fetch!
+				.ready! and aggr coll.gudang.find!fetch!
 			else
 				Meteor.subscribe \coll, \gudang, {}, {}
-					.ready! and aggr coll.gudang.find!fetch!
+				.ready! and aggr coll.gudang.find!fetch!
 		nearEds: -> Session.get \nearEds
 		addAmprah: -> Session.get \addAmprah
 		schemaAmprah: -> new SimpleSchema schema.amprah
