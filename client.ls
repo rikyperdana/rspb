@@ -57,13 +57,13 @@ if Meteor.isClient
 
 	Template.pasien.helpers do
 		heads: ->
-			pasien: ['No MR', 'Nama', 'Orang Tua', 'Alamat', 'Jenis Kelamin', 'Tgl Lahir']
-			bayar: ['No MR', 'Nama', 'Tanggal', 'Total Biaya', 'Cara Bayar', 'Klinik', 'Aksi']
-			labor: ['No MR', 'Pasien', 'Grup', 'Order', 'Aksi']
-			radio: ['No MR', 'Pasien', 'Order', 'Aksi']
-			obat: ['No MR', 'Pasien', 'Nama Obat', 'Kali', 'Dosis', 'Bentuk', 'Jumlah', 'Serah']
-			rawat: ['Tanggal', 'Klinik', 'Cara Bayar', 'Bayar Pendaftaran', 'Bayar Tindakan', 'Cek']
-			fisik: ['Tekanan Darah', 'Nadi', 'Suhu', 'Pernapasan', 'Berat', 'Tinggi', 'LILA']
+			pasien: <[ no_mr nama orang_tua alamat jenis_kelamin tgl_lahir ]>
+			bayar: <[ no_mr nama tanggal total_biaya cara_bayar klinik aksi ]>
+			labor: <[ no_mr pasien grup order aksi ]>
+			radio: <[ no_mr pasien order aksi ]>
+			obat: <[ no_mr pasien nama_obat kali dosis bentuk jumlah serah ]>
+			rawat: <[ tanggal klinik cara_bayar bayar_pendaftaran bayar_tindakan cek ]>
+			fisik: <[ tekanan_darah nadi suhu pernapasan berat tinggi lila ]>
 			previewDokter: <[ Tindakan Dokter Harga ]>
 			previewLabor: <[ Grup Order Hasil ]>
 			previewRadio: <[ Order Arsip ]>
@@ -204,7 +204,7 @@ if Meteor.isClient
 						flat = _.flatten _.toPairs res
 						Session.set \rekap, [...rekap, [...nodes, ...flat]]
 		'dblclick #rekap': ->
-			headers = ['Pasien', 'ID Bayar', 'Jenis', 'ID Request', 'No Batch', 'Jumlah']
+			headers = <[ psaien id_bayar jenis id_request no_batch jumlah ]>
 			makePdf.rekap [headers, ...Session.get \rekap]
 			Session.set \rekap, null
 		'click .modal-trigger': (event) ->
@@ -300,10 +300,10 @@ if Meteor.isClient
 
 	Template.gudang.helpers do
 		heads: ->
-			barang: ['Jenis Barang', 'Nama Barang', 'Stok Gudang', 'Stok Apotik']
-			batch: ['No Batch', 'Masuk', 'Kadaluarsa', 'Beli', 'Jual', 'Di Gudang', 'Di Apotik', 'Suplier']
-			amprah: <[ Ruangan Peminta Meminta Penyerah Menyerahkan Tanggal ]>
-			latestAmprah: <[ Nama Ruangan Peminta Diminta Tanggal ]>
+			barang: <[ jenis_barang nama_barang stok_gudang stok_diapotik ]>
+			batch: <[ no_batch masuk kadaluarsa beli jual di_gudang di_apotik suplier ]>
+			amprah: <[ ruangan peminta meminta penyerah menyerahkan tanggal ]>
+			latestAmprah: <[ nama ruangan peminta diminta tanggal ]>
 		formType: -> if currentPar \idbarang then \update-pushArray else \insert
 		warning: (date) -> switch
 			when monthDiff(date) < 2 then \red

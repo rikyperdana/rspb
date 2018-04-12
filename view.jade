@@ -62,7 +62,7 @@ template(name='pasien'): .container
 		table.bordered
 			thead: tr
 				each val in heads.pasien
-					th= val
+					th= startCase(val)
 			tbody
 				each pasiens
 					tr#row
@@ -87,7 +87,7 @@ template(name='pasien'): .container
 			table.bordered
 				thead: tr
 					each val in heads.bayar
-						th= val
+						th= startCase(val)
 				tbody
 					each pasien in pasiens
 						if pasien.regis.billCard
@@ -140,7 +140,7 @@ template(name='pasien'): .container
 			table.bordered
 				thead: tr
 					each val in heads.labor
-						th= val
+						th= startCase(val)
 				tbody
 					each pasien in pasiens
 						each item in pasien.rawat
@@ -165,7 +165,7 @@ template(name='pasien'): .container
 			table.bordered
 				thead: tr
 					each val in heads.radio
-						th= val
+						th= startCase(val)
 				tbody
 					each pasien in pasiens
 						each item in pasien.rawat
@@ -189,7 +189,7 @@ template(name='pasien'): .container
 			table.bordered
 				thead: tr
 					each val in heads.obat
-						th= val
+						th= startCase(val)
 				tbody
 					each pasien in pasiens
 						each item in pasien.rawat
@@ -252,7 +252,7 @@ template(name='pasien'): .container
 				table.bordered
 					thead: tr
 						each val in heads.rawat
-							th= val
+							th= startCase(val)
 						if userRole 'admin'
 							th Hapus
 					tbody
@@ -300,7 +300,7 @@ template(name='pasien'): .container
 					table
 						thead: tr
 							each val in heads.fisik
-								th= val
+								th= startCase(val)
 						tbody
 							each fisik
 								tr
@@ -318,7 +318,7 @@ template(name='pasien'): .container
 					table
 						thead: tr
 							each val in heads.previewDokter
-								th= val
+								th= startCase(val)
 						tbody
 							each tindakan
 								tr
@@ -332,7 +332,7 @@ template(name='pasien'): .container
 					table
 						thead: tr
 							each val in heads.previewLabor
-								th= val
+								th= startCase(val)
 						tbody
 							each labor
 								tr
@@ -346,7 +346,7 @@ template(name='pasien'): .container
 					table
 						thead: tr
 							each val in heads.previewObat
-								th= val
+								th= startCase(val)
 						tbody
 							each obat
 								tr
@@ -362,7 +362,7 @@ template(name='pasien'): .container
 					table
 						thead: tr
 							each val in heads.previewRadio
-								th= val
+								th= startCase(val)
 						tbody
 							each radio
 								tr
@@ -422,7 +422,7 @@ template(name='gudang'): .container
 		table.bordered
 			thead: tr
 				each val in heads.barang
-					th= val
+					th= startCase(val)
 				if userRole 'admin'
 					th Hapus
 			tbody
@@ -448,7 +448,7 @@ template(name='gudang'): .container
 				thead: tr
 					th Nama Obat
 					each val in heads.batch
-						th= val
+						th= startCase(val)
 				tbody
 					each nearEds
 						tr#nearEd
@@ -466,7 +466,7 @@ template(name='gudang'): .container
 			table
 				thead: tr
 					each val in heads.latestAmprah
-						th= val
+						th= startCase(val)
 				tbody
 					each val in latestAmprah
 						each val.amprah
@@ -494,7 +494,7 @@ template(name='gudang'): .container
 			table
 				thead: tr
 					each val in heads.batch
-						th= val
+						th= startCase(val)
 					th Returnable
 					if userRole 'admin'
 						th Hapus
@@ -525,7 +525,7 @@ template(name='gudang'): .container
 		table
 			thead: tr
 				each val in heads.amprah
-					th= val
+					th= startCase(val)
 			tbody
 				with gudangs
 					each amprah

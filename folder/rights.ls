@@ -35,6 +35,5 @@ if Meteor.isClient
 		list: [\farmasi]
 	]
 
-	_.map rights, (i) ->
-		i.list = [...i.list, \panduan]
-		i
+	_.map rights, (i) -> _.assign i,
+		list: [...i.list, \panduan]
