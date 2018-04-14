@@ -19,12 +19,14 @@ if Meteor.isClient
 	@formDoc = -> Session.get \formDoc
 	@limit = -> Session.get \limit
 	@page = -> Session.get \page
-	@roles = -> Meteor.user!?roles
-	@userGroup = (name) -> roles![name]
-	@userRole = (name) -> roles!?[currentRoute!]?0 is name
 	@tag = (tag, val) -> "<#tag>#val</#tag>"
 	@userName = (id) -> Meteor.users.findOne(_id: id)?username
-	@show = console.log
-	@sessNull = -> _.map (_.tail _.keys Session.keys), (i) ->
-		Session.set i, null
-	
+	@roles = -> Meteor.user!?roles
+	@userGroup = (name) ->
+		if name then roles![name]
+		else (.0) _.keys roles!
+	@userRole = (name) ->
+		if name then roles!?[currentRoute!]?0 is name
+		else (.0.0) _.values roles!
+	@sessNull = -> _.map Session.keys, (i, j) ->
+		Session.set j, null

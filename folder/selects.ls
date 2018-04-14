@@ -8,6 +8,7 @@
 	cara_bayar: <[ umum bpjs jamkesda_pekanbaru jamkesda_kampar lapas_dinsos free ]>
 	nikah: <[ nikah belum_nikah janda duda ]>
 	klinik: <[ penyakit_dalam gigi kebidanan tht anak saraf mata bedah paru tb_dots kulit fisioterapi gizi metadon psikologi tindakan aps_labor aps_radio ]>
+	karcis: [ 40 30 40 40 40 40 40 40 40 40 40 0 25 30 25 0 0 0 ]
 	bentuk: <[ butir kapsul tablet sendok_makan sendok_teh ]>
 	tipe_dokter: <[ umum spesialis ]>
 	rujukan: <[ datang_sendiri rs_lain puskesmas faskes_lainnya ]>
@@ -17,9 +18,7 @@
 	anggaran: <[ blud apbd kemenkes dinkes ]>
 	alias: <[ tn ny nn an by ]>
 
-_.map selects, (i, j) -> selects[j] = _.map selects[j], (m, n) -> label: m, value: n+1
-
-selects.karcis = _.map [15000 20000 25000 30000 40000], (i) -> value: i, label: 'Rp ' + i
+_.map selects, (i, j) -> selects[j] = _.map selects[j], (m, n) -> value: n+1, label: _.startCase m
 
 selects.tindakan = -> if Meteor.isClient
 	selector = jenis: Meteor.user!roles.jalan.0

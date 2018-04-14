@@ -4,6 +4,11 @@ if Meteor.isClient
 		doc.tanggal = new Date!
 		doc.idbayar = if idbayar then idbayar else randomId!
 		doc.jenis = currentRoute!
+		doc.karcis = do -> if doc.klinik
+			val = parseInt (.label) _.find selects.karcis, ->
+				it.value is doc.klinik
+			val -= 10 if coll.pasien.findOne!rawat?0? unless val is 0
+			val * 1000
 		doc.total = tindakan: 0, labor: 0, radio: 0, obat: 0
 		_.map <[ tindakan labor radio ]>, (i) ->
 			if doc[i] then for j in doc[i]
@@ -11,7 +16,7 @@ if Meteor.isClient
 				find = _.find coll.tarif.find!fetch!, (k) -> k._id is j.nama
 				j.harga = find.harga
 				doc.total[i] += j.harga
-		for i in doc.obat?
+		doc.obat and for i in doc.obat
 			i.idobat = randomId!
 			find = _.find coll.gudang.find!fetch!, (k) -> k._id is i.nama
 			i.harga = 0 # find.batch[find.batch.length-1].jual

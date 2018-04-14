@@ -150,7 +150,7 @@ if Meteor.isClient
 								$ 'input[name="'+i+'"][value="'+formDoc![i]+'"]' .attr checked: true
 								$ 'input[name="'+i+'"]' .attr disabled: \disabled
 						_.map [\anamesa_perawat], (i) ->
-							$ 'textarea[name="'+i+'"]' .val formDoc![i]
+							$ 'textarea[name="'+i+'"]' .val formDoc!?[i]
 					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
 					if currentRoute! is \regis then _.map list, (i) ->
 						$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
