@@ -10,7 +10,7 @@ if Meteor.isClient
 				pageSize: \B8
 				pageMargins: [110 50 0 0]
 				pageOrientation: \landscape
-			pdf.download zeros(doc.no_mr) + '_card.pdf'
+			pdf.download zeros(doc.no_mr) + \_card.pdf
 		consent: ->
 			doc = coll.pasien.findOne!
 			pdf = pdfMake.createPdf do
@@ -24,7 +24,7 @@ if Meteor.isClient
 							doc.regis.nama_lengkap
 							(doc.regis.tmpt_lahir or \-) + ', ' + moment doc.regis.tgl_lahir .format 'D/MM/YYYY'
 							... do -> _.map <[ darah kelamin agama pendidikan pekerjaan ]>, (i) ->
-								look(i, doc.regis[i])?.label or \-
+								look(i, doc.regis[i])?label or \-
 							... do -> _.map <[ ayah ibu pasangan alamat kontak ]>, (i) ->
 								doc.regis[i] or \-
 						], (i) -> ': ' + i
@@ -66,10 +66,10 @@ if Meteor.isClient
 						_.map [
 							zeros pasien.no_mr
 							_.startCase pasien.regis.nama_lengkap
-							(look('kelamin', pasien.regis.kelamin)?.label or '-')
+							look(\kelamin, pasien.regis.kelamin)?label or \-
 							moment!format 'D/MM/YYYY'
-							moment!diff(pasien.regis.tgl_lahir, 'years') + ' tahun'
-							(look('klinik', doc.klinik)?.label or '-')
+							moment!diff(pasien.regis.tgl_lahir, \years) + ' tahun'
+							look(\klinik, doc.klinik)?label or '-'
 						], (i) -> ': ' + i
 					]}
 					{text: '\n\nRINCIAN PEMBAYARAN', alignment: center}
@@ -78,9 +78,8 @@ if Meteor.isClient
 					{text: '\nPEKANBARU, ' + moment!format('D/MM/YYYY') +
 					'\n\n\n\n\n' + (_.startCase Meteor.user!username), alignment: \right}
 				]
-			pdf.download zeros(pasien.no_mr) + '_payRawat.pdf'
+			pdf.download zeros(pasien.no_mr) + \_payRawat.pdf
 		payRegCard: (no_mr, amount, words) ->
-			doc = coll.pasien.findOne no_mr: parseInt no_mr
 			pdf = pdfMake.createPdf do
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
@@ -89,15 +88,15 @@ if Meteor.isClient
 						['TANGGAL', 'NO. MR', 'NAMA PASIEN', 'TARIF', '\n\nPETUGAS']
 						_.map [
 							moment!format 'DD/MM/YYYY'
-							zeros doc.no_mr
-							_.startCase doc.regis.nama_lengkap
+							zeros no_mr
+							_.startCase coll.pasien.findOne(no_mr: no_mr).regis.nama_lengkap
 							'Rp ' + amount
-							'\n\n' + _.startCase Meteor.user().username
+							'\n\n' + _.startCase Meteor.user!username
 						], (i) -> ': ' + i
 					]}
 				]
-			pdf.download zeros(doc.no_mr) + '_payRegCard.pdf'
+			pdf.download zeros(no_mr) + \_payRegCard.pdf
 		rekap: (rows) ->
 			strings = _.map rows, (i) -> _.map i, (j) -> _.toString j
 			pdf = pdfMake.createPdf content: [table: body: strings]
-			pdf.download 'rekap.pdf'
+			pdf.download \rekap.pdf

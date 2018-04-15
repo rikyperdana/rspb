@@ -1,39 +1,40 @@
 if Meteor.isClient
 
-	@modForm = (doc, idbayar) -> if currentRoute! is \jalan
-		doc.tanggal = new Date!
-		doc.idbayar = if idbayar then idbayar else randomId!
-		doc.jenis = currentRoute!
-		doc.karcis = do -> if doc.klinik
-			val = parseInt (.label) _.find selects.karcis, ->
-				it.value is doc.klinik
+	@modForm = (doc, idbayar) -> if currentRoute! is \jalan then _.assign doc,
+		tanggal: new Date!
+		idbayar: idbayar or randomId!
+		jenis: currentRoute!
+		karcis: if doc.klinik
+			val = parseInt (.label) _.find selects.karcis, -> it.value is doc.klinik
 			val -= 10 if coll.pasien.findOne!rawat?0? unless val is 0
 			val * 1000
-		doc.total = tindakan: 0, labor: 0, radio: 0, obat: 0
-		_.map <[ tindakan labor radio ]>, (i) ->
-			if doc[i] then for j in doc[i]
-				j["id#i"] = randomId!
-				find = _.find coll.tarif.find!fetch!, (k) -> k._id is j.nama
-				j.harga = find.harga
-				doc.total[i] += j.harga
-		doc.obat and for i in doc.obat
-			i.idobat = randomId!
-			find = _.find coll.gudang.find!fetch!, (k) -> k._id is i.nama
-			i.harga = 0 # find.batch[find.batch.length-1].jual
-			i.subtotal = i.harga * i.jumlah
-			doc.total.obat += i.subtotal
-		doc.total.semua = _.reduce _.values(doc.total), (acc, val) -> acc + val
-		doc.billRegis = true if doc.anamesa_perawat or doc.anamesa_dokter
-		doc.billRegis = true if doc.total.semua > 0 or doc.cara_bayar isnt 1
-		doc.status_bayar = true if doc.total.semua > 0 and doc.cara_bayar isnt 1
-		if doc.obat and 0 is doc.total.semua
-			doc.billRegis = true
-			doc.status_bayar = true
-		begin = Session.get \begin; stop = moment!
-		doc.spm = stop.diff begin, \minutes
-		doc.petugas = Meteor.userId!
-		doc.nobill = parseInt _.toString(Date.now!).substr 7, 13
-		doc
+		total: do ->
+			arr = <[ tindakan labor radio ]>
+			tlr = _.zipObject arr, _.map arr, (i) -> doc[i] and _.map doc[i], (j) ->
+				"id#i": randomId!, harga: (.harga) _.find coll.tarif.find!fetch!,
+					(k) -> k._id is j.nama
+			obat = obat: doc.obat and _.map doc.obat, (i) ->
+				idobat: randomId!
+				harga: 0 # (.harga) _.find coll.gudang.find!fetch!, (j) -> j._id is i.nama
+				subtotal: i.harga * i.jumlah
+			_.assign tlr, obat, semua: _.sum _.concat do
+				_.map arr, (i) -> tlr[i]?harga
+				_.map obat, (i) -> i?subtotal
+		billRegis: do ->
+			a = -> doc.anamesa_perawat or doc.anamesa_dokter
+			b = -> doc.total?semua > 0 and doc.cara_bayar isnt 1
+			c = -> doc.obat and 0 is doc.total?semua
+			doc.billRegis or a! or b! or c!
+		status_bayar: do ->
+			a = -> doc.total?semua > 0 and doc.cara_bayar isnt 1
+			b = -> doc.obat and 0 is doc.total?semua
+			doc.status_bayar or a! or b!
+		spm: do ->
+			begin = Session.get \begin; stop = moment!
+			stop.diff begin, \minutes
+		petugas: Meteor.userId!
+		nobill: parseInt _.toString(Date.now!)substr 7, 13
+
 
 	AutoForm.addHooks \formPasien,
 		before:

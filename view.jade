@@ -90,18 +90,6 @@ template(name='pasien'): .container
 						th= startCase(val)
 				tbody
 					each pasien in pasiens
-						if pasien.regis.billCard
-							tr
-								td= zeros(pasien.no_mr)
-								td= pasien.regis.nama_lengkap
-								td= hari(pasien.regis.date)
-								td Rp 10,000
-								td {{look 'cara_bayar' pasien.regis.cara_bayar 'label'}}
-								td Kartu
-								td
-									a#bill(
-										pasien= pasien.no_mr
-									) Bayar
 						each item in pasien.rawat
 							unless item.billRegis
 								tr
@@ -119,7 +107,7 @@ template(name='pasien'): .container
 										) Bayar
 							if isTrue item.cara_bayar 1
 								unless item.status_bayar
-									unless isTrue item.total.semua 0
+									if item.total.semua
 										tr
 											td= zeros(pasien.no_mr)
 											td= pasien.regis.nama_lengkap
