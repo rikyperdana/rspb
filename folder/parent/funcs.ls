@@ -23,7 +23,7 @@ if Meteor.isClient
 	@userName = (id) -> Meteor.users.findOne(_id: id)?username
 	@roles = -> Meteor.user!?roles
 	@userGroup = (name) ->
-		if name then roles![name]
+		if name then roles!?[name]
 		else (.0) _.keys roles!
 	@userRole = (name) ->
 		if name then roles!?[currentRoute!]?0 is name

@@ -21,9 +21,9 @@ if Meteor.isClient
 				_.map arr, (i) -> tlr[i]?harga
 				_.map obat, (i) -> i?subtotal
 		billRegis: do ->
-			a = -> doc.anamesa_perawat or doc.anamesa_dokter
+			a = -> doc.anamesa_perawat? or doc.anamesa_dokter?
 			b = -> doc.total?semua > 0 and doc.cara_bayar isnt 1
-			c = -> doc.obat and 0 is doc.total?semua
+			c = -> doc.obat? and 0 is doc.total?semua
 			doc.billRegis or a! or b! or c!
 		status_bayar: do ->
 			a = -> doc.total?semua > 0 and doc.cara_bayar isnt 1

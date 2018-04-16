@@ -1,3 +1,11 @@
+16 April 2018
+1. Penyerahan amprah secara otomatis mengurangi stok batch
+2. Perbaiki fields diakumulasi
+3. Tambahkan info berikut ini pada tabel daftar request obat
+   - Nama Dokter
+   - Ruangan Klinik
+   - Tanggal Request
+
 23 Feb 2018
 oke 1. Pada General Consent tambahkan no_mr dan kolom s/ts
 oke 2. Pada registrasi pasien tambahkan field alias (Tn, Ny, Nn, An, By)

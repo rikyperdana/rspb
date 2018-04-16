@@ -109,7 +109,7 @@ if Meteor.isClient
 				options = fields: no_mr: 1, regis: 1
 				Meteor.subscribe \coll, \pasien, selector, options
 				.ready! and coll.pasien.find!fetch!
-			else if roles!jalan
+			else if roles!?jalan
 				kliniks = _.map roles!jalan, (i) ->
 					(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
 				selector = rawat: $elemMatch:
@@ -118,9 +118,9 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, {} .ready! and do ->
 					filter = _.filter coll.pasien.find!fetch!, (i) ->
 						a = -> i.rawat[i.rawat.length-1]klinik in kliniks
-						b = -> not i.rawat[i.rawat.length-1].total.semua
+						b = -> not i.rawat[i.rawat.length-1]total.semua
 						selPol = Session.get \selPol
-						c = -> i.rawat[i.rawat.length-1].klinik is selPol
+						c = -> i.rawat[i.rawat.length-1]klinik is selPol
 						if selPol then b! and c! else a! and b!
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
 			else if currentRoute! is \bayar
