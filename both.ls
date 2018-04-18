@@ -8,17 +8,17 @@ Router.route \/,
 schema.regis =
 	no_mr: type: Number, max: 999999
 	regis: type: Object
-	'regis.alias': type: Number, optional: true, autoform: options: selects.alias, type: \select-radio-inline
+	'regis.alias': type: Number, optional: true, autoform: options: selects.alias
 	'regis.nama_lengkap': type: String
 	'regis.tgl_lahir': type: Date, autoform: type: \pickadate, pickadateOptions: selectYears: 150, selectMonths: true
 	'regis.tmpt_lahir': type: String, optional: true
-	'regis.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: \select-radio-inline
-	'regis.kelamin': type: Number, autoform: options: selects.kelamin, type: \select-radio-inline
-	'regis.agama': type: Number, autoform: options: selects.agama, type: \select-radio-inline
-	'regis.nikah': type: Number, autoform: options: selects.nikah, type: \select-radio-inline
-	'regis.pendidikan': type: Number, optional: true, autoform: options: selects.pendidikan, type: \select-radio-inline
-	'regis.darah': type: Number, optional: true, autoform: options: selects.darah, type: \select-radio-inline
-	'regis.pekerjaan': type: Number, optional: true, autoform: options: selects.pekerjaan, type: \select-radio-inline
+	'regis.cara_bayar': type: Number, autoform: options: selects.cara_bayar
+	'regis.kelamin': type: Number, autoform: options: selects.kelamin
+	'regis.agama': type: Number, autoform: options: selects.agama
+	'regis.nikah': type: Number, autoform: options: selects.nikah
+	'regis.pendidikan': type: Number, optional: true, autoform: options: selects.pendidikan
+	'regis.darah': type: Number, optional: true, autoform: options: selects.darah
+	'regis.pekerjaan': type: Number, optional: true, autoform: options: selects.pekerjaan
 	'regis.kabupaten': type: String, optional: true
 	'regis.kecamatan': type: String, optional: true
 	'regis.kelurahan': type: String, optional: true

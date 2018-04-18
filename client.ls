@@ -152,8 +152,13 @@ if Meteor.isClient
 						_.map [\anamesa_perawat], (i) ->
 							$ 'textarea[name="'+i+'"]' .val formDoc!?[i]
 					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
-					if currentRoute! is \regis then _.map list, (i) ->
-						$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
+					if currentRoute! is \regis
+						_.map list, (i) ->
+							$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
+						arr = _.compact _.map schema.regis, (i, j) -> (.1) _.split j, \.
+						_.map arr, (i) ->
+							$ '[name="regis.'+i+'"]' .parents \div.row .removeClass \row .addClass 'col m6'
+						$ '.card-content' .addClass \row
 		'dblclick #row': ->
 			Router.go \/ + currentRoute! + \/ + @no_mr
 		'click #close': -> sessNull!; Router.go currentRoute!
