@@ -77,12 +77,12 @@ template(name='pasien'): .container
 		if pasiens
 			+pagination(name= 'pasien')
 		if userRole 'admin'
-			if routeIs 'regis'
+			if currentRoute 'regis'
 				+import
 				+report(jenis='pendaftaran')
-			else if routeIs 'jalan'
+			else if currentRoute 'jalan'
 				+report(jenis='rawat_jalan')
-		if routeIs 'bayar'
+		if currentRoute 'bayar'
 			h5 Daftar Bayar
 			table.bordered
 				thead: tr
@@ -98,7 +98,7 @@ template(name='pasien'): .container
 									td= hari(item.tanggal)
 									td= rupiah(item.karcis)
 									td {{look 'cara_bayar' item.cara_bayar 'label'}}
-									td Konsultasi
+									td {{look 'klinik' item.klinik 'label'}}
 									td
 										a#bill(
 											pasien= pasien.no_mr
@@ -123,7 +123,7 @@ template(name='pasien'): .container
 			br
 			if userRole 'admin'
 				+report(jenis='pembayaran')
-		if routeIs 'labor'
+		if currentRoute 'labor'
 			h5 Daftar Request Labor
 			table.bordered
 				thead: tr
@@ -148,7 +148,7 @@ template(name='pasien'): .container
 														jenis= 'labor'
 														idjenis= labor.idlabor
 													) Isi
-		if routeIs 'radio'
+		if currentRoute 'radio'
 			h5 Daftar Request Radiologi
 			table.bordered
 				thead: tr
@@ -172,7 +172,7 @@ template(name='pasien'): .container
 														jenis = 'radio'
 														idjenis= radio.idradio
 													) Aksi
-		if routeIs 'obat'
+		if currentRoute 'obat'
 			h5 Daftar Request Obat
 			table.bordered
 				thead: tr
@@ -186,12 +186,18 @@ template(name='pasien'): .container
 									each obat in item.obat
 										unless obat.hasil
 											tr
+												td= hari(item.tanggal)
 												td= zeros(pasien.no_mr)
 												td= pasien.regis.nama_lengkap
+												td
+													each tindakan in item.tindakan
+														span= tindakan.dokter
+												td {{look 'klinik' item.klinik 'label'}}
 												td {{look2 'gudang' obat.nama 'nama'}}
-												td= obat.aturan.kali
-												td= obat.aturan.dosis
-												td {{look 'bentuk' obat.aturan.bentuk 'label'}}
+												td
+													span= obat.aturan.kali
+													span= obat.aturan.dosis
+													span {{look 'bentuk' obat.aturan.bentuk 'label'}}
 												td= obat.jumlah
 												td
 													a#request(
@@ -206,7 +212,7 @@ template(name='pasien'): .container
 
 	if currentPar 'no_mr'
 		with pasiens
-			if routeIs 'regis'
+			if currentRoute 'regis'
 				.row
 					.left.purple.btn#card Cetak
 					.left.purple.btn#consent Consent

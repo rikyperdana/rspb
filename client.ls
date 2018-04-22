@@ -15,6 +15,7 @@ if Meteor.isClient
 		showForm: -> Session.get \showForm
 		hari: (date) -> date and moment date .format 'D MMM YYYY'
 		rupiah: (val) -> 'Rp ' + numeral val .format '0,0'
+		currentRoute: (name) -> unless name then currentRoute! else currentRoute! is name
 		currentPar: (param) -> currentPar param
 		stringify: (obj) -> JSON.stringify obj
 		startCase: (val) -> _.startCase val
@@ -25,7 +26,6 @@ if Meteor.isClient
 		isFalse: (a, b) -> a isnt b
 		look: (option, value, field) -> look(option, value)?[field]
 		look2: (option, value, field) -> look2(option, value)?[field]
-		routeIs: (name) -> currentRoute! is name
 		userGroup: (name) -> userGroup name
 		userRole: (name) -> userRole name
 		userName: (id) -> _.startCase userName id
@@ -44,9 +44,10 @@ if Meteor.isClient
 
 	Template.menu.helpers do
 		menus: ->			
-			_.initial _.flatMap roles!, (i, j) ->
+			_.flatMap roles!, (i, j) ->
 				find = _.find rights, (k) -> k.group is j
-				_.map find.list, (k) -> _.find modules, (l) -> l.name is k
+				_.initial _.map find.list, (k) ->
+					_.find modules, (l) -> l.name is k
 		navTitle: ->
 			find = _.find modules, (i) -> i.name is currentRoute!
 			find?full or _.startCase currentRoute!
@@ -61,7 +62,7 @@ if Meteor.isClient
 			bayar: <[ no_mr nama tanggal total_biaya cara_bayar klinik aksi ]>
 			labor: <[ no_mr pasien grup order aksi ]>
 			radio: <[ no_mr pasien order aksi ]>
-			obat: <[ no_mr pasien nama_obat kali dosis bentuk jumlah serah ]>
+			obat: <[ tanggal no_mr pasien dokter klinik nama_obat aturan jumlah serah ]>
 			rawat: <[ tanggal klinik cara_bayar bayar_pendaftaran bayar_tindakan cek ]>
 			fisik: <[ tekanan_darah nadi suhu pernapasan berat tinggi lila ]>
 			previewDokter: <[ Tindakan Dokter Harga ]>
@@ -179,7 +180,7 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				if nodes.1
 					Meteor.call \billRegis, ...nodes[0 to 1], true
-					makePdf.payRegCard nodes.1, nodes.2, '...'
+					makePdf.payRegCard ...nodes[0 to 2], \...
 				else
 					Meteor.call \billCard, nodes.0, false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
@@ -318,7 +319,7 @@ if Meteor.isClient
 		gudangs: ->
 			aggr = (i) -> _.map i, (j) ->
 				reduced = (name) -> _.reduce j.batch, ((sum, n) -> sum + n[name]), 0
-				_.assign j,
+				_.assign j, akumulasi:
 					digudang: reduced \digudang
 					diapotik: reduced \diapotik
 			if currentPar \idbarang

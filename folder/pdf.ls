@@ -69,7 +69,7 @@ if Meteor.isClient
 							look(\kelamin, pasien.regis.kelamin)?label or \-
 							moment!format 'D/MM/YYYY'
 							moment!diff(pasien.regis.tgl_lahir, \years) + ' tahun'
-							look(\klinik, doc.klinik)?label or '-'
+							look(\klinik, doc.klinik)?label or \-
 						], (i) -> ': ' + i
 					]}
 					{text: '\n\nRINCIAN PEMBAYARAN', alignment: center}
@@ -79,7 +79,8 @@ if Meteor.isClient
 					'\n\n\n\n\n' + (_.startCase Meteor.user!username), alignment: \right}
 				]
 			pdf.download zeros(pasien.no_mr) + \_payRawat.pdf
-		payRegCard: (no_mr, amount, words) ->
+		payRegCard: (no_mr, idbayar, amount, words) ->
+			doc = coll.pasien.findOne no_mr: parseInt no_mr
 			pdf = pdfMake.createPdf do
 				content: [
 					{text: 'PEMERINTAH PROVINSI RIAU\nRUMAH SAKIT UMUM DAERAH PETALA BUMI\nJL. DR. SOETOMO NO. 65, TELP. (0761) 23024, PEKANBARU', alignment: 'center'}
@@ -89,7 +90,7 @@ if Meteor.isClient
 						_.map [
 							moment!format 'DD/MM/YYYY'
 							zeros no_mr
-							_.startCase coll.pasien.findOne(no_mr: no_mr).regis.nama_lengkap
+							_.startCase doc.regis.nama_lengkap
 							'Rp ' + amount
 							'\n\n' + _.startCase Meteor.user!username
 						], (i) -> ': ' + i
