@@ -73,8 +73,7 @@ if Meteor.isClient
 		formType: ->
 			if currentRoute! is \regis
 				if currentPar \no_mr then \update else \insert
-			else
-				\update-pushArray
+			else \update-pushArray
 		umur: (date) -> moment!diff(date, \years) + ' tahun'
 		showButton: -> Router.current!params.no_mr or currentRoute! is \regis
 		showButtonText: ->
@@ -385,7 +384,8 @@ if Meteor.isClient
 				MaterializeModal.prompt do
 					message: 'Jumlah diserahkan'
 					callback: (err, res) -> if res.submit
-						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt res.value
+						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt(res.value), (err, res) ->
+							res and Meteor.call \transfer, currentPar(\idbarang), false, parseInt res.value
 
 	Template.manajemen.helpers do
 		users: -> Meteor.users.find!fetch!

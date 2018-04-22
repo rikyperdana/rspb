@@ -82,7 +82,8 @@ if Meteor.isServer
 			give if jenis is \obat
 
 		transfer: (idbarang, idbatch, amount) ->
-			selector = idbarang: idbarang, 'batch.idbatch': idbatch
+			selector = idbarang: idbarang, 'batch.idbatch': idbatch or do ->
+				(.0.idbatch) _.sortBy coll.gudang.findOne(idbarang: idbarang).batch, \kadaluarsa
 			modifier = $inc: 'batch.$.digudang': -amount, 'batch.$.diapotik': amount
 			coll.gudang.update selector, modifier
 
