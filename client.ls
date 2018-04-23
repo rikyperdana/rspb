@@ -3,8 +3,7 @@ if Meteor.isClient
 	Router.onBeforeAction ->
 		unless Meteor.userId! then @render \login else @next!
 	Router.onAfterAction ->
-		sessNull!
-		Router.go \/ unless currentRoute! in
+		sessNull! and Router.go \/ unless currentRoute! in
 			_.uniq _.flatMap roles!, (i, j) ->
 				(.list) _.find rights, (k) -> k.group is j
 
@@ -85,7 +84,7 @@ if Meteor.isClient
 		omitFields: ->
 			arr = <[ anamesa_perawat fisik anamesa_dokter diagnosa planning tindakan labor radio obat spm keluar pindah ]>
 			unless formDoc!?billRegis then arr
-			else unless \dr is _.first _.split Meteor.user!username, \.
+			else unless \dr or \drg is _.first _.split Meteor.user!username, \.
 				arr[2 to arr.length]
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			i.klinik is (.value) _.find selects.klinik, (j) ->
@@ -301,7 +300,7 @@ if Meteor.isClient
 			select = $ 'select#export' .val!
 			Meteor.call \export, select, (err, content) -> if content
 				blob = new Blob [content], type: 'text/plain;charset=utf-8'
-				saveAs blob, "#select.csv"
+				saveAs blob, \#select.csv
 
 	Template.gudang.helpers do
 		heads: ->
@@ -452,12 +451,12 @@ if Meteor.isClient
 				if err
 					Materialize.toast 'Salah username / password', 3000
 				else
-					Router.go \/ + (_.keys roles!).0
+					Router.go \/ + (_.keys roles!)0
 
 	Template.pagination.helpers do
 		pagins: (name) ->
 			limit = Session.get \limit
-			length = coll[name].find!fetch!length
+			length = coll[name]find!fetch!length
 			end = (length - (length % limit)) / limit
 			[1 to end]
 
