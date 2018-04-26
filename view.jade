@@ -59,23 +59,24 @@ template(name='pasien'): .container
 			omitFields= omitFields
 		)
 	unless currentPar 'no_mr'
-		table.bordered
-			thead: tr
-				each val in heads.pasien
-					th= startCase(val)
-			tbody
-				each pasiens
-					tr#row
-						td= zeros(no_mr)
-						td= startCase(regis.nama_lengkap)
-						td
-							span= regis.ayah
-							span= regis.ibu
-						td= regis.alamat
-						td {{look 'kelamin' regis.kelamin 'label'}}
-						td= hari(regis.tgl_lahir)
-		if pasiens
-			+pagination(name= 'pasien')
+		unless currentRoute 'bayar'
+			table.bordered
+				thead: tr
+					each val in heads.pasien
+						th= startCase(val)
+				tbody
+					each pasiens
+						tr#row
+							td= zeros(no_mr)
+							td= startCase(regis.nama_lengkap)
+							td
+								span= regis.ayah
+								span= regis.ibu
+							td= regis.alamat
+							td {{look 'kelamin' regis.kelamin 'label'}}
+							td= hari(regis.tgl_lahir)
+			if pasiens
+				+pagination(name= 'pasien')
 		if userRole 'admin'
 			if currentRoute 'regis'
 				+import

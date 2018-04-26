@@ -68,7 +68,6 @@ if Meteor.isClient
 			previewLabor: <[ Grup Order Hasil ]>
 			previewRadio: <[ Order Arsip ]>
 			previewObat: <[ Nama Dosis Bentuk Kali Jumlah ]>
-		route: -> currentRoute!
 		formType: ->
 			if currentRoute! is \regis
 				if currentPar \no_mr then \update else \insert
@@ -84,7 +83,7 @@ if Meteor.isClient
 		omitFields: ->
 			arr = <[ anamesa_perawat fisik anamesa_dokter diagnosa planning tindakan labor radio obat spm keluar pindah ]>
 			unless formDoc!?billRegis then arr
-			else unless \dr or \drg is _.first _.split Meteor.user!username, \.
+			else unless (_.first _.split Meteor.user!username, \.) in <[ dr drg ]>
 				arr[2 to arr.length]
 		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
 			i.klinik is (.value) _.find selects.klinik, (j) ->
@@ -104,7 +103,7 @@ if Meteor.isClient
 			else if search!
 				byName = 'regis.nama_lengkap': $options: \-i, $regex: '.*'+search!+'.*'
 				byNoMR = no_mr: parseInt search!
-				selector = $or: [byName, byNoMR]
+				selector = $or: [byName, byNoMR], no_mr: $ne: NaN
 				options = fields: no_mr: 1, regis: 1
 				Meteor.subscribe \coll, \pasien, selector, options
 				.ready! and coll.pasien.find!fetch!

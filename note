@@ -1,3 +1,10 @@
+25 April 2018
+1. Pdf laporan amprah lengkap dengan filterisasi
+2. Rapikan susunan semua radio select
+3. Rapikan pengkoloman form tindakan, labor, radio, obat
+oke 4. Keluarkan pasien tanpa no_mr dari hasil pencarian
+5. Tambahkan NIK pada pendaftaran pasien baru
+
 16 April 2018
 oke 1. Penyerahan amprah secara otomatis mengurangi stok batch
 oke 2. Perbaiki fields diakumulasi

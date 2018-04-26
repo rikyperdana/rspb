@@ -29,4 +29,4 @@ if Meteor.isClient
 		if name then roles!?[currentRoute!]?0 is name
 		else (.0.0) _.values roles!
 	@sessNull = -> _.map Session.keys, (i, j) ->
-		Session.set j, null
+		Session.set j, null unless j in <[ page limit ]>
