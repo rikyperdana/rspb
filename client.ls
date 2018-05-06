@@ -382,8 +382,8 @@ if Meteor.isClient
 				MaterializeModal.prompt do
 					message: 'Jumlah diserahkan'
 					callback: (err, res) -> if res.submit
-						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt(res.value), (err, res) ->
-							res and Meteor.call \transfer, currentPar(\idbarang), false, parseInt res.value
+						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt(res.value), (err2, res2) ->
+							res2 and Meteor.call \transfer, currentPar(\idbarang), false, parseInt res.value
 
 	Template.manajemen.helpers do
 		users: -> Meteor.users.find!fetch!

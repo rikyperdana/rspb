@@ -87,7 +87,7 @@ if Meteor.isServer
 
 		transfer: (idbarang, idbatch, amount) ->
 			selector = idbarang: idbarang, 'batch.idbatch': idbatch or do ->
-				filtered = _.filter coll.gudang.findOne(idbarang: idbarang).batch, (i) ->
+				filtered = _.filter coll.gudang.findOne(idbarang: idbarang)batch, (i) ->
 					a = -> i.digudang > 0
 					b = -> 0 < monthDiff i.kadaluarsa
 					a! and b!
@@ -116,8 +116,7 @@ if Meteor.isServer
 			if find
 				Accounts.setUsername find._id, doc.username
 				Accounts.setPassword find._id, doc.password
-			else
-				Accounts.createUser doc
+			else Accounts.createUser doc
 
 		rmBarang: (idbarang) ->
 			coll.gudang.remove idbarang: idbarang
