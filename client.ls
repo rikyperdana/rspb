@@ -120,7 +120,7 @@ if Meteor.isClient
 						selPol = Session.get \selPol
 						c = -> i.rawat[i.rawat.length-1]klinik is selPol
 						if selPol then b! and c! else a! and b!
-					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1].tanggal
+					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1]tanggal
 			else if currentRoute! is \bayar
 				selector = rawat: $elemMatch: $or: ['status_bayar': $ne: true]
 				Meteor.subscribe \coll, \pasien, selector, {}
@@ -341,13 +341,6 @@ if Meteor.isClient
 		'click #showForm': ->
 			Session.set \showForm, not Session.get \showForm
 		'dblclick #row': -> Router.go \/ + currentRoute! + \/ + @idbarang
-		'dblclick #transfer': ->
-			self = this
-			if roles!farmasi
-				MaterializeModal.prompt do
-					message: 'Transfer Gudang > Apotek'
-					callback: (err, res) -> if res.submit
-						Meteor.call \transfer, currentPar(\idbarang), self.idbatch, parseInt res.value
 		'click #rmBarang': ->
 			self = this
 			dialog =
@@ -383,7 +376,10 @@ if Meteor.isClient
 					message: 'Jumlah diserahkan'
 					callback: (err, res) -> if res.submit
 						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt(res.value), (err2, res2) ->
-							res2 and Meteor.call \transfer, currentPar(\idbarang), false, parseInt res.value
+							res2 and Meteor.call \transfer, currentPar(\idbarang), parseInt(res.value), (err3, res3) ->
+								res3 and MaterializeModal.message do
+									title: 'Transferkan Barang'
+									message: JSON.stringify res3
 
 	Template.manajemen.helpers do
 		users: -> Meteor.users.find!fetch!
@@ -447,10 +443,8 @@ if Meteor.isClient
 			username = event.target.children.username.value
 			password = event.target.children.password.value
 			Meteor.loginWithPassword username, password, (err) ->
-				if err
-					Materialize.toast 'Salah username / password', 3000
-				else
-					Router.go \/ + (_.keys roles!)0
+				if err then Materialize.toast 'Salah username / password', 3000
+				else Router.go \/ + (_.keys roles!)0
 
 	Template.pagination.helpers do
 		pagins: (name) ->

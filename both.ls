@@ -84,8 +84,8 @@ schema.rawat =
 	'rawat.$.tanggal': type: Date, autoform: type: \hidden
 	'rawat.$.idbayar': type: String, optional: true, autoform: type: \hidden
 	'rawat.$.jenis': type: String, optional: true, autoform: type: \hidden
-	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar, type: \select-radio-inline
-	'rawat.$.klinik': type: Number, autoform: options: selects.klinik, type: \select-radio-inline
+	'rawat.$.cara_bayar': type: Number, autoform: options: selects.cara_bayar
+	'rawat.$.klinik': type: Number, autoform: options: selects.klinik
 	'rawat.$.karcis': type: Number, autoform: type: \hidden
 	'rawat.$.rujukan': type: Number, optional: true, autoform: options: selects.rujukan, type: \select-radio-inline
 	'rawat.$.billRegis': type: Boolean, optional: true, autoform: type: \hidden

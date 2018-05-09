@@ -85,15 +85,20 @@ if Meteor.isServer
 						coll.gudang.update selector, modifier
 			give if jenis is \obat
 
-		transfer: (idbarang, idbatch, amount) ->
-			selector = idbarang: idbarang, 'batch.idbatch': idbatch or do ->
-				filtered = _.filter coll.gudang.findOne(idbarang: idbarang)batch, (i) ->
-					a = -> i.digudang > 0
-					b = -> 0 < monthDiff i.kadaluarsa
+		transfer: (idbarang, amount) ->
+			findStock = coll.gudang.findOne idbarang: idbarang
+			give = {}
+			for i in [1 to amount]
+				findBatch = _.find findStock.batch, (j) ->
+					a = -> j.digudang > 0
+					b = -> 0 < monthDiff j.kadaluarsa
 					a! and b!
-				(.0.idbatch) _.sortBy filtered, \kadaluarsa
-			modifier = $inc: 'batch.$.digudang': -amount, 'batch.$.diapotik': amount
-			coll.gudang.update selector, modifier
+				findBatch.digudang -= 1
+				findBatch.diapotik += 1
+				key = findBatch.nobatch
+				give[key] or= 0; give[key] += 1
+			coll.gudang.update findStock._id, findStock
+			give
 
 		rmPasien: (no_mr) ->
 			coll.pasien.remove no_mr: parseInt no_mr
