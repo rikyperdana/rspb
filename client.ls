@@ -142,11 +142,10 @@ if Meteor.isClient
 				(Meteor.setTimeout _, 1000) later = ->
 					$ \.autoform-remove-item .trigger \click
 					if currentRoute! is \jalan
-						_.map <[ cara_bayar klinik karcis rujukan ]>, (i) ->
+						_.map <[ cara_bayar klinik rujukan ]>, (i) ->
 							$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
 							if formDoc!
-								$ 'input[name="'+i+'"][value="'+formDoc![i]+'"]' .attr checked: true
-								$ 'input[name="'+i+'"]' .attr disabled: \disabled
+								$ 'select[name="'+i+'"]' .val formDoc![i] .attr {disabled} .material_select!
 						_.map [\anamesa_perawat], (i) ->
 							$ 'textarea[name="'+i+'"]' .val formDoc!?[i]
 					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
