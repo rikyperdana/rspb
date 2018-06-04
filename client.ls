@@ -112,7 +112,7 @@ if Meteor.isClient
 					(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
 				selector = rawat: $elemMatch:
 					klinik: $in: kliniks
-					tanggal: $gt: new Date (new Date!).getDate!-2
+					tanggal: $gt: new Date (new Date!)getDate!-2
 				Meteor.subscribe \coll, \pasien, selector, {} .ready! and do ->
 					filter = _.filter coll.pasien.find!fetch!, (i) ->
 						a = -> i.rawat[i.rawat.length-1]klinik in kliniks
@@ -161,9 +161,7 @@ if Meteor.isClient
 		'click #close': -> sessNull!; Router.go currentRoute!
 		'click #card': ->
 			dialog = title: 'Cetak Kartu', message: 'Yakin untuk cetak kartu ini?'
-			new Confirmation dialog, (ok) -> if ok
-				# Meteor.call \billCard, currentPar(\no_mr), true
-				makePdf.card!
+			new Confirmation dialog, (ok) -> makePdf.card! if ok
 		'click #consent': ->
 			dialog = title: 'General Consent', message: 'Yakin untuk dicetak?'
 			new Confirmation dialog, (ok) -> makePdf.consent! if ok
@@ -363,8 +361,7 @@ if Meteor.isClient
 		'dblclick #nearEd': ->
 			self = this
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
-			new Confirmation dialog, (ok) -> if ok
-				Meteor.call \returBatch, self
+			new Confirmation dialog, (ok) -> Meteor.call \returBatch, self if ok
 		'click #addAmprah': ->
 			unless userGroup \farmasi
 				Session.set \addAmprah, not Session.get \addAmprah
@@ -376,9 +373,7 @@ if Meteor.isClient
 					callback: (err, res) -> if res.submit
 						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt(res.value), (err2, res2) ->
 							res2 and Meteor.call \transfer, currentPar(\idbarang), parseInt(res.value), (err3, res3) ->
-								res3 and MaterializeModal.message do
-									title: 'Transferkan Barang'
-									message: JSON.stringify res3
+								res3 and MaterializeModal.message title: 'Transferkan Barang', message: JSON.stringify res3
 
 	Template.manajemen.helpers do
 		users: -> Meteor.users.find!fetch!
