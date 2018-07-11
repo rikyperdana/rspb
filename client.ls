@@ -145,7 +145,10 @@ if Meteor.isClient
 						_.map <[ cara_bayar klinik rujukan ]>, (i) ->
 							$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
 							if formDoc!
-								$ 'select[name="'+i+'"]' .val formDoc![i] .attr {disabled} .material_select!
+								$ 'select[name="'+i+'"]'
+									.val formDoc![i]
+									# .attr disabled: true
+									.material_select!
 						_.map [\anamesa_perawat], (i) ->
 							$ 'textarea[name="'+i+'"]' .val formDoc!?[i]
 					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>

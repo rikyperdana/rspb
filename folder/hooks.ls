@@ -49,7 +49,7 @@ if Meteor.isClient
 				if res then Meteor.call \pindah, currentPar \no_mr
 		formToDoc: (doc) ->
 			Session.set \preview, modForm doc
-			if currentRoute(\regis) and Session.get \showForm
+			if currentRoute(\regis)
 				Meteor.call \patientExist, doc.no_mr, (err, res) -> if res
 					Materialize.toast 'No MR sudah dipakai pasien yang lain', 3000
 					$ 'input[name="no_mr"]' .val ''
