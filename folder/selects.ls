@@ -1,6 +1,7 @@
 @selects =
 	rawat: <[ rawat_jalan rawat_inap igd ]>
-	pekerjaan: <[ pns bumn_bumd tni_polri dokter karyawan_swasta wirausaha honorer pensiun petani buruh tidak_bekerja dan_lainnya ]>
+	# pekerjaan: <[ pns bumn_bumd tni_polri dokter karyawan_swasta wirausaha honorer pensiun petani buruh tidak_bekerja dan_lainnya ]>
+	pekerjaan: <[ pns swasta wiraswasta tni polri pensiunan lainnya ]>
 	kelamin: <[ laki_laki perempuan ]>
 	agama: <[ islam katolik protestan buddha hindu kong_hu_chu ]>
 	pendidikan: <[ sd smp sma diploma s1 s2 s3 tidak_sekolah ]>

@@ -1,3 +1,43 @@
+Strategi Implementasi SIMRS Baru:
+IDE:
+	SIMRS Baru untuk pasien baru+lama
+	GOS+Access untuk akses pasien lama
+1. Memastikan simrs baru layak pakai
+   - Ketersediaan data pasien        [oke]
+   - Ketersediaan data tarif         [oke]
+   - Ketersediaan data obat gudang   [wip]
+       (tar: 16-21/Jul/2018| rel: -)
+   - Ketersediaan data obat apotik   [wip]
+       (tar: 16-21/Jul/2018| rel: -)
+2. Memastikan infrastruktur server dan clients ideal
+   - Komputer EDP              [oke]
+   - Komputer Poli             [oke]
+   - Komputer Apotik           [oke]
+   - Komputer Gudang Farmasi   [oke]
+   - Komputer Kasir            [oke]
+   - Komputer Pendaftaran      [oke]
+   - Komputer Laboratorium     [oke]
+   - Komputer Radiologi        [oke]
+   - Komputer Rekam Medik      [oke]
+3. Mengekspor data pasien untuk (tanggal target)
+   - Dari GOS
+   - Dari Access
+4. Membersihkan data pasien untuk (tanggal target)
+   - Gabung data GOS+Access
+   - Field Pekerjaan
+   - Field Kelamin
+   - Field Agama
+   - Field Nikah # note: boleh String
+5. Mengimpor data pasien untuk (tanggal target)
+   - Memastikan jumlah pasien diterima database sama dengan input
+   - Jika tidak, maka ulang impor
+
+Pembagian file:
+   dari data 157.738 baris
+   dipecah per 10.000 .xlsx
+   jadi 16 buah .csv
+
+
 25 April 2018
 1. Pdf laporan amprah lengkap dengan filterisasi
 oke 2. Rapikan susunan semua radio select
