@@ -59,7 +59,6 @@ if Meteor.isClient
 		before:
 			insert: (doc) -> @result _.assign doc,
 				idbarang: randomId!
-				batch.0.idbatch: randomId!
 			'update-pushArray': (doc) ->
 				@result _.assign doc, idbatch: randomId!
 

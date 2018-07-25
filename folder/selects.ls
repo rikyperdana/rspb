@@ -1,6 +1,5 @@
 @selects =
 	rawat: <[ rawat_jalan rawat_inap igd ]>
-	# pekerjaan: <[ pns bumn_bumd tni_polri dokter karyawan_swasta wirausaha honorer pensiun petani buruh tidak_bekerja dan_lainnya ]>
 	pekerjaan: <[ pns swasta wiraswasta tni polri pensiunan lainnya ]>
 	kelamin: <[ laki_laki perempuan ]>
 	agama: <[ islam katolik protestan buddha hindu kong_hu_chu ]>
@@ -15,7 +14,7 @@
 	rujukan: <[ datang_sendiri rs_lain puskesmas faskes_lainnya ]>
 	keluar: <[ pulang rujuk ]>
 	barang: <[ generik non_generik obat_narkotika bhp ]>
-	satuan: <[ botol vial ampul pcs sachet tube supp tablet minidose pot turbuhaler kaplet ]>
+	satuan: <[ botol vial ampul pcs sachet tube supp tablet minidose pot turbuhaler kaplet kapsul bag pen rectal fls ]>
 	anggaran: <[ blud apbd kemenkes dinkes ]>
 	alias: <[ tn ny nn an by ]>
 
