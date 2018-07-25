@@ -275,19 +275,19 @@ if Meteor.isClient
 						idbarang: randomId!
 						batch: [
 							idbatch: randomId!
-							anggaran: data.anggaran
-							beli: parseInt data.beli
-							diapotik: parseInt data.diapotik
-							digudang: parseInt data.digudang
-							jenis: parseInt data.jenis
-							jual: parseInt data.jual
-							kadaluarsa: new Date data.kadaluarsa
-							masuk: new Date data.masuk
-							merek: data.merek or ''
-							nobatch: data.nobatch
-							pengadaan: parseInt data.pengadaan
-							satuan: parseInt data.satuan
-							suplier: data.suplier
+							anggaran: that if data.anggaran
+							beli: parseInt that if data.beli
+							diapotik: parseInt that if data.diapotik
+							digudang: parseInt that if data.digudang
+							jenis: parseInt that if data.jenis
+							jual: parseInt that if data.jual
+							kadaluarsa: new Date that if Date.parse data.kadaluarsa
+							masuk: new Date that if Date.parse data.masuk
+							merek: that if data.merek
+							nobatch: that if data.nobatch
+							pengadaan: parseInt that if data.pengadaan
+							satuan: parseInt that if data.satuan
+							suplier: that if data.suplier
 						]
 					data.nama and Meteor.call \import, \gudang, selector, modifier, \batch
 
