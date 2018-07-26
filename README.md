@@ -13,7 +13,7 @@ Access http://localhost:3000 from your browser
 Ctrl+Shift+i to open browser console and execute these:
 ```
 Accounts.createUser({username: 'yourName', password: 'yourPassword'})
-Meteor.call('addRole', Meteor.userId(), 'manajemen', 'admin')
+Meteor.call('addRole', Meteor.userId(), 'admin', 'manajemen')
 ```
 Then you can get access to management page which can be used to register other accounts
 
