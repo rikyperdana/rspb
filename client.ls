@@ -13,7 +13,7 @@ if Meteor.isClient
 		zeros: (num) -> zeros num
 		showForm: -> Session.get \showForm
 		hari: (date) -> date and moment date .format 'D MMM YYYY'
-		rupiah: (val) -> 'Rp ' + numeral val .format '0,0'
+		rupiah: (val) -> 'Rp ' + numeral (+val or 0) .format '0,0'
 		currentRoute: (name) -> unless name then currentRoute! else currentRoute! is name
 		currentPar: (param) -> currentPar param
 		stringify: (obj) -> JSON.stringify obj
@@ -116,7 +116,7 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, {} .ready! and do ->
 					filter = _.filter coll.pasien.find!fetch!, (i) ->
 						a = -> i.rawat[i.rawat.length-1]klinik in kliniks
-						b = -> not i.rawat[i.rawat.length-1]total.semua
+						b = -> not i.rawat[i.rawat.length-1]total?semua
 						selPol = Session.get \selPol
 						c = -> i.rawat[i.rawat.length-1]klinik is selPol
 						if selPol then b! and c! else a! and b!
@@ -146,9 +146,7 @@ if Meteor.isClient
 							$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
 							if formDoc!
 								$ 'select[name="'+i+'"]'
-									.val formDoc![i]
-									# .attr disabled: true
-									.material_select!
+								.val formDoc![i] .material_select!
 						_.map [\anamesa_perawat], (i) ->
 							$ 'textarea[name="'+i+'"]' .val formDoc!?[i]
 					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
@@ -365,8 +363,7 @@ if Meteor.isClient
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
 			new Confirmation dialog, (ok) -> Meteor.call \returBatch, self if ok
 		'click #addAmprah': ->
-			unless userGroup \farmasi
-				Session.set \addAmprah, not Session.get \addAmprah
+			Session.set \addAmprah, not Session.get \addAmprah
 		'dblclick #amprah': ->
 			if userGroup \farmasi and not @diserah
 				self = this
