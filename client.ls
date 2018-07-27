@@ -94,7 +94,7 @@ if Meteor.isClient
 			_.find selects.klinik, (j) -> i is _.snakeCase j.label
 		pasiens: ->
 			if currentPar \no_mr
-				selector = no_mr: parseInt currentPar \no_mr
+				selector = no_mr: +currentPar \no_mr
 				options = fields: no_mr: 1, regis: 1
 				arr = <[ bayar jalan labor radio obat ]>
 				options.fields.rawat = 1 if currentRoute! in arr
@@ -102,7 +102,7 @@ if Meteor.isClient
 				.ready! and coll.pasien.findOne!
 			else if search!
 				byName = 'regis.nama_lengkap': $options: \-i, $regex: '.*'+search!+'.*'
-				byNoMR = no_mr: parseInt search!
+				byNoMR = no_mr: +search!
 				selector = $or: [byName, byNoMR], no_mr: $ne: NaN
 				options = fields: no_mr: 1, regis: 1
 				Meteor.subscribe \coll, \pasien, selector, options
@@ -189,7 +189,7 @@ if Meteor.isClient
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call \bayar, ...nodes
-				pasien = coll.pasien.findOne no_mr: parseInt nodes.1
+				pasien = coll.pasien.findOne no_mr: +nodes.1
 				doc = _.find pasien.rawat, (i) -> i.idbayar is nodes.1
 				makePdf.payRawat nodes.0, doc
 		'dblclick #request': (event) ->
@@ -223,7 +223,7 @@ if Meteor.isClient
 			new Confirmation dialog, (ok) -> if ok
 				Meteor.call \rmRawat, currentPar(\no_mr), self.idbayar
 		'change #selPol': (event) ->
-			Session.set \selPol, parseInt event.target.id
+			Session.set \selPol, +event.target.id
 		'click #rmPasien': ->
 			dialog =
 				title: 'Hapus Pasien'
@@ -237,15 +237,15 @@ if Meteor.isClient
 			Papa.parse event.target.files.0, header: true, step: (result) ->
 				data = result.data.0
 				if currentRoute! is \regis
-					selector = no_mr: parseInt data.no_mr
+					selector = no_mr: +data.no_mr
 					modifier = regis:
 						nama_lengkap: _.startCase data.nama_lengkap
 						alamat: _.startCase data.alamat if data.alamat
-						agama: parseInt data.agama if data.agama
+						agama: +data.agama if data.agama
 						ayah: _.startCase data.ayah if data.ayah
-						nikah: parseInt data.nikah if data.nikah
-						pekerjaan: parseInt data.pekerjaan if data.pekerjaan
-						pendidikan: parseInt data.pendidikan if data.pendidikan
+						nikah: +data.nikah if data.nikah
+						pekerjaan: +data.pekerjaan if data.pekerjaan
+						pendidikan: +data.pendidikan if data.pendidikan
 						tgl_lahir: new Date data.tgl_lahir if Date.parse data.tgl_lahir
 						tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran
 					Meteor.call \import, \pasien, selector, modifier
@@ -253,14 +253,14 @@ if Meteor.isClient
 					if data.tipe
 						selector = nama: data.nama
 						modifier =
-							tipe: parseInt data.tipe
-							poli: parseInt data.poli
+							tipe: +data.tipe
+							poli: +data.poli
 							active: true
 						Meteor.call \import, \dokter, selector, modifier
 					else if data.harga
 						selector = nama: _.snakeCase data.nama
 						modifier =
-							harga: parseInt data.harga
+							harga: +data.harga
 							jenis: _.snakeCase data.jenis
 							active: true
 						data.grup and modifier.grup = _.startCase data.grup
@@ -271,13 +271,12 @@ if Meteor.isClient
 				else if currentRoute! is \farmasi
 					selector = nama: data.nama
 					modifier =
-						jenis: parseInt data.jenis
 						idbarang: randomId!
+						jenis: +that if data.jenis
+						satuan: +that if data.satuan
 						batch: [
 							idbatch: randomId!
 							nobatch: that if data.nobatch
-							jenis: +that if data.jenis
-							satuan: +that if data.satuan
 							digudang: +data.digudang or 0
 							diapotik: +data.diapotik or 0
 							beli: +data.beli or 0
@@ -374,8 +373,8 @@ if Meteor.isClient
 				MaterializeModal.prompt do
 					message: 'Jumlah diserahkan'
 					callback: (err, res) -> if res.submit
-						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, parseInt(res.value), (err2, res2) ->
-							res2 and Meteor.call \transfer, currentPar(\idbarang), parseInt(res.value), (err3, res3) ->
+						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, +res.value, (err2, res2) ->
+							res2 and Meteor.call \transfer, currentPar(\idbarang), +res.value, (err3, res3) ->
 								res3 and MaterializeModal.message title: 'Transferkan Barang', message: JSON.stringify res3
 
 	Template.manajemen.helpers do
@@ -454,7 +453,7 @@ if Meteor.isClient
 		'click #next': -> Session.set \page, 1 + page!
 		'click #prev': -> Session.set \page, -1 + page!
 		'click #num': (event) ->
-			Session.set \page, parseInt event.target.innerText
+			Session.set \page, +event.target.innerText
 
 	Template.report.helpers do
 		datas: -> Session.get \laporan

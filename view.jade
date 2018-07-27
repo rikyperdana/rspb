@@ -507,7 +507,8 @@ template(name='gudang'): .container
 							td= returnable
 							td: a#rmBatch(href='#') hapus
 		h5 Amprah
-		.right.btn#addAmprah +Amprah
+		unless userGroup 'farmasi'
+			.right.btn#addAmprah +Amprah
 		if addAmprah
 			+quickForm(
 				collection = coll.gudang
