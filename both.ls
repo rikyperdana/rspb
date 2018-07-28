@@ -65,7 +65,10 @@ schema.radio =
 	hasil: type: String, optional: true, autoform: type: \hidden
 
 schema.obat =
-	idobat: type: String, optional: true, autoform: type: \hidden
+	idobat:
+		type: String, optional: true,
+		autoform: type: \hidden
+		autoValue: -> randomId!
 	nama: type: String, autoform: options: selects.obat
 	puyer: type: String, optional: true
 	aturan: type: Object

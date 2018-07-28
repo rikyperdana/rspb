@@ -126,9 +126,9 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, {}
 				.ready! and coll.pasien.find!fetch!
 			else if currentRoute! in <[ labor radio obat ]>
-				elem = 'status_bayar': true
-				elem[currentRoute!] = $exists: true, $elemMatch: hasil: $exists: false
-				selSub = rawat: $elemMatch: elem
+				selSub = rawat: $elemMatch:
+					'status_bayar': true, "#{currentRoute!}":
+						$exists: true, $elemMatch: hasil: $exists: false
 				Meteor.subscribe \coll, \pasien, selSub, {}
 				.ready! and coll.pasien.find!fetch!
 

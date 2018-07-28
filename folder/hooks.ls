@@ -1,6 +1,6 @@
 if Meteor.isClient
 
-	@modForm = (doc, idbayar) -> if currentRoute! is \jalan then _.assign doc,
+	@modForm = (doc, idbayar) -> (currentRoute! is \jalan) and _.assign doc,
 		tanggal: new Date!
 		idbayar: idbayar or randomId!
 		jenis: currentRoute!
@@ -8,28 +8,23 @@ if Meteor.isClient
 			val = +(.label) _.find selects.karcis, -> it.value is doc.klinik
 			val -= 10 if coll.pasien.findOne!rawat?0? unless val is 0
 			val * 1000
-		billRegis: do ->
-			a = -> doc.anamesa_perawat? or doc.anamesa_dokter?
-			b = -> doc.total?semua > 0 and doc.cara_bayar isnt 1
-			c = -> doc.obat? and 0 is doc.total?semua
-			doc.billRegis or a! or b! or c!
-		status_bayar: do ->
-			a = -> doc.total?semua > 0 and doc.cara_bayar isnt 1
-			b = -> doc.obat and 0 is doc.total?semua
-			doc.status_bayar or a! or b!
-		spm: do ->
-			begin = Session.get \begin; stop = moment!
-			stop.diff begin, \minutes
+		billRegis: _.defaultTo do
+			doc.billRegis
+			doc.anamesa_perawat? or doc.anamesa_dokter?
+			doc.total?semua > 0 and doc.cara_bayar isnt 1
+			doc.obat? and 0 is doc.total?semua
+		status_bayar: _.defaultTo do
+			doc.status_bayar
+			doc.total?semua > 0 and doc.cara_bayar isnt 1
+			doc.obat and 0 is doc.total?semua
+		spm: moment!diff (Session.get \begin), \minutes
 		petugas: Meteor.userId!
 		nobill: +(_.toString Date.now! .substr 7, 13)
 		total: do ->
 			arr = <[ tindakan labor radio ]>
-			tlr = _.zipObject arr, _.map arr, (i) -> if doc[i]
-				_.sum _.map that, (j) -> (.harga) _.find coll.tarif.find!fetch!,
-				(k) -> k._id is j.nama
-			obt = if doc.obat then obat: _.sum _.map that, (i) ->
-				0 # (.harga) _.find coll.gudang.find!fetch!, (j) -> j._id is i.nama
-			_.merge tlr, obt
+			tlr = _.zipObject arr, _.map arr, (i) -> 0
+			obt = if doc.obat then obat: _.sum _.map that, (i) -> 0
+			_.merge tlr, obt, semua: 0
 
 
 	AutoForm.addHooks \formPasien,
