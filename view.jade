@@ -319,7 +319,7 @@ template(name='pasien'): .container
 								tr
 									td {{look2 'tarif' nama 'nama'}}
 									td {{look2 'dokter' dokter 'nama'}}
-									td= rupiah(harga)
+									td {{look2 'tarif' nama 'harga'}}
 					br
 					br
 				if labor

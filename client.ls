@@ -9,25 +9,25 @@ if Meteor.isClient
 
 	globalHelpers =
 		coll: -> coll
-		schema: -> new SimpleSchema schema[currentRoute!]
-		zeros: (num) -> zeros num
+		modules: -> modules
+		zeros: zeros
+		userGroup: userGroup
+		userRole: userRole
+		reverse: _.reverse
+		currentPar: currentPar
+		stringify: JSON.stringify
+		startCase: _.startCase
+		userName: _.startCase userName
 		showForm: -> Session.get \showForm
+		schema: -> new SimpleSchema schema[currentRoute!]
 		hari: (date) -> date and moment date .format 'D MMM YYYY'
 		rupiah: (val) -> 'Rp ' + numeral (+val or 0) .format '0,0'
 		currentRoute: (name) -> unless name then currentRoute! else currentRoute! is name
-		currentPar: (param) -> currentPar param
-		stringify: (obj) -> JSON.stringify obj
-		startCase: (val) -> _.startCase val
-		modules: -> modules
-		reverse: (arr) -> _.reverse arr
 		sortBy: (arr, sel, sort) -> _.sortBy arr, -> -it.tanggal.getTime!
 		isTrue: (a, b) -> a is b
 		isFalse: (a, b) -> a isnt b
-		look: (option, value, field) -> look(option, value)?[field]
-		look2: (option, value, field) -> look2(option, value)?[field]
-		userGroup: (name) -> userGroup name
-		userRole: (name) -> userRole name
-		userName: (id) -> _.startCase userName id
+		look: (option, value, field) -> _.startCase look(option, value)?[field]
+		look2: (option, value, field) -> _.startCase look2(option, value)?[field]
 	_.map globalHelpers, (val, key) -> Template.registerHelper key, val
 
 	Template.body.events do

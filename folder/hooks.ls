@@ -22,7 +22,10 @@ if Meteor.isClient
 		nobill: +(_.toString Date.now! .substr 7, 13)
 		total: do ->
 			arr = <[ tindakan labor radio ]>
-			tlr = _.zipObject arr, _.map arr, -> 0
+			tlr = _.zipObject arr, arr.map (i) -> if doc[i]
+				_.sum _.map that, (j) ->
+					(?harga) coll.tarif.find!fetch!find (k) ->
+						k._id is j.nama
 			obt = if doc.obat then obat: _.sum _.map that, -> 0
 			_.merge tlr, obt, semua: 0
 
