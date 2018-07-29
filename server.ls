@@ -78,7 +78,7 @@ if Meteor.isServer
 							sortedIn = _.sortBy filtered, (l) -> new Date l.masuk .getTime!
 							sortedEd = _.sortBy sortedIn, (l) -> new Date l.kadaluarsa .getTime!
 							sortedEd.0.diapotik -= 1
-							key = findStock.nama +';'+ sortedEd[0]nobatch
+							key = "#{findStock.nama};#{sortedEd.0.nobatch}"
 							give[key] or= 0; give[key] += 1
 						selector = _id: findStock._id
 						modifier = $set: batch: findStock.batch
