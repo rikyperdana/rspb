@@ -8,15 +8,15 @@ if Meteor.isClient
 			val = +(.label) _.find selects.karcis, -> it.value is doc.klinik
 			val -= 10 if coll.pasien.findOne!rawat?0? unless val is 0
 			val * 1000
-		billRegis: do ->
-			a = -> doc.anamesa_perawat? or doc.anamesa_dokter?
-			b = -> doc.total?semua > 0 and doc.cara_bayar isnt 1
-			c = -> doc.obat? and 0 is doc.total?semua
-			a! or b! or c! or doc.billRegis
-		status_bayar: do ->
-			a = -> doc.obat? and (0 is doc.total?semua)
-			b = -> (doc.total?semua > 0) and (doc.cara_bayar isnt 1)
-			a! or b! or doc.status_bayar
+		billRegis: ors arr =
+			doc.anamesa_perawat? or doc.anamesa_dokter?
+			doc.total?semua > 0 and doc.cara_bayar isnt 1
+			doc.obat? and 0 is doc.total?semua
+			doc.billRegis
+		status_bayar: ors arr =
+			doc.obat? and (0 is doc.total?semua)
+			(doc.total?semua > 0) and (doc.cara_bayar isnt 1)
+			doc.status_bayar
 		spm: moment!diff (Session.get \begin), \minutes
 		petugas: Meteor.userId!
 		nobill: +(_.toString Date.now! .substr 7, 13)

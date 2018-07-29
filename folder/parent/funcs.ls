@@ -1,9 +1,11 @@
 @_ = lodash
 @coll = {}; @schema = {}
-@look = (list, val) -> _.find selects[list], (i) -> i.value is val
-@look2 = (list, id) -> _.find coll[list]find!fetch!, (i) -> i._id is id
+@look = (list, val) -> _.find selects[list], -> it.value is val
+@look2 = (list, id) -> _.find coll[list]find!fetch!, -> it._id is id
 @randomId = -> Math.random!toString 36 .slice 2
 @zeros = (num) -> \0 * (6 - num.toString!length) + num
+@ors = -> it.find -> it
+@ands = (exprs) -> _.last exprs if _.every exprs
 @monthDiff = (date) ->
 	diff = date.getTime! - (new Date!)getTime!
 	diff /= 1000ms * 60sec * 60min * 24hour * 7day * 4week
@@ -11,7 +13,7 @@
 
 if Meteor.isClient
 
-	# SimpleSchema.debug = true
+	SimpleSchema.debug = true
 	AutoForm.setDefaultTemplate \materialize
 	@currentRoute = -> Router.current!route.getName!
 	@currentPar = (param) -> Router.current!params[param]

@@ -115,9 +115,9 @@ if Meteor.isClient
 					tanggal: $gt: new Date (new Date!)getDate!-2
 				Meteor.subscribe \coll, \pasien, selector, {} .ready! and do ->
 					filter = _.filter coll.pasien.find!fetch!, (i) ->
+						selPol = Session.get \selPol
 						a = -> i.rawat[i.rawat.length-1]klinik in kliniks
 						b = -> not i.rawat[i.rawat.length-1]total?semua
-						selPol = Session.get \selPol
 						c = -> i.rawat[i.rawat.length-1]klinik is selPol
 						if selPol then b! and c! else a! and b!
 					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1]tanggal
