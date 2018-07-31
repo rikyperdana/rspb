@@ -167,32 +167,32 @@ schema.tarif =
 	harga: type: Number
 	grup: type: String, optional: true
 
-_.map <[ dokter tarif ]>, (i) ->
+<[ dokter tarif ]>map (i) ->
 	_.assign schema[i], active:
 		type: Boolean
 		autoform: type: \hidden
 		autoValue: -> true
 
-_.map <[ pasien gudang dokter tarif ]>, (i) ->
+<[ pasien gudang dokter tarif ]>map (i) ->
 	coll[i] = new Meteor.Collection i
 	arr = <[ insert update remove ]>
-	coll[i].allow _.zipObject arr, _.map arr, (i) -> -> true
+	coll[i]allow _.zipObject arr, arr.map -> -> true
 
-_.map modules[0 to 9], (i) ->
-	Router.route "/#{i.name}/:no_mr?",
-		name: i.name
+modules[0 to 9]map ({name}) ->
+	Router.route "/#name/:no_mr?",
+		name: name
 		action: -> @render \pasien
 		waitOn: ->
-			_.map <[ dokter tarif gudang ]>, (j) ->
-				Meteor.subscribe \coll, j, {}, {}
+			<[ dokter tarif gudang ]>map (i) ->
+				Meteor.subscribe \coll, i, {}, {}
 
-_.map modules[10 to 11], (i) ->
-	Router.route "/#{i.name}/:idbarang?",
-		name: i.name
+modules[10 to 11]map ({name}) ->
+	Router.route "/#name/:idbarang?",
+		name: name
 		action: -> @render \gudang
 		waitOn: -> Meteor.subscribe \users, {}, fields: username: 1
 
-_.map <[ panduan ]>, (i) ->
+<[ panduan ]>map (i) ->
 	Router.route "/#i",
 		action: -> @render i
 

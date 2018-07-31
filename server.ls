@@ -14,8 +14,7 @@ if Meteor.isServer
 			unless arrName
 				coll[name]insert _.assign selector, modifier
 			else
-				find = coll[name]findOne selector
-				unless find
+				unless coll[name]findOne selector
 					coll[name]insert _.assign selector, modifier
 				else
 					sel = _id: find._id
@@ -24,12 +23,12 @@ if Meteor.isServer
 
 		export: (jenis) ->
 			if jenis is \regis
-				arr = _.map coll.pasien.find!fetch!, (i) ->
-					no_mr: i.no_mr
-					nama_lengkap: i.regis.nama_lengkap
+				arr = coll.pasien.find!fetch!map ->
+					no_mr: it.no_mr
+					nama_lengkap: it.regis.nama_lengkap
 			else if jenis is \jalan
 				arr = _.flatMap coll.pasien.find!fetch!, (i) ->
-					if i.rawat then _.map i.rawat, (j) ->
+					if i.rawat then that.rawat.map (j) ->
 						no_mr: i.no_mr
 						nama_lengkap: i.regis.nama_lengkap
 						idbayar: j.idbayar
@@ -37,7 +36,7 @@ if Meteor.isServer
 						klinik: find \klinik, j.klinik
 			else if jenis is \farmasi
 				arr = _.flatMap coll.gudang.find!fetch!, (i) ->
-					_.map i.batch, (j) ->
+					i.batch.map (j) ->
 						head = <[ jenis nama ]>
 						head = _.zipObject head, _.map head, (k) -> i[k]
 						body = <[ nobatch merek satuan masuk kadaluarsa digudang diapotik beli jual suplier anggaran pengadaan ]>
@@ -46,22 +45,22 @@ if Meteor.isServer
 			exportcsv.exportToCSV arr, true, \;
 
 		billCard: (no_mr, state) ->
-			selector = no_mr: parseInt no_mr
+			selector = no_mr: +no_mr
 			modifier = $set: 'regis.billCard': state
 			coll.pasien.update selector, modifier
 
 		billRegis: (no_mr, idbayar, state) ->
-			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
+			selector = 'rawat.idbayar': idbayar, no_mr: +no_mr
 			modifier = $set: 'rawat.$.billRegis': state
 			coll.pasien.update selector, modifier
 
 		bayar: (no_mr, idbayar) ->
-			selector = 'rawat.idbayar': idbayar, no_mr: parseInt no_mr
+			selector = 'rawat.idbayar': idbayar, no_mr: +no_mr
 			modifier = 'rawat.$.status_bayar': true
 			coll.pasien.update selector, $set: modifier
 
 		request: (no_mr, idbayar, jenis, idjenis, hasil) ->
-			selector = no_mr: parseInt no_mr
+			selector = no_mr: +no_mr
 			findPasien = coll.pasien.findOne selector
 			for i in findPasien.rawat
 				if i.idbayar is idbayar then if i[jenis] then for j in i[jenis]
@@ -89,10 +88,8 @@ if Meteor.isServer
 			findStock = coll.gudang.findOne idbarang: idbarang
 			give = {}
 			for i in [1 to amount]
-				findBatch = _.find findStock.batch, (j) ->
-					a = -> j.digudang > 0
-					b = -> 0 < monthDiff j.kadaluarsa
-					a! and b!
+				findBatch = findStock.batch.find (j) -> ands do
+					[j.digudang > 0, 0 < monthDiff j.kadaluarsa]
 				findBatch.digudang -= 1
 				findBatch.diapotik += 1
 				key = findBatch.nobatch
@@ -101,10 +98,10 @@ if Meteor.isServer
 			give
 
 		rmPasien: (no_mr) ->
-			coll.pasien.remove no_mr: parseInt no_mr
+			coll.pasien.remove no_mr: +no_mr
 
 		rmRawat: (no_mr, idbayar) ->
-			selector = no_mr: parseInt no_mr
+			selector = no_mr: +no_mr
 			modifier = $pull: rawat: idbayar: idbayar
 			coll.pasien.update selector, modifier
 
@@ -117,10 +114,9 @@ if Meteor.isServer
 			Meteor.users.update selector, modifier
 
 		newUser: (doc) ->
-			find = Accounts.findUserByUsername doc.username
-			if find
-				Accounts.setUsername find._id, doc.username
-				Accounts.setPassword find._id, doc.password
+			if Accounts.findUserByUsername(doc.username)
+				Accounts.setUsername that._id, doc.username
+				Accounts.setPassword that._id, doc.password
 			else Accounts.createUser doc
 
 		rmBarang: (idbarang) ->
@@ -128,8 +124,8 @@ if Meteor.isServer
 
 		rmBatch: (idbarang, idbatch) ->
 			findStock = coll.gudang.findOne idbarang: idbarang
-			terbuang = _.without findStock.batch, _.find findStock.batch, (i) ->
-				i.idbatch is idbatch
+			terbuang = _.without findStock.batch, findStock.batch.find ->
+				it.idbatch is idbatch
 			coll.gudang.update {_id: findStock._id}, $set: batch: terbuang
 
 		inactive: (name, id) ->
@@ -151,7 +147,7 @@ if Meteor.isServer
 				coll.pasien.update selector, modifier
 
 		report: (jenis, start, end) ->
-			filter = (arr) -> _.filter arr, (i) ->
+			filter = -> it.filter (i) ->
 				new Date(start) < new Date(i.tanggal) < new Date(end)
 			docs = _.flatMap coll.pasien.find!fetch!, (i) -> _.map filter(i.rawat), (j) ->
 				obj =
@@ -186,10 +182,10 @@ if Meteor.isServer
 		nearEds: (returnable) ->
 			sel = 'digudang': {$gt: 0}, 'diretur': {$ne: true}
 			source = coll.gudang.find batch: $elemMatch: sel .fetch!
-			assign = _.map source, (i) -> _.map i.batch, (j) -> _.assign j,
+			assign = source.map (i) -> i.batch.map (j) -> _.assign j,
 				idbarang: i.idbarang, nama: i.nama
 			batch = _.flatMap source, (i) -> i.batch
-			diffed = _.filter batch, (i) ->
+			diffed = batch.filter (i) ->
 				a = -> 6 > monthDiff i.kadaluarsa
 				b = -> i.returnable
 				if returnable then a! and b! else a!
@@ -211,6 +207,6 @@ if Meteor.isServer
 			coll.gudang.update barang._id, barang
 
 		latestAmprah: ->
-			_.map coll.gudang.find!fetch!, (i) -> if i.amprah
-				_.assign i, amprah: _.filter i.amprah, (j) ->
+			coll.gudang.find!fetch!map (i) -> if i.amprah
+				_.assign i, amprah: i.amprah.filter (j) ->
 					not j.penyerah

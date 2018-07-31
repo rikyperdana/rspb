@@ -1,7 +1,7 @@
 @_ = lodash
 @coll = {}; @schema = {}
-@look = (list, val) -> _.find selects[list], -> it.value is val
-@look2 = (list, id) -> _.find coll[list]find!fetch!, -> it._id is id
+@look = (list, val) -> selects[list]find -> it.value is val
+@look2 = (list, id) -> coll[list]find!fetch!find -> it._id is id
 @randomId = -> Math.random!toString 36 .slice 2
 @zeros = (num) -> \0 * (6 - num.toString!length) + num
 @ors = -> it.find -> it
@@ -25,10 +25,10 @@ if Meteor.isClient
 	@userName = (id) -> Meteor.users.findOne(_id: id)?username
 	@roles = -> Meteor.user!?roles
 	@userGroup = (name) ->
-		if name then roles!?[name]
+		if name then roles!?[that]
 		else (.0) _.keys roles!
 	@userRole = (name) ->
-		if name then roles!?[currentRoute!]?0 is name
+		if name then roles!?[currentRoute!]?0 is that
 		else (.0.0) _.values roles!
 	@sessNull = -> _.map Session.keys, (i, j) ->
 		Session.set j, null unless j in <[ page limit ]>

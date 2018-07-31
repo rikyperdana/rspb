@@ -23,24 +23,24 @@ _.map selects, (i, j) -> selects[j] = _.map selects[j], (m, n) -> value: n+1, la
 selects.tindakan = -> if Meteor.isClient
 	selector = jenis: Meteor.user!roles.jalan.0
 	Meteor.subscribe \coll, \tarif, {}, {}
-	.ready! and _.map coll.tarif.find(selector)fetch!, (i) ->
-		value: i._id, label: _.startCase i.nama
+	.ready! and coll.tarif.find(selector)fetch!map ->
+		value: it._id, label: _.startCase it.nama
 
 selects.dokter = -> if Meteor.isClient
-	selector = poli: (.value) _.find selects.klinik, (i) ->
-		Meteor.user!roles.jalan.0 is _.snakeCase i.label
+	selector = poli: (.value) selects.klinik.find ->
+		Meteor.user!roles.jalan.0 is _.snakeCase it.label
 	Meteor.subscribe \coll, \dokter, {}, {}
-	.ready! and _.map coll.dokter.find(selector)fetch!, (i) ->
-		value: i._id, label: i.nama
+	.ready! and coll.dokter.find(selector)fetch!map ->
+		value: it._id, label: it.nama
 
 selects.obat = -> if Meteor.isClient
-	filter = (arr) -> _.filter arr, (i) -> i.jenis is 1
+	filter = -> it.filter -> it.jenis is 1
 	Meteor.subscribe \coll, \gudang, {}, {}
-	.ready! and _.map filter(coll.gudang.find!fetch!), (i) ->
-		value: i._id, label: i.nama
+	.ready! and filter(coll.gudang.find!fetch!)map ->
+		value: it._id, label: it.nama
 
-_.map <[ labor radio ]>, (i) ->
+for i in <[ labor radio ]>
 	selects[i] = -> if Meteor.isClient
 		Meteor.subscribe \coll, \tarif, {}, {}
-		.ready! and _.map coll.tarif.find(jenis: i)fetch!, (j) ->
-			value: j._id, label: _.startCase j.nama
+		.ready! and coll.tarif.find(jenis: i)fetch!map ->
+			value: it._id, label: _.startCase it.nama

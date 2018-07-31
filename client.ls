@@ -44,11 +44,11 @@ if Meteor.isClient
 	Template.menu.helpers do
 		menus: ->			
 			_.flatMap roles!, (i, j) ->
-				find = _.find rights, (k) -> k.group is j
-				_.initial _.map find.list, (k) ->
-					_.find modules, (l) -> l.name is k
+				find = rights.find -> it.group is j
+				_.initial find.list.map (k) ->
+					modules.find -> it.name is k
 		navTitle: ->
-			find = _.find modules, (i) -> i.name is currentRoute!
+			find = modules.find -> it.name is currentRoute!
 			find?full or _.startCase currentRoute!
 		today: -> moment!format \LLL
 
@@ -62,7 +62,7 @@ if Meteor.isClient
 			labor: <[ no_mr pasien grup order aksi ]>
 			radio: <[ no_mr pasien order aksi ]>
 			obat: <[ tanggal no_mr pasien dokter klinik nama_obat aturan jumlah serah ]>
-			rawat: <[ tanggal klinik cara_bayar bayar_pendaftaran bayar_tindakan cek ]>
+			rawat: <[ tanggal klinik cara_bayar bayar_pendaftaran status_bayar cek ]>
 			fisik: <[ tekanan_darah nadi suhu pernapasan berat tinggi lila ]>
 			previewDokter: <[ Tindakan Dokter Harga ]>
 			previewLabor: <[ Grup Order Hasil ]>
@@ -85,16 +85,15 @@ if Meteor.isClient
 			unless formDoc!?billRegis then arr
 			else unless (_.first _.split Meteor.user!username, \.) in <[ dr drg ]>
 				arr[2 to arr.length]
-		roleFilter: (arr) -> _.reverse _.filter arr, (i) ->
-			i.klinik is (.value) _.find selects.klinik, (j) ->
-				j.label is _.startCase roles!jalan.0
+		roleFilter: (arr) -> _.reverse arr.filter (i) ->
+			i.klinik is (.value) selects.klinik.find ->
+				it.label is _.startCase roles!jalan.0
 		userPoli: -> roles!jalan
-		insurance: (val) -> 'Rp ' + numeral val+30000 .format '0,0'
 		selPol: -> _.map roles!?jalan, (i) ->
-			_.find selects.klinik, (j) -> i is _.snakeCase j.label
+			selects.klinik.find (j) -> i is _.snakeCase j.label
 		pasiens: ->
 			if currentPar \no_mr
-				selector = no_mr: +currentPar \no_mr
+				selector = no_mr: +that
 				options = fields: no_mr: 1, regis: 1
 				arr = <[ bayar jalan labor radio obat ]>
 				options.fields.rawat = 1 if currentRoute! in arr
@@ -108,7 +107,7 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \pasien, selector, options
 				.ready! and coll.pasien.find!fetch!
 			else if roles!?jalan
-				kliniks = _.map roles!jalan, (i) ->
+				kliniks = roles!jalan.map (i) ->
 					(.value) _.find selects.klinik, (j) -> i is _.snakeCase j.label
 				selector = rawat: $elemMatch:
 					klinik: $in: kliniks
@@ -120,7 +119,7 @@ if Meteor.isClient
 						b = -> not i.rawat[i.rawat.length-1]total?semua
 						c = -> i.rawat[i.rawat.length-1]klinik is selPol
 						if selPol then b! and c! else a! and b!
-					_.sortBy filter, (i) -> i.rawat[i.rawat.length-1]tanggal
+					_.sortBy filter, -> it.rawat[it.rawat.length-1]tanggal
 			else if currentRoute! is \bayar
 				selector = rawat: $elemMatch: $or: ['status_bayar': $ne: true]
 				Meteor.subscribe \coll, \pasien, selector, {}
@@ -139,40 +138,40 @@ if Meteor.isClient
 				if userGroup \regis then Session.set \formDoc, null
 				Meteor.subscribe \coll, \gudang, {}, {}
 				Session.set \begin, new Date!
-				(Meteor.setTimeout _, 1000) later = ->
+				(Meteor.setTimeout _, 3000) later = ->
 					$ \.autoform-remove-item .trigger \click
 					if currentRoute! is \jalan
-						_.map <[ cara_bayar klinik rujukan ]>, (i) ->
+						for i in <[ cara_bayar klinik rujukan ]>
 							$ 'div[data-schema-key="'+i+'"]' .prepend tag \p, _.startCase i
 							if formDoc!
 								$ 'select[name="'+i+'"]'
-								.val formDoc![i] .material_select!
-						_.map [\anamesa_perawat], (i) ->
+								.val that[i] .material_select!
+						for i in [\anamesa_perawat]
 							$ 'textarea[name="'+i+'"]' .val formDoc!?[i]
 					list = <[ cara_bayar kelamin agama nikah pendidikan darah pekerjaan ]>
 					if currentRoute! is \regis
-						_.map list, (i) ->
+						for i in list
 							$ 'div[data-schema-key="regis.'+i+'"]' .prepend tag \p, _.startCase i
 						arr = _.compact _.map schema.regis, (i, j) -> (.1) _.split j, \.
-						_.map arr, (i) ->
+						for i in arr
 							$ '[name="regis.'+i+'"]' .parents \div.row .removeClass \row .addClass 'col m6'
 						$ '.card-content' .addClass \row
 		'dblclick #row': ->
-			Router.go \/ + currentRoute! + \/ + @no_mr
+			Router.go "/#{currentRoute!}/#{@no_mr}"
 		'click #close': -> sessNull!; Router.go currentRoute!
 		'click #card': ->
 			dialog = title: 'Cetak Kartu', message: 'Yakin untuk cetak kartu ini?'
-			new Confirmation dialog, (ok) -> makePdf.card! if ok
+			new Confirmation dialog, -> it and makePdf.card!
 		'click #consent': ->
 			dialog = title: 'General Consent', message: 'Yakin untuk dicetak?'
-			new Confirmation dialog, (ok) -> makePdf.consent! if ok
+			new Confirmation dialog, -> it and makePdf.consent!
 		'dblclick #bill': (event) ->
-			nodes = _.map <[ pasien idbayar karcis ]>, (i) ->
-				event.target.attributes[i]nodeValue
+			nodes = <[ pasien idbayar karcis ]>map ->
+				event.target.attributes[it]nodeValue
 			dialog =
 				title: 'Pembayaran Pendaftaran'
 				message: 'Apakah yakin pasien sudah membayar?'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				if nodes.1
 					Meteor.call \billRegis, ...nodes[0 to 1], true
 					makePdf.payRegCard ...nodes[0 to 2], \...
@@ -180,19 +179,19 @@ if Meteor.isClient
 					Meteor.call \billCard, nodes.0, false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
 		'dblclick #bayar': (event) ->
-			nodes = _.map <[ pasien idbayar ]>, (i) ->
-				event.target.attributes[i]nodeValue
+			nodes = <[ pasien idbayar ]>map ->
+				event.target.attributes[it]nodeValue
 			dialog =
 				title: 'Konfirmasi Pembayaran'
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \bayar, ...nodes
 				pasien = coll.pasien.findOne no_mr: +nodes.1
-				doc = _.find pasien.rawat, (i) -> i.idbayar is nodes.1
+				doc = _.find pasien.rawat, -> it.idbayar is nodes.1
 				makePdf.payRawat nodes.0, doc
 		'dblclick #request': (event) ->
-			nodes = _.map <[ pasien idbayar jenis idjenis ]>, (i) ->
-				event.target.attributes[i].nodeValue
+			nodes = <[ pasien idbayar jenis idjenis ]>map ->
+				event.target.attributes[it]nodeValue
 			MaterializeModal.prompt do
 				message: 'Isikan data requestnya'
 				callback: (err, res) -> if res.submit
@@ -205,7 +204,7 @@ if Meteor.isClient
 						flat = _.flatten _.toPairs res
 						Session.set \rekap, [...rekap, [...nodes, ...flat]]
 		'dblclick #rekap': ->
-			headers = <[ psaien id_bayar jenis id_request no_batch jumlah ]>
+			headers = <[ pasien id_bayar jenis id_request no_batch jumlah ]>
 			makePdf.rekap [headers, ...Session.get \rekap]
 			Session.set \rekap, null
 		'click .modal-trigger': (event) ->
@@ -218,7 +217,7 @@ if Meteor.isClient
 			dialog =
 				title: 'Konfirmasi Hapus'
 				message: 'Apakah yakin hapus data rawat pasien ini?'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \rmRawat, currentPar(\no_mr), self.idbayar
 		'change #selPol': (event) ->
 			Session.set \selPol, +event.target.id
@@ -226,7 +225,7 @@ if Meteor.isClient
 			dialog =
 				title: 'Hapus Pasien'
 				message: 'Apakah yakin untuk menghapus pasien?'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \rmPasien, currentPar \no_mr
 				Router.go \/ + currentRoute!
 
@@ -239,13 +238,13 @@ if Meteor.isClient
 					modifier = regis:
 						nama_lengkap: _.startCase data.nama_lengkap
 						alamat: _.startCase data.alamat if data.alamat
-						agama: +data.agama if data.agama
-						ayah: _.startCase data.ayah if data.ayah
-						nikah: +data.nikah if data.nikah
-						pekerjaan: +data.pekerjaan if data.pekerjaan
-						pendidikan: +data.pendidikan if data.pendidikan
-						tgl_lahir: new Date data.tgl_lahir if Date.parse data.tgl_lahir
-						tmpt_kelahiran: _.startCase data.tmpt_kelahiran if data.tmpt_kelahiran
+						agama: +that if data.agama
+						ayah: _.startCase that if data.ayah
+						nikah: +that if data.nikah
+						pekerjaan: +that if data.pekerjaan
+						pendidikan: +that if data.pendidikan
+						tgl_lahir: new Date that if Date.parse data.tgl_lahir
+						tmpt_kelahiran: _.startCase that if data.tmpt_kelahiran
 					Meteor.call \import, \pasien, selector, modifier
 				else if currentRoute! is \manajemen
 					if data.tipe
@@ -260,8 +259,8 @@ if Meteor.isClient
 						modifier =
 							harga: +data.harga
 							jenis: _.snakeCase data.jenis
+							grup: _.startCase that if data.grup
 							active: true
-						data.grup and modifier.grup = _.startCase data.grup
 						Meteor.call \import, \tarif, selector, modifier
 					else if data.password
 						Meteor.call \newUser, data
@@ -311,18 +310,18 @@ if Meteor.isClient
 			when monthDiff(date) < 13 then \yellow
 			else \green
 		gudangs: ->
-			aggr = (i) -> _.map i, (j) ->
-				reduced = (name) -> _.reduce j.batch, ((sum, n) -> sum + n[name]), 0
-				_.assign j, akumulasi:
+			aggr = -> it.map (i) ->
+				reduced = (name) -> i.batch.reduce ((sum, n) -> sum + n[name]), 0
+				_.assign i, akumulasi:
 					digudang: reduced \digudang
 					diapotik: reduced \diapotik
 			if currentPar \idbarang
-				selector = idbarang: currentPar \idbarang
+				selector = idbarang: that
 				Meteor.subscribe \coll, \gudang, selector, {}
 				.ready! and coll.gudang.findOne!
 			else if search!
-				byName = nama: $options: '-i', $regex: '.*'+search!+'.*'
-				byBatch = idbatch: search!
+				byBatch = idbatch: that
+				byName = nama: $options: '-i', $regex: ".*#{that}.*"
 				selector = $or: [byName, byBatch]
 				Meteor.subscribe \coll, \gudang, selector, {}
 				.ready! and aggr coll.gudang.find!fetch!
@@ -337,18 +336,18 @@ if Meteor.isClient
 	Template.gudang.events do
 		'click #showForm': ->
 			Session.set \showForm, not Session.get \showForm
-		'dblclick #row': -> Router.go \/ + currentRoute! + \/ + @idbarang
+		'dblclick #row': -> Router.go "/#{currentRoute!}/#{@idbarang}"
 		'click #rmBarang': ->
 			self = this
 			dialog =
 				title: 'Hapus Jenis Obat'
 				message: 'Apakah yakin untuk hapus jenis obat ini dari sistem?'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \rmBarang, self.idbarang
 		'click #rmBatch': ->
 			self = this
 			dialog = title: 'Yakin?', message: 'Hapus 1 batch ini'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \rmBatch, currentPar(\idbarang), self.idbatch
 		'click #nearEds': ->
 			Session.set \nearEds, null
@@ -361,7 +360,7 @@ if Meteor.isClient
 		'dblclick #nearEd': ->
 			self = this
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
-			new Confirmation dialog, (ok) -> Meteor.call \returBatch, self if ok
+			new Confirmation dialog, -> it and Meteor.call \returBatch, self
 		'click #addAmprah': ->
 			Session.set \addAmprah, not Session.get \addAmprah
 		'dblclick #amprah': ->
@@ -393,8 +392,7 @@ if Meteor.isClient
 	Template.manajemen.events do
 		'submit #userForm': (event) ->
 			event.preventDefault!
-			onUser = Session.get \onUser
-			unless onUser
+			unless Session.get(\onUser)
 				doc =
 					username: event.target.children.username.value
 					password: event.target.children.password.value
@@ -404,9 +402,8 @@ if Meteor.isClient
 					$ \input .val ''
 				else Materialize.toast 'Password tidak mirip', 3000
 			else
-				role = $ 'input[name="role"]:checked', event.target .0.id
-				group = $ 'input[name="group"]:checked', event.target .0.id
-				poli = $ 'input[name="poli"]:checked', event.target .0
+				[role, group, poli] = <[ role group poli ]>map (i) ->
+					$ "input[name=#{i}]:checked", event.target .0.id
 				theRole = unless poli then role else _.snakeCase poli.id
 				Meteor.call \addRole, onUser._id, [theRole], group
 		'dblclick #row': -> Session.set \onUser, @
@@ -415,7 +412,7 @@ if Meteor.isClient
 			dialog =
 				title: 'Reset Peranan'
 				message: 'Anda yakin untuk menghapus semua perannya?'
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \rmRole, self._id
 		'click #close': -> sessNull!
 		'dblclick #baris': (event) ->
@@ -424,7 +421,7 @@ if Meteor.isClient
 				title: 'Hapus ' + _.startCase jenis
 				message: "Yakin untuk menghapus #jenis dari daftar?"
 			self = this
-			new Confirmation dialog, (ok) -> if ok
+			new Confirmation dialog, -> if it
 				Meteor.call \inactive, jenis, self._id
 
 	Template.login.onRendered ->
