@@ -24,11 +24,11 @@ if Meteor.isClient
 	@tag = (tag, val) -> "<#tag>#val</#tag>"
 	@userName = (id) -> Meteor.users.findOne(_id: id)?username
 	@roles = -> Meteor.user!?roles
-	@userGroup = (name) ->
-		if name then roles!?[that]
+	@userGroup = ->
+		if it then roles!?[that]
 		else (.0) _.keys roles!
-	@userRole = (name) ->
-		if name then roles!?[currentRoute!]?0 is that
+	@userRole = ->
+		if it then roles!?[currentRoute!]?0 is that
 		else (.0.0) _.values roles!
 	@sessNull = -> _.map Session.keys, (i, j) ->
 		Session.set j, null unless j in <[ page limit ]>

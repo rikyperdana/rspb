@@ -14,7 +14,7 @@ if Meteor.isServer
 			unless arrName
 				coll[name]insert _.assign selector, modifier
 			else
-				unless coll[name]findOne selector
+				unless coll[name]findOne(selector)
 					coll[name]insert _.assign selector, modifier
 				else
 					sel = _id: find._id
@@ -28,7 +28,7 @@ if Meteor.isServer
 					nama_lengkap: it.regis.nama_lengkap
 			else if jenis is \jalan
 				arr = _.flatMap coll.pasien.find!fetch!, (i) ->
-					if i.rawat then that.rawat.map (j) ->
+					if i.rawat then that.map (j) ->
 						no_mr: i.no_mr
 						nama_lengkap: i.regis.nama_lengkap
 						idbayar: j.idbayar
@@ -115,8 +115,8 @@ if Meteor.isServer
 
 		newUser: (doc) ->
 			if Accounts.findUserByUsername(doc.username)
-				Accounts.setUsername that._id, doc.username
-				Accounts.setPassword that._id, doc.password
+				for i in <[ username password ]>
+					Accounts["set#{_.startCase i}"] that._id, doc[i]
 			else Accounts.createUser doc
 
 		rmBarang: (idbarang) ->
@@ -124,9 +124,8 @@ if Meteor.isServer
 
 		rmBatch: (idbarang, idbatch) ->
 			findStock = coll.gudang.findOne idbarang: idbarang
-			terbuang = _.without findStock.batch, findStock.batch.find ->
-				it.idbatch is idbatch
-			coll.gudang.update {_id: findStock._id}, $set: batch: terbuang
+			coll.gudang.update {_id: findStock._id}, $set: batch: _.without do
+				findStock.batch, findStock.batch.find -> it.idbatch is idbatch
 
 		inactive: (name, id) ->
 			sel = _id: id; mod = $set: active: false
@@ -208,5 +207,5 @@ if Meteor.isServer
 
 		latestAmprah: ->
 			coll.gudang.find!fetch!map (i) -> if i.amprah
-				_.assign i, amprah: i.amprah.filter (j) ->
+				_.assign i, amprah: that.filter (j) ->
 					not j.penyerah

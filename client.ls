@@ -85,8 +85,8 @@ if Meteor.isClient
 			unless formDoc!?billRegis then arr
 			else unless (_.first _.split Meteor.user!username, \.) in <[ dr drg ]>
 				arr[2 to arr.length]
-		roleFilter: (arr) -> _.reverse arr.filter (i) ->
-			i.klinik is (.value) selects.klinik.find ->
+		roleFilter: (arr) -> _.reverse arr.filter ->
+			it.klinik is (.value) selects.klinik.find ->
 				it.label is _.startCase roles!jalan.0
 		userPoli: -> roles!jalan
 		selPol: -> _.map roles!?jalan, (i) ->
@@ -320,9 +320,9 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \gudang, selector, {}
 				.ready! and coll.gudang.findOne!
 			else if search!
-				byBatch = idbatch: that
-				byName = nama: $options: '-i', $regex: ".*#{that}.*"
-				selector = $or: [byName, byBatch]
+				selector = $or: arr =
+					idbatch: that
+					nama: $options: '-i', $regex: ".*#{that}.*"
 				Meteor.subscribe \coll, \gudang, selector, {}
 				.ready! and aggr coll.gudang.find!fetch!
 			else
@@ -403,7 +403,7 @@ if Meteor.isClient
 				else Materialize.toast 'Password tidak mirip', 3000
 			else
 				[role, group, poli] = <[ role group poli ]>map (i) ->
-					$ "input[name=#{i}]:checked", event.target .0.id
+					$ "input[name=#i]:checked", event.target .0.id
 				theRole = unless poli then role else _.snakeCase poli.id
 				Meteor.call \addRole, onUser._id, [theRole], group
 		'dblclick #row': -> Session.set \onUser, @

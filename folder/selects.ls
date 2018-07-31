@@ -34,9 +34,9 @@ selects.dokter = -> if Meteor.isClient
 		value: it._id, label: it.nama
 
 selects.obat = -> if Meteor.isClient
-	filter = -> it.filter -> it.jenis is 1
+	filtered = -> it.filter -> it.jenis is 1
 	Meteor.subscribe \coll, \gudang, {}, {}
-	.ready! and filter(coll.gudang.find!fetch!)map ->
+	.ready! and filtered(coll.gudang.find!fetch!)map ->
 		value: it._id, label: it.nama
 
 for i in <[ labor radio ]>
