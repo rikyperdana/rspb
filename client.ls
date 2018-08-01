@@ -179,16 +179,16 @@ if Meteor.isClient
 					Meteor.call \billCard, nodes.0, false
 					makePdf.payRegCard 10000, 'Sepuluh Ribu Rupiah'
 		'dblclick #bayar': (event) ->
-			nodes = <[ pasien idbayar ]>map ->
+			[no_mr, idbayar] = <[ pasien idbayar ]>map ->
 				event.target.attributes[it]nodeValue
 			dialog =
 				title: 'Konfirmasi Pembayaran'
 				message: 'Apakah yakin tagihan ini sudah dibayar?'
 			new Confirmation dialog, -> if it
-				Meteor.call \bayar, ...nodes
-				pasien = coll.pasien.findOne no_mr: +nodes.1
-				doc = _.find pasien.rawat, -> it.idbayar is nodes.1
-				makePdf.payRawat nodes.0, doc
+				Meteor.call \bayar, no_mr, idbayar
+				pasien = coll.pasien.findOne no_mr: +no_mr
+				doc = pasien.rawat.find -> it.idbayar is idbayar
+				makePdf.payRawat no_mr, doc
 		'dblclick #request': (event) ->
 			nodes = <[ pasien idbayar jenis idjenis ]>map ->
 				event.target.attributes[it]nodeValue

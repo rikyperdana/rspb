@@ -13,7 +13,7 @@ if Meteor.isClient
 			doc.total?semua > 0 and doc.cara_bayar isnt 1
 			doc.obat? and 0 is doc.total?semua
 			doc.billRegis
-		status_bayar: ors arr =
+		status_bayar: (or false) ors arr =
 			doc.obat? and (0 is doc.total?semua)
 			(doc.total?semua > 0) and (doc.cara_bayar isnt 1)
 			doc.status_bayar
@@ -27,7 +27,7 @@ if Meteor.isClient
 					(?harga) coll.tarif.find!fetch!find (k) ->
 						k._id is j.nama
 			obt = if doc.obat then obat: _.sum _.map that, -> 0
-			_.merge tlr, obt, semua: 0
+			_.merge tlr, obt, semua: _.sum _.values _.merge tlr, obt
 
 	AutoForm.addHooks \formPasien,
 		before:
