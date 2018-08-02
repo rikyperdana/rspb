@@ -85,7 +85,7 @@ if Meteor.isServer
 			give if jenis is \obat
 
 		transfer: (idbarang, amount) ->
-			findStock = coll.gudang.findOne idbarang: idbarang
+			findStock = coll.gudang.findOne {idbarang}
 			give = {}
 			for i in [1 to amount]
 				findBatch = findStock.batch.find (j) -> ands do
@@ -102,7 +102,7 @@ if Meteor.isServer
 
 		rmRawat: (no_mr, idbayar) ->
 			selector = no_mr: +no_mr
-			modifier = $pull: rawat: idbayar: idbayar
+			modifier = $pull: rawat: {idbayar}
 			coll.pasien.update selector, modifier
 
 		addRole: (id, roles, group, poli) ->
@@ -120,10 +120,10 @@ if Meteor.isServer
 			else Accounts.createUser doc
 
 		rmBarang: (idbarang) ->
-			coll.gudang.remove idbarang: idbarang
+			coll.gudang.remove {idbarang}
 
 		rmBatch: (idbarang, idbatch) ->
-			findStock = coll.gudang.findOne idbarang: idbarang
+			findStock = coll.gudang.findOne {idbarang}
 			coll.gudang.update {_id: findStock._id}, $set: batch: _.without do
 				findStock.batch, findStock.batch.find -> it.idbatch is idbatch
 
@@ -132,7 +132,7 @@ if Meteor.isServer
 			coll[name]update sel, mod
 
 		pindah: (no_mr) ->
-			find = coll.pasien.findOne no_mr: parseInt no_mr
+			find = coll.pasien.findOne no_mr: +no_mr
 			[..., last] = find.rawat
 			if last.pindah
 				selector = _id: find._id
@@ -148,7 +148,7 @@ if Meteor.isServer
 		report: (jenis, start, end) ->
 			filter = -> it.filter (i) ->
 				new Date(start) < new Date(i.tanggal) < new Date(end)
-			docs = _.flatMap coll.pasien.find!fetch!, (i) -> _.map filter(i.rawat), (j) ->
+			docs = _.flatMap coll.pasien.find!fetch!, (i) -> filter(i.rawat)map (j) ->
 				obj =
 					no_mr: i.no_mr
 					nama_lengkap: _.startCase i.regis.nama_lengkap
@@ -172,18 +172,18 @@ if Meteor.isServer
 				else if jenis is \rawat_jalan
 					_.pick obj, <[ tanggal no_mr nama_lengkap keluar umur cara_bayar diagnosa tindakan petugas keluar rujukan ]>
 			headers: _.map docs.0, (val, key) -> _.startCase key
-			rows: _.map docs, (i) -> _.values i
+			rows: docs.map -> _.values it
 			csv: docs
 
 		patientExist: (no_mr) ->
-			true if coll.pasien.findOne no_mr: parseInt no_mr
+			true if coll.pasien.findOne no_mr: +no_mr
 
 		nearEds: (returnable) ->
 			sel = 'digudang': {$gt: 0}, 'diretur': {$ne: true}
 			source = coll.gudang.find batch: $elemMatch: sel .fetch!
 			assign = source.map (i) -> i.batch.map (j) -> _.assign j,
 				idbarang: i.idbarang, nama: i.nama
-			batch = _.flatMap source, (i) -> i.batch
+			batch = _.flatMap source, -> it.batch
 			diffed = batch.filter (i) ->
 				a = -> 6 > monthDiff i.kadaluarsa
 				b = -> i.returnable
@@ -198,7 +198,7 @@ if Meteor.isServer
 			coll.gudang.update sel, $set: mod
 
 		amprah: (idbarang, idamprah, diserah) ->
-			barang = coll.gudang.findOne idbarang: idbarang
+			barang = coll.gudang.findOne {idbarang}
 			for i in barang.amprah
 				if i.idamprah is idamprah
 					i.penyerah = @userId
