@@ -3,11 +3,12 @@ if Meteor.isServer
 	Meteor.startup ->
 		coll.pasien._ensureIndex 'regis.nama_lengkap': 1
 
-	Meteor.publish \coll, (name, selector, options) ->
-		coll[name]find selector, options
-
-	Meteor.publish \users, (selector, options) ->
-		Meteor.users.find selector, options
+	publisher =
+		coll: (name, selector, options) ->
+			coll[name]find selector, options
+		users: (selector, options) ->
+			Meteor.users.find selector, options
+	_.map publisher, (val, key) -> Meteor.publish key, val
 
 	Meteor.methods do
 		import: (name, selector, modifier, arrName) ->
@@ -179,12 +180,11 @@ if Meteor.isServer
 			true if coll.pasien.findOne no_mr: +no_mr
 
 		nearEds: (returnable) ->
-			sel = 'digudang': {$gt: 0}, 'diretur': {$ne: true}
+			sel = digudang: {$gt: 0}, diretur: {$ne: true}
 			source = coll.gudang.find batch: $elemMatch: sel .fetch!
 			assign = source.map (i) -> i.batch.map (j) -> _.assign j,
 				idbarang: i.idbarang, nama: i.nama
-			batch = _.flatMap source, -> it.batch
-			diffed = batch.filter (i) ->
+			diffed = (_.flatMap source, -> it.batch)filter (i) ->
 				a = -> 6 > monthDiff i.kadaluarsa
 				b = -> i.returnable
 				if returnable then a! and b! else a!

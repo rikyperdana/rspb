@@ -48,7 +48,7 @@ if Meteor.isClient
 				_.initial find.list.map (k) ->
 					modules.find -> it.name is k
 		navTitle: ->
-			find = modules.find(-> it.name is currentRoute!)
+			find = modules.find -> it.name is currentRoute!
 			find?full or _.startCase currentRoute!
 		today: -> moment!format \LLL
 
