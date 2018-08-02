@@ -5,23 +5,23 @@ if Meteor.isClient
 	Router.onAfterAction ->
 		sessNull! and Router.go \/ unless currentRoute! in
 			_.uniq _.flatMap roles!, (i, j) ->
-				(.list) _.find rights, (k) -> k.group is j
+				(.list) _.find rights, -> it.group is j
 
 	globalHelpers =
+		rupiah: rupiah
+		zeros: zeros
+		userRole: userRole
+		userGroup: userGroup
+		currentPar: currentPar
 		coll: -> coll
 		modules: -> modules
-		zeros: zeros
-		userGroup: userGroup
-		userRole: userRole
 		reverse: _.reverse
-		currentPar: currentPar
 		stringify: JSON.stringify
 		startCase: _.startCase
 		userName: _.startCase userName
 		showForm: -> Session.get \showForm
 		schema: -> new SimpleSchema schema[currentRoute!]
-		hari: (date) -> date and moment date .format 'D MMM YYYY'
-		rupiah: (val) -> 'Rp ' + numeral (+val or 0) .format '0,0'
+		hari: -> it and moment it .format 'D MMM YYYY'
 		currentRoute: (name) -> unless name then currentRoute! else currentRoute! is name
 		sortBy: (arr, sel, sort) -> _.sortBy arr, -> -it.tanggal.getTime!
 		isTrue: (a, b) -> a is b
@@ -48,7 +48,7 @@ if Meteor.isClient
 				_.initial find.list.map (k) ->
 					modules.find -> it.name is k
 		navTitle: ->
-			find = modules.find -> it.name is currentRoute!
+			find = modules.find(-> it.name is currentRoute!)
 			find?full or _.startCase currentRoute!
 		today: -> moment!format \LLL
 
@@ -89,14 +89,14 @@ if Meteor.isClient
 			it.klinik is (.value) selects.klinik.find ->
 				it.label is _.startCase roles!jalan.0
 		userPoli: -> roles!jalan
-		selPol: -> _.map roles!?jalan, (i) ->
+		selPol: -> roles!?jalan.map (i) ->
 			selects.klinik.find (j) -> i is _.snakeCase j.label
 		pasiens: ->
 			if currentPar \no_mr
 				selector = no_mr: +that
 				options = fields: no_mr: 1, regis: 1
-				arr = <[ bayar jalan labor radio obat ]>
-				options.fields.rawat = 1 if currentRoute! in arr
+				options.fields.rawat = 1 if currentRoute! in
+					<[ bayar jalan labor radio obat ]>
 				Meteor.subscribe \coll, \pasien, selector, options
 				.ready! and coll.pasien.findOne!
 			else if search!
