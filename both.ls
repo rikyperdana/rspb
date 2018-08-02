@@ -47,19 +47,27 @@ schema.fisik =
 	lila: type: Number, optional: true
 
 schema.tindakan =
-	idtindakan: type: String, optional: true, autoform: type: \hidden
+	idtindakan:
+		type: String, optional: true,
+		autoform: type: \hidden
+		autoValue: -> randomId!
 	nama: type: String, autoform: options: selects.tindakan, type: \universe-select
 	dokter: type: String, autoform: options: selects.dokter
-	harga: type: Number, optional: true, autoform: type: \hidden
 
 schema.labor =
-	idlabor: type: String, optional: true, autoform: type: \hidden
+	idlabor:
+		type: String, optional: true,
+		autoform: type: \hidden
+		autoValue: -> randomId!
 	nama: type: String, autoform: options: selects.labor
 	harga: type: Number, optional: true, autoform: type: \hidden
 	hasil: type: String, optional: true, autoform: type: \hidden
 
 schema.radio =
-	idradio: type: String, optional: true, autoform: type: \hidden
+	idradio:
+		type: String, optional: true,
+		autoform: type: \hidden
+		autoValue: -> randomId!
 	nama: type: String, autoform: options: selects.radio
 	harga: type: Number, optional: true, autoform: type: \hidden
 	hasil: type: String, optional: true, autoform: type: \hidden
