@@ -8,9 +8,9 @@ if Meteor.isClient
 			val = +(.label) _.find selects.karcis, -> it.value is doc.klinik
 			val -= 10 if coll.pasien.findOne!rawat?0? unless val is 0
 			val * 1000
-		billRegis: ors arr =
+		billRegis: (or false) ors arr =
 			doc.anamesa_perawat? or doc.anamesa_dokter?
-			doc.total?semua > 0 and doc.cara_bayar isnt 1
+			doc.cara_bayar isnt 1
 			doc.obat? and 0 is doc.total?semua
 			doc.billRegis
 		status_bayar: (or false) ors arr =

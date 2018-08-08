@@ -89,7 +89,7 @@ if Meteor.isClient
 			it.klinik is (.value) selects.klinik.find ->
 				it.label is _.startCase roles!jalan.0
 		userPoli: -> roles!jalan
-		selPol: -> roles!?jalan.map (i) ->
+		selPol: -> roles!?jalan?map (i) ->
 			selects.klinik.find (j) -> i is _.snakeCase j.label
 		pasiens: ->
 			if currentPar \no_mr
