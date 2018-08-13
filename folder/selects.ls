@@ -14,7 +14,7 @@
 	rujukan: <[ datang_sendiri rs_lain puskesmas faskes_lainnya ]>
 	keluar: <[ pulang rujuk ]>
 	barang: <[ generik non_generik obat_narkotika bhp ]>
-	satuan: <[ botol vial ampul pcs sachet tube supp tablet minidose pot turbuhaler kaplet kapsul bag pen rectal fls ]>
+	satuan: <[ botol vial ampul pcs sachet tube supp tablet minidose pot turbuhaler kaplet kapsul bag pen rectal flash cream nebu ]>
 	anggaran: <[ blud apbd kemenkes dinkes ]>
 	alias: <[ tn ny nn an by ]>
 

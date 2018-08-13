@@ -12,11 +12,12 @@ if Meteor.isServer
 
 	Meteor.methods do
 		import: (name, selector, modifier, arrName) ->
+			find = coll[name]findOne selector
 			unless arrName
 				coll[name]insert _.assign selector, modifier
 			else
-				unless coll[name]findOne(selector)
-					coll[name]insert _.assign selector, modifier
+				unless find then coll[name]insert do
+					_.assign selector, modifier
 				else
 					sel = _id: find._id
 					obj = "#arrName": modifier[arrName]0
