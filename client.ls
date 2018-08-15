@@ -374,7 +374,9 @@ if Meteor.isClient
 								res3 and MaterializeModal.message title: 'Transferkan Barang', message: JSON.stringify res3
 
 	Template.manajemen.helpers do
-		users: -> Meteor.users.find!fetch!
+		users: ->
+			options = limit: limit!, skip: page! * limit!
+			Meteor.users.find {}, options .fetch!
 		onUser: -> Session.get \onUser
 		selRoles: -> <[ petugas admin ]>
 		klinik: -> selects.klinik
@@ -439,7 +441,9 @@ if Meteor.isClient
 	Template.pagination.helpers do
 		pagins: (name) ->
 			limit = Session.get \limit
-			length = coll[name]find!fetch!length
+			length =
+				if name is \users then Meteor.users.find!fetch!length
+				else coll[name]?find!fetch!length
 			end = (length - (length % limit)) / limit
 			[1 to end]
 

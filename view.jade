@@ -581,6 +581,7 @@ template(name='manajemen'): .container
 					td= username
 					td= stringify(roles)
 					td: a#reset Reset
+	+pagination(name= 'users')
 
 	h5 Tambahkan Dokter
 	+quickForm(
