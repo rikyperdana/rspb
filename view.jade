@@ -429,6 +429,7 @@ template(name='gudang'): .container
 						td= akumulasi.diapotik
 						if userRole 'admin'
 							td: a#rmBarang hapus
+		+pagination(name= 'gudang')
 		br
 		br
 		.row

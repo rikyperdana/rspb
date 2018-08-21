@@ -310,6 +310,7 @@ if Meteor.isClient
 			when monthDiff(date) < 13 then \yellow
 			else \green
 		gudangs: ->
+			options = limit: limit!, skip: page! * limit!
 			aggr = -> it.map (i) ->
 				reduced = (name) -> i.batch.reduce ((sum, n) -> sum + n[name]), 0
 				_.assign i, akumulasi:
@@ -317,16 +318,16 @@ if Meteor.isClient
 					diapotik: reduced \diapotik
 			if currentPar \idbarang
 				selector = idbarang: that
-				Meteor.subscribe \coll, \gudang, selector, {}
+				Meteor.subscribe \coll, \gudang, selector, options
 				.ready! and coll.gudang.findOne!
 			else if search!
 				selector = $or: arr =
-					idbatch: that
-					nama: $options: '-i', $regex: ".*#{that}.*"
+					{idbatch: that}
+					{nama: $options: \-i, $regex: ".*#that.*"}
 				Meteor.subscribe \coll, \gudang, selector, {}
 				.ready! and aggr coll.gudang.find!fetch!
 			else
-				Meteor.subscribe \coll, \gudang, {}, {}
+				Meteor.subscribe \coll, \gudang, {}, options
 				.ready! and aggr coll.gudang.find!fetch!
 		nearEds: -> Session.get \nearEds
 		addAmprah: -> Session.get \addAmprah
@@ -394,7 +395,12 @@ if Meteor.isClient
 	Template.manajemen.events do
 		'submit #userForm': (event) ->
 			event.preventDefault!
-			unless Session.get(\onUser)
+			if Session.get \onUser
+				[role, group, poli] = <[ role group poli ]>map (i) ->
+					$ "input[name=#i]:checked", event.target .0?id
+				theRole = unless poli then role else _.snakeCase poli
+				Meteor.call \addRole, that._id, [theRole], group
+			else
 				doc =
 					username: event.target.children.username.value
 					password: event.target.children.password.value
@@ -403,11 +409,6 @@ if Meteor.isClient
 					Meteor.call \newUser, doc
 					$ \input .val ''
 				else Materialize.toast 'Password tidak mirip', 3000
-			else
-				[role, group, poli] = <[ role group poli ]>map (i) ->
-					$ "input[name=#i]:checked", event.target .0.id
-				theRole = unless poli then role else _.snakeCase poli.id
-				Meteor.call \addRole, onUser._id, [theRole], group
 		'dblclick #row': -> Session.set \onUser, @
 		'dblclick #reset': ->
 			self = this
