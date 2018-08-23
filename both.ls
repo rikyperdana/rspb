@@ -173,7 +173,7 @@ schema.tarif =
 schema.amprah =
 	amprahs: type: Array
 	'amprahs.$': type: Object
-	'amprahs.$.nama': type: String
+	'amprahs.$.nama': type: String, autoform: options: selects.bhp
 	'amprahs.$.diminta': type: Number
 	'amprahs.$.diserah': type: Number, optional: true, autoform: type: \hidden
 

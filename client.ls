@@ -463,6 +463,7 @@ if Meteor.isClient
 		ruangan: (id) -> JSON.stringify userName(id)?roles
 		amprah: -> coll.amprah.findOne _id: currentPar \idamprah
 		rows: -> coll.amprah.find!fetch!
+		jumlah: -> "#{it.length} macam"
 
 	Template.amprah.events do
 		'click #showForm': ->
