@@ -197,16 +197,3 @@ if Meteor.isServer
 					i.diretur = true
 			sel = _id: findStock._id; mod = batch: findStock.batch
 			coll.gudang.update sel, $set: mod
-
-		amprah: (idbarang, idamprah, diserah) ->
-			barang = coll.gudang.findOne {idbarang}
-			for i in barang.amprah
-				if i.idamprah is idamprah
-					i.penyerah = @userId
-					i.diserah = diserah
-			coll.gudang.update barang._id, barang
-
-		latestAmprah: ->
-			coll.gudang.find!fetch!map (i) -> if i.amprah
-				_.assign i, amprah: that.filter (j) ->
-					not j.penyerah

@@ -437,7 +437,6 @@ template(name='gudang'): .container
 			.col.m7
 				input#returnable(type='checkbox')
 				label(for='returnable') Returnable
-			.col.m2: .btn#latestAmprah Amprahan
 		if nearEds
 			h5 Menjelang Kadaluarsa
 			table
@@ -457,21 +456,6 @@ template(name='gudang'): .container
 							td= digudang
 							td= diapotik
 							td= suplier
-		if latestAmprah
-			h5 Daftar Amprah
-			table
-				thead: tr
-					each val in heads.latestAmprah
-						th= startCase(val)
-				tbody
-					each val in latestAmprah
-						each val.amprah
-							tr
-								td: a(href="/farmasi/{{val.idbarang}}")= val.nama
-								td= startCase(ruangan)
-								td= userName(peminta)
-								td= diminta
-								td= hari(tanggal)
 	if currentPar 'idbarang'
 		h5 Rincian Barang
 		with gudangs
@@ -507,32 +491,6 @@ template(name='gudang'): .container
 							td= suplier
 							td= returnable
 							td: a#rmBatch(href='#') hapus
-		h5 Amprah
-		unless userGroup 'farmasi'
-			.right.btn#addAmprah +Amprah
-		if addAmprah
-			+quickForm(
-				collection = coll.gudang
-				schema = schemaAmprah
-				type = 'update-pushArray'
-				id = 'formAmprah'
-				doc = gudangs
-				scope = 'amprah'
-			)
-		table
-			thead: tr
-				each val in heads.amprah
-					th= startCase(val)
-			tbody
-				with gudangs
-					each amprah
-						tr#amprah
-							td= startCase(ruangan)
-							td= userName(peminta)
-							td= diminta
-							td= userName(penyerah)
-							td= diserah
-							td= hari(tanggal)
 	br
 	if userRole 'admin'
 		unless currentPar 'idbarang'
@@ -679,3 +637,49 @@ template(name='export'): .row
 		option(value='') Pilih jenis ekspor
 		option(value='farmasi') Farmasi
 		option(value='logistik') Logistik
+
+template(name='amprah'): .container
+	br
+	.right.btn#showForm +Amprah
+	if showForm
+		h5 Form Amprah Barang
+		+quickForm(
+			collection= coll.amprah
+			schema= schemaAmprah
+			type = 'insert'
+			id = 'formAmprah'
+		)
+	br
+	unless currentPar 'idamprah'
+		h5 Daftar Amprah Barang
+		table
+			thead: tr
+				each val in headers
+					th= val
+			tbody
+				each val in rows
+					tr#serah(data-target= val._id)
+						td= hari(val.tanggal_minta)
+						td= ruangan(val.peminta)
+						td= userName(val.peminta)
+	else
+		h5 Rincian Amprah
+		with amprah
+			table
+				tr
+					th Peminta
+					td= userName(peminta)
+				tr
+					th Tanggal Minta
+					td= hari(tanggal_minta)
+			br
+			table
+				thead: tr
+					th Nama
+					th Jumlah
+				tbody
+					each amprahs
+						tr
+							td= nama
+							td= diminta
+		.right.orange.btn#close Close

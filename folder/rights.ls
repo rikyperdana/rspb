@@ -8,7 +8,7 @@ if Meteor.isClient
 		list: [\bayar]
 	,
 		group: \jalan
-		list: <[ jalan farmasi ]>
+		list: <[ jalan farmasi amprah ]>
 	,
 		group: \inap
 		list: <[ inap farmasi ]>

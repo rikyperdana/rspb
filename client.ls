@@ -18,7 +18,7 @@ if Meteor.isClient
 		reverse: _.reverse
 		stringify: JSON.stringify
 		startCase: _.startCase
-		userName: _.startCase userName
+		userName: -> _.startCase (?username) userName it
 		showForm: -> Session.get \showForm
 		schema: -> new SimpleSchema schema[currentRoute!]
 		hari: -> it and moment it .format 'D MMM YYYY'
@@ -301,8 +301,6 @@ if Meteor.isClient
 		heads: ->
 			barang: <[ jenis_barang nama_barang stok_gudang stok_diapotik ]>
 			batch: <[ no_batch masuk kadaluarsa beli jual di_gudang di_apotik suplier ]>
-			amprah: <[ ruangan peminta meminta penyerah menyerahkan tanggal ]>
-			latestAmprah: <[ nama ruangan peminta diminta tanggal ]>
 		formType: -> if currentPar \idbarang then \update-pushArray else \insert
 		warning: (date) -> switch
 			when monthDiff(date) < 2 then \red
@@ -330,9 +328,6 @@ if Meteor.isClient
 				Meteor.subscribe \coll, \gudang, {}, options
 				.ready! and aggr coll.gudang.find!fetch!
 		nearEds: -> Session.get \nearEds
-		addAmprah: -> Session.get \addAmprah
-		schemaAmprah: -> new SimpleSchema schema.amprah
-		latestAmprah: -> Session.get \latestAmprah
 
 	Template.gudang.events do
 		'click #showForm': ->
@@ -355,24 +350,10 @@ if Meteor.isClient
 			returnable = $ \#returnable .is \:checked
 			Meteor.call 'nearEds', returnable, (err, res) ->
 				Session.set \nearEds, res if res
-		'click #latestAmprah': ->
-			Meteor.call \latestAmprah, (err, res) ->
-				Session.set \latestAmprah, res if res
 		'dblclick #nearEd': ->
 			self = this
 			dialog = title: 'Karantina?', message: 'Pindahkan ke karantina'
 			new Confirmation dialog, -> it and Meteor.call \returBatch, self
-		'click #addAmprah': ->
-			Session.set \addAmprah, not Session.get \addAmprah
-		'dblclick #amprah': ->
-			if userGroup \farmasi and not @diserah
-				self = this
-				MaterializeModal.prompt do
-					message: 'Jumlah diserahkan'
-					callback: (err, res) -> if res.submit
-						Meteor.call \amprah, currentPar(\idbarang), self.idamprah, +res.value, (err2, res2) ->
-							res2 and Meteor.call \transfer, currentPar(\idbarang), +res.value, (err3, res3) ->
-								res3 and MaterializeModal.message title: 'Transferkan Barang', message: JSON.stringify res3
 
 	Template.manajemen.helpers do
 		users: ->
@@ -471,3 +452,22 @@ if Meteor.isClient
 			content = exportcsv.exportToCSV Session.get(\laporan).csv, true, \;
 			blob = new Blob [content], type: 'text/plain;charset=utf-8'
 			saveAs blob, template.data.jenis+'.csv'
+
+	Template.amprah.onRendered do
+		Meteor.subscribe \coll, \amprah, {}, {}
+		Meteor.subscribe \users, {}, {}
+
+	Template.amprah.helpers do
+		schemaAmprah: -> new SimpleSchema schema.amprah
+		headers: -> <[ Tanggal Ruangan Peminta Meminta Penyerah Serahkan ]>
+		ruangan: (id) -> JSON.stringify userName(id)?roles
+		amprah: -> coll.amprah.findOne _id: currentPar \idamprah
+		rows: -> coll.amprah.find!fetch!
+
+	Template.amprah.events do
+		'click #showForm': ->
+			Session.set \showForm, not Session.get \showForm
+		'dblclick #serah': (event) ->
+			id = event.currentTarget.attributes['data-target']value
+			Router.go "/#{currentRoute!}/#id"
+		'click #close': -> Router.go currentRoute!

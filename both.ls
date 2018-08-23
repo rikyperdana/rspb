@@ -157,11 +157,6 @@ schema.farmasi = _.assign {}, schema.gudang,
 	'batch.$.anggaran': type: Number, autoform: options: selects.anggaran
 	'batch.$.pengadaan': type: Number
 
-schema.amprah = _.assign {}, schema.gudang,
-	amprah: type: Array
-	'amprah.$': type: Object
-	'amprah.$.diminta': type: Number
-
 schema.logistik = _.assign {}, schema.gudang, {}
 
 schema.dokter =
@@ -175,13 +170,20 @@ schema.tarif =
 	harga: type: Number
 	grup: type: String, optional: true
 
+schema.amprah =
+	amprahs: type: Array
+	'amprahs.$': type: Object
+	'amprahs.$.nama': type: String
+	'amprahs.$.diminta': type: Number
+	'amprahs.$.diserah': type: Number, optional: true, autoform: type: \hidden
+
 <[ dokter tarif ]>map (i) ->
 	_.assign schema[i], active:
 		type: Boolean
 		autoform: type: \hidden
 		autoValue: -> true
 
-<[ pasien gudang dokter tarif ]>map (i) ->
+<[ pasien gudang dokter tarif amprah ]>map (i) ->
 	coll[i] = new Meteor.Collection i
 	arr = <[ insert update remove ]>
 	coll[i]allow _.zipObject arr, arr.map -> -> true
@@ -200,17 +202,20 @@ modules[10 to 11]map ({name}) ->
 		action: -> @render \gudang
 		waitOn: -> Meteor.subscribe \users, {}, fields: username: 1
 
+Router.route "/amprah/:idamprah?",
+	name: \amprah
+	action: -> @render \amprah
+
 <[ panduan ]>map (i) ->
 	Router.route "/#i",
 		action: -> @render i
 
 Router.route \/manajemen,
 	action: -> @render \manajemen
-	waitOn: -> [
+	waitOn: -> arr =
 		Meteor.subscribe \users, {}, {}
 		Meteor.subscribe \coll, \dokter, {}, {}
 		Meteor.subscribe \coll, \tarif, {}, {}
-	]
 
 Router.route \/login, ->
 	action: -> @render \login

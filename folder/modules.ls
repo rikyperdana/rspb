@@ -63,4 +63,9 @@
 	full: \Manajemen
 	icon: \people
 	color: \orange
+,
+	name: \amprah
+	full: \Amprah
+	icon: \rv_hookup
+	color: \blue-grey
 ]

@@ -22,7 +22,7 @@ if Meteor.isClient
 	@limit = -> Session.get \limit
 	@page = -> Session.get \page
 	@tag = (tag, val) -> "<#tag>#val</#tag>"
-	@userName = -> Meteor.users.findOne _id: it ?username
+	@userName = -> Meteor.users.findOne _id: it
 	@roles = -> Meteor.user!?roles
 	@rupiah = -> "Rp #{numeral(+it or 0)format '0,0'}"
 	@userGroup = ->

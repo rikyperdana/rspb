@@ -61,3 +61,8 @@ if Meteor.isClient
 				peminta: Meteor.userId!
 				tanggal: new Date!
 				ruangan: _.keys roles! .0
+
+	AutoForm.addHooks \formAmprah,
+		before: insert: (doc) -> @result _.assign doc,
+			peminta: Meteor.userId!
+			tanggal_minta: new Date!
