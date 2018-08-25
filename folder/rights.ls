@@ -20,7 +20,7 @@ if Meteor.isClient
 		list: [\radio]
 	,
 		group: \obat
-		list: <[ obat farmasi ]>
+		list: <[ obat farmasi amprah ]>
 	,
 		group: \rekam
 		list: <[ rekam regis ]>

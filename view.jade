@@ -658,7 +658,7 @@ template(name='amprah'): .container
 					th= val
 			tbody
 				each val in rows
-					tr#serah(data-target= val._id)
+					tr#detail(data-target= val._id)
 						td= hari(val.tanggal_minta)
 						td= ruangan(val.peminta)
 						td= userName(val.peminta)
@@ -673,14 +673,19 @@ template(name='amprah'): .container
 				tr
 					th Tanggal Minta
 					td= hari(tanggal_minta)
+				tr
+					th Penyerah
+					td= userName(penyerah)
 			br
 			table
 				thead: tr
 					th Nama
-					th Jumlah
+					th Diminta
+					th Diserah
 				tbody
 					each amprahs
-						tr
+						tr#serah
 							td= nama
 							td= diminta
+							td= diserah
 		.right.orange.btn#close Close

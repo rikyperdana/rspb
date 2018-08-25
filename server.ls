@@ -197,3 +197,10 @@ if Meteor.isServer
 					i.diretur = true
 			sel = _id: findStock._id; mod = batch: findStock.batch
 			coll.gudang.update sel, $set: mod
+
+		amprahkan: ({idamprah, nama, diminta, diserah, penyerah}) ->
+			coll.amprah.update {_id: idamprah}, do
+				$set: penyerah: penyerah, amprahs: arr =
+					{nama, diminta, diserah}
+					... coll.amprah.findOne(_id: idamprah)amprahs.filter ->
+						it.nama isnt nama

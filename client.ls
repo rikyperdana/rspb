@@ -468,7 +468,15 @@ if Meteor.isClient
 	Template.amprah.events do
 		'click #showForm': ->
 			Session.set \showForm, not Session.get \showForm
-		'dblclick #serah': (event) ->
+		'dblclick #detail': (event) ->
 			id = event.currentTarget.attributes['data-target']value
 			Router.go "/#{currentRoute!}/#id"
 		'click #close': -> Router.go currentRoute!
+		'dblclick #serah': -> if userGroup \obat
+			self = this
+			MaterializeModal.prompt do
+				message: 'Serahkan berapa?'
+				callback: (err, res) -> if res.submit
+					Meteor.call \amprahkan, _.merge self,
+						penyerah: Meteor.userId!, diserah: +res.value,
+						idamprah: currentPar \idamprah
