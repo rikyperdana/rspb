@@ -1,3 +1,21 @@
+Aug 25, 2018
+1. Dokter tidak mengamprah, hanya perawat
+2. Daftar amprahan dibatas view poli bersangkutan
+3. Kurangi sumber pendanaan jadi apbd, blud
+4. Optionalskan fields obat/bhp
+5. Ubah kode amprah barang jadi nama barangnya
+6. Sortir daftar amprahan descending
+7. Amprahan selesai tidak ditampilkan lagi
+8. Tambahkan info ruangan peminta barang
+9. Tombol cetakan bukti seserahan barang amprah
+10. Jika masih ada barang yang belum terpenuhi, tetap munculkan
+    pada daftar barang pada kedua pihak
+11. Nama ruangan yang meminta langsung nama poli saja
+12. Pengurangan terjadi otomatis setelah konfirmasi serahan
+13. Sistem menotifikasi user bhp batch mana yang akan diserahkan
+    dalam bentuk pdf daftar barang seserahan
+
+
 Strategi Implementasi SIMRS Baru:
 IDE:
 	SIMRS Baru untuk pasien baru+lama
